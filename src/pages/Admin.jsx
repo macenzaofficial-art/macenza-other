@@ -35,7 +35,10 @@ import {
   Mail,
   Phone,
   Menu,
-  Filter
+  Filter,
+  ShieldAlert,
+  AlertTriangle,
+  Ban
 } from 'lucide-react';
 
 import { supabase } from '../supabaseClient';
@@ -48,8 +51,38 @@ import AppliedCandidatesChart from '../components/admin/AppliedCandidatesChart';
 import JobVsCandidateAnalysis from '../components/admin/JobVsCandidateAnalysis';
 import RecentActivityAndActions from '../components/admin/RecentActivityAndActions';
 import FuturisticAnalytics from '../components/admin/FuturisticAnalytics';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+
+const TAB_TO_SLUG = {
+  'Dashboard': 'dashboard',
+  'Jobs': 'jobs',
+  'Applications': 'applications',
+  'Resume Manager': 'resume-manager',
+  'Employees': 'employees',
+  'Finance': 'finance',
+  'Events': 'events',
+  'Analytics': 'analytics'
+};
+
+const SLUG_TO_TAB = {
+  'dashboard': 'Dashboard',
+  'dashbord': 'Dashboard',
+  'jobs': 'Jobs',
+  'applications': 'Applications',
+  'resume-manager': 'Resume Manager',
+  'resumemanager': 'Resume Manager',
+  'employees': 'Employees',
+  'employee': 'Employees',
+  'finance': 'Finance',
+  'events': 'Events',
+  'analytics': 'Analytics'
+};
 
 const Admin = () => {
+  const { tab: tabParam } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   // Authentication states
   const [user, setUser] = useState(null);
   const [authChecking, setAuthChecking] = useState(true);
@@ -59,13 +92,28 @@ const Admin = () => {
   const [signingIn, setSigningIn] = useState(false);
 
   // Dashboard states
-  const [activeTab, setActiveTab] = useState('Dashboard');
+  const initialTab = (tabParam && SLUG_TO_TAB[tabParam.toLowerCase()]) || 'Dashboard';
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     if (typeof window !== 'undefined') {
       return window.innerWidth >= 1024;
     }
     return false;
   });
+
+  // Keep activeTab in sync when URL parameter changes (e.g. back/forward navigation or direct link)
+  useEffect(() => {
+    if (tabParam && SLUG_TO_TAB[tabParam.toLowerCase()]) {
+      const resolved = SLUG_TO_TAB[tabParam.toLowerCase()];
+      if (resolved !== activeTab) {
+        setActiveTab(resolved);
+      }
+    } else if (location.pathname === '/admin' || location.pathname === '/admin/') {
+      if (activeTab !== 'Dashboard') {
+        setActiveTab('Dashboard');
+      }
+    }
+  }, [tabParam, location.pathname]);
 
   // Handle escape key to close sidebar on mobile
   useEffect(() => {
@@ -80,6 +128,8 @@ const Admin = () => {
 
   const handleTabSelect = (tabId) => {
     setActiveTab(tabId);
+    const slug = TAB_TO_SLUG[tabId] || tabId.toLowerCase();
+    navigate(`/admin/${slug}`);
     if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       setIsSidebarOpen(false);
     }
@@ -98,6 +148,75 @@ const Admin = () => {
   const [filterExperience, setFilterExperience] = useState('');
   const [filterType, setFilterType] = useState('');
   const [filterDate, setFilterDate] = useState('');
+  const [filterBlacklistOnly, setFilterBlacklistOnly] = useState(false);
+
+  // Blacklisted Candidates (Emails) State
+  const [blacklistedEmails, setBlacklistedEmails] = useState(() => {
+    try {
+      const saved = localStorage.getItem('macenza_blacklisted_emails');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [isBlacklistModalOpen, setIsBlacklistModalOpen] = useState(false);
+  const [blacklistInputEmail, setBlacklistInputEmail] = useState('');
+  const [blacklistInputReason, setBlacklistInputReason] = useState('');
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('macenza_blacklisted_emails', JSON.stringify(blacklistedEmails));
+    } catch (e) {
+      console.error('Failed to sync blacklisted emails:', e);
+    }
+  }, [blacklistedEmails]);
+
+  // Helper to check if an email or candidate is blacklisted
+  const isCandidateBlacklisted = (candidateEmail) => {
+    if (!candidateEmail) return false;
+    const cleanEmail = candidateEmail.trim().toLowerCase();
+    return blacklistedEmails.some(b => {
+      const bEmail = typeof b === 'string' ? b : b.email;
+      return bEmail && bEmail.trim().toLowerCase() === cleanEmail;
+    });
+  };
+
+  const getBlacklistEntry = (candidateEmail) => {
+    if (!candidateEmail) return null;
+    const cleanEmail = candidateEmail.trim().toLowerCase();
+    return blacklistedEmails.find(b => {
+      const bEmail = typeof b === 'string' ? b : b.email;
+      return bEmail && bEmail.trim().toLowerCase() === cleanEmail;
+    }) || null;
+  };
+
+  const handleAddBlacklistEmail = (emailToAdd, reason = '') => {
+    const clean = (emailToAdd || '').trim().toLowerCase();
+    if (!clean) {
+      toast.error('Please enter a valid email address.');
+      return;
+    }
+    const alreadyExists = blacklistedEmails.some(b => (typeof b === 'string' ? b : b.email).trim().toLowerCase() === clean);
+    if (alreadyExists) {
+      toast.info('Candidate is already on the blacklist.');
+      return;
+    }
+    const newEntry = {
+      email: clean,
+      reason: reason ? reason.trim() : 'Flagged for internal review',
+      addedAt: new Date().toISOString()
+    };
+    setBlacklistedEmails(prev => [newEntry, ...prev]);
+    setBlacklistInputEmail('');
+    setBlacklistInputReason('');
+    toast.success(`Flagged ${clean} on blacklist for internal review.`);
+  };
+
+  const handleRemoveBlacklistEmail = (emailToRemove) => {
+    const clean = (emailToRemove || '').trim().toLowerCase();
+    setBlacklistedEmails(prev => prev.filter(b => (typeof b === 'string' ? b : b.email).trim().toLowerCase() !== clean));
+    toast.info(`Removed ${clean} from blacklist.`);
+  };
 
   // Selected Candidate for Resume Preview / Recruitment Actions
   const [selectedApp, setSelectedApp] = useState(null);
@@ -816,7 +935,7 @@ const Admin = () => {
       documents: []
     };
 
-    const updated = [newEmp, ...employees];
+    const updated = [...employees, newEmp];
     setEmployees(updated);
 
     // Save image to localStorage if present
@@ -1385,7 +1504,7 @@ const Admin = () => {
       toast.error('No candidate applications to export');
       return;
     }
-    const headers = ['Candidate Name', 'Email', 'Phone', 'Job Applied', 'Experience', 'Location', 'Applied Date', 'Status', 'LinkedIn URL', 'Portfolio URL', 'Resume URL', 'Cover Letter', 'Notes'];
+    const headers = ['Candidate Name', 'Email', 'Phone', 'Job Applied', 'Experience', 'Location', 'Applied Date', 'Status', 'Internal Review Flag', 'LinkedIn URL', 'Portfolio URL', 'Resume URL', 'Cover Letter', 'Notes'];
     const csvContent = [
       headers.join(','),
       ...filteredApplications.map(app => [
@@ -1397,6 +1516,7 @@ const Admin = () => {
         `"${(app.location || '').replace(/"/g, '""')}"`,
         `"${app.createdAt ? new Date(app.createdAt).toLocaleDateString() : ''}"`,
         `"${(app.status || '').replace(/"/g, '""')}"`,
+        `"${isCandidateBlacklisted(app.email) ? 'BLACKLISTED (Review)' : 'Normal'}"`,
         `"${(app.linkedInUrl || '').replace(/"/g, '""')}"`,
         `"${(app.portfolioUrl || '').replace(/"/g, '""')}"`,
         `"${(app.resume || '').replace(/"/g, '""')}"`,
@@ -1590,7 +1710,11 @@ const Admin = () => {
       matchesDate = diffDays <= parseInt(filterDate);
     }
 
-    return matchesName && matchesLocation && matchesPosition && matchesExperience && matchesType && matchesDate;
+    // Blacklist filter
+    const isBlacklisted = isCandidateBlacklisted(app.email);
+    const matchesBlacklist = !filterBlacklistOnly || isBlacklisted;
+
+    return matchesName && matchesLocation && matchesPosition && matchesExperience && matchesType && matchesDate && matchesBlacklist;
   });
 
   // Calculate Overview Stats
@@ -1600,6 +1724,7 @@ const Admin = () => {
   const shortlistedApps = applications.filter(a => a.status === 'Shortlisted').length;
   const scheduledApps = applications.filter(a => a.status === 'Interview Scheduled').length;
   const rejectedApps = applications.filter(a => a.status === 'Rejected').length;
+  const blacklistedAppsCount = applications.filter(a => isCandidateBlacklisted(a.email)).length;
 
   // Render Stats Card
   const renderStatsCard = (title, count, icon, subtext) => (
@@ -1621,7 +1746,7 @@ const Admin = () => {
 
   if (authChecking) {
     return (
-      <div className="min-h-screen bg-white text-black flex items-center justify-center font-sans">
+      <div className="admin-panel-root min-h-screen bg-white text-black flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
           <p className="text-sm font-bold tracking-widest text-black/40 uppercase animate-pulse">Verifying Credentials...</p>
@@ -1632,7 +1757,7 @@ const Admin = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-white text-black flex flex-col items-center justify-center font-sans relative overflow-hidden px-6">
+      <div className="admin-panel-root min-h-screen bg-white text-black flex flex-col items-center justify-center relative overflow-hidden px-6">
         <SEO title="Admin Portal | Macenza" description="Macenza Admin Portal" canonicalPath="/admin" noindex={true} />
         {/* Futuristic glowing ambient background */}
         <div className="absolute inset-0 z-0 pointer-events-none">
@@ -1723,7 +1848,7 @@ const Admin = () => {
   }
 
   return (
-    <div className="flex bg-[#FFFFFF] min-h-screen font-sans text-black relative">
+    <div className="admin-panel-root flex bg-[#FFFFFF] min-h-screen text-black relative">
       <SEO title="Admin Dashboard | Macenza" description="Macenza Admin Portal" canonicalPath="/admin" noindex={true} />
       {/* Mobile Backdrop Overlay */}
       {isSidebarOpen && (
@@ -1893,12 +2018,12 @@ const Admin = () => {
                 onNavigateTab={handleTabSelect}
                 onSelectCandidate={(app) => {
                   setSelectedApp(app);
-                  setActiveTab('Resume Manager');
+                  handleTabSelect('Resume Manager');
                 }}
                 onOpenCreateJob={() => {
                   setEditingJobId(null);
                   setJobForm(initialJobForm);
-                  setActiveTab('Jobs');
+                  handleTabSelect('Jobs');
                 }}
               />
             </div>
@@ -2223,27 +2348,39 @@ const Admin = () => {
             <div className="flex flex-col gap-4 sm:gap-6 max-w-[1600px] mx-auto w-full">
               {/* Filtering Suite */}
               <div className="bg-white border border-slate-200/80 p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl shadow-sm flex flex-col gap-4 sm:gap-5">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex flex-wrap items-center justify-between border-b border-slate-100 pb-3 gap-2">
                   <div className="flex items-center gap-2">
                     <Filter className="w-4 h-4 text-blue-600" />
                     <h4 className="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">Candidate Search & Filters</h4>
                   </div>
-                  <button
-                    onClick={() => {
-                      setSearchName('');
-                      setFilterLocation('');
-                      setFilterPosition('');
-                      setFilterExperience('');
-                      setFilterType('');
-                      setFilterDate('');
-                    }}
-                    className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer py-1 px-2 rounded-lg hover:bg-blue-50"
-                  >
-                    Reset Filters
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsBlacklistModalOpen(true)}
+                      className="text-xs font-bold px-3 py-1.5 rounded-xl bg-rose-50 text-rose-700 border border-rose-200/80 hover:bg-rose-100 transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                      title="Manage blacklisted candidate emails"
+                    >
+                      <ShieldAlert className="w-3.5 h-3.5 text-rose-600" />
+                      <span>Manage Blacklist ({blacklistedEmails.length})</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSearchName('');
+                        setFilterLocation('');
+                        setFilterPosition('');
+                        setFilterExperience('');
+                        setFilterType('');
+                        setFilterDate('');
+                        setFilterBlacklistOnly(false);
+                      }}
+                      className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors cursor-pointer py-1 px-2 rounded-lg hover:bg-blue-50"
+                    >
+                      Reset Filters
+                    </button>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-3 sm:gap-4">
                   {/* Search by Name */}
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[10px] font-extrabold uppercase tracking-wider text-slate-600">Candidate / Email</label>
@@ -2329,6 +2466,23 @@ const Admin = () => {
                       <option value="30">Last Month</option>
                     </select>
                   </div>
+
+                  {/* Filter by Blacklist Review Flag */}
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-extrabold uppercase tracking-wider text-rose-600">Review Flag</label>
+                    <button
+                      type="button"
+                      onClick={() => setFilterBlacklistOnly(!filterBlacklistOnly)}
+                      className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer border ${
+                        filterBlacklistOnly
+                          ? 'bg-rose-600 text-white border-rose-600 shadow-xs ring-2 ring-rose-200'
+                          : 'bg-slate-50/60 border-slate-200 text-slate-700 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200'
+                      }`}
+                    >
+                      <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">{filterBlacklistOnly ? 'Blacklisted Only' : 'All Candidates'}</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -2368,25 +2522,42 @@ const Admin = () => {
 
                 {/* Mobile Card View (shown on screens < md) */}
                 <div className="md:hidden divide-y divide-slate-100 bg-slate-50/30">
-                  {filteredApplications.map(app => (
+                  {filteredApplications.map(app => {
+                    const blacklisted = isCandidateBlacklisted(app.email);
+                    return (
                     <div
                       key={app._id}
                       onClick={() => {
                         setCandidateDrawerApp(app);
                         setDrawerNotesText(app.notes || '');
                       }}
-                      className="p-4 bg-white hover:bg-blue-50/30 active:bg-blue-50/50 transition-colors cursor-pointer flex flex-col gap-3"
+                      className={`p-4 transition-colors cursor-pointer flex flex-col gap-3 ${
+                        blacklisted
+                          ? 'bg-rose-50/70 hover:bg-rose-100/60 active:bg-rose-100 border-l-4 border-l-rose-600'
+                          : 'bg-white hover:bg-blue-50/30 active:bg-blue-50/50'
+                      }`}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 font-bold text-sm flex items-center justify-center shrink-0 border border-blue-100/80">
+                          <div className={`w-10 h-10 rounded-xl font-bold text-sm flex items-center justify-center shrink-0 border ${
+                            blacklisted
+                              ? 'bg-rose-100 text-rose-700 border-rose-300'
+                              : 'bg-blue-50 text-blue-600 border-blue-100/80'
+                          }`}>
                             {(app.candidateName || 'C').charAt(0).toUpperCase()}
                           </div>
                           <div className="min-w-0">
-                            <h5 className="text-sm font-bold text-slate-900 truncate">
-                              {app.candidateName}
-                            </h5>
-                            <p className="text-[11px] text-slate-500 truncate">{app.email}</p>
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <h5 className={`text-sm font-bold truncate ${blacklisted ? 'text-rose-900 font-black' : 'text-slate-900'}`}>
+                                {app.candidateName}
+                              </h5>
+                              {blacklisted && (
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-600 text-white tracking-wider uppercase shrink-0 shadow-2xs">
+                                  <ShieldAlert className="w-2.5 h-2.5" /> Blacklisted
+                                </span>
+                              )}
+                            </div>
+                            <p className={`text-[11px] truncate ${blacklisted ? 'text-rose-700 font-semibold' : 'text-slate-500'}`}>{app.email}</p>
                           </div>
                         </div>
 
@@ -2401,7 +2572,11 @@ const Admin = () => {
                         </span>
                       </div>
 
-                      <div className="bg-slate-50/80 rounded-xl p-2.5 border border-slate-100 flex flex-col gap-1.5 text-xs">
+                      <div className={`rounded-xl p-2.5 border flex flex-col gap-1.5 text-xs ${
+                        blacklisted
+                          ? 'bg-rose-100/40 border-rose-200/80 text-rose-950'
+                          : 'bg-slate-50/80 border-slate-100'
+                      }`}>
                         <div className="flex items-center justify-between text-slate-700 font-semibold">
                           <span className="text-slate-400 text-[11px]">Role:</span>
                           <span className="text-right truncate max-w-[200px] text-blue-700 font-bold">
@@ -2437,7 +2612,8 @@ const Admin = () => {
                         </button>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
 
                   {filteredApplications.length === 0 && (
                     <div className="text-center py-10 px-4 text-slate-400 italic text-xs">
@@ -2461,8 +2637,17 @@ const Admin = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 bg-white text-xs">
-                      {filteredApplications.map(app => (
-                        <tr key={app._id} className="hover:bg-slate-50/70 transition-colors font-medium">
+                      {filteredApplications.map(app => {
+                        const blacklisted = isCandidateBlacklisted(app.email);
+                        return (
+                        <tr
+                          key={app._id}
+                          className={`transition-colors font-medium ${
+                            blacklisted
+                              ? 'bg-rose-50/80 hover:bg-rose-100/70 border-l-4 border-l-rose-600'
+                              : 'hover:bg-slate-50/70'
+                          }`}
+                        >
                           <td className="px-6 py-4">
                             <button
                               type="button"
@@ -2472,14 +2657,29 @@ const Admin = () => {
                               }}
                               className="flex items-center gap-3 text-left group cursor-pointer focus:outline-none"
                             >
-                              <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 font-bold text-xs flex items-center justify-center shrink-0">
+                              <div className={`w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center shrink-0 border ${
+                                blacklisted
+                                  ? 'bg-rose-100 text-rose-700 border-rose-300'
+                                  : 'bg-blue-50 text-blue-600 border-transparent'
+                              }`}>
                                 {(app.candidateName || 'C').charAt(0).toUpperCase()}
                               </div>
                               <div className="flex flex-col">
-                                <span className="text-slate-900 font-bold text-sm group-hover:text-blue-600 transition-colors">
-                                  {app.candidateName}
-                                </span>
-                                <span className="text-[11px] text-slate-400">{app.email}</span>
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className={`font-bold text-sm transition-colors ${
+                                    blacklisted
+                                      ? 'text-rose-900 font-black group-hover:text-rose-700'
+                                      : 'text-slate-900 group-hover:text-blue-600'
+                                  }`}>
+                                    {app.candidateName}
+                                  </span>
+                                  {blacklisted && (
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-600 text-white tracking-wider uppercase shrink-0 shadow-2xs">
+                                      <ShieldAlert className="w-2.5 h-2.5" /> Blacklisted
+                                    </span>
+                                  )}
+                                </div>
+                                <span className={`text-[11px] ${blacklisted ? 'text-rose-700 font-semibold' : 'text-slate-400'}`}>{app.email}</span>
                               </div>
                             </button>
                           </td>
@@ -2514,7 +2714,8 @@ const Admin = () => {
                             </button>
                           </td>
                         </tr>
-                      ))}
+                        );
+                      })}
                       {filteredApplications.length === 0 && (
                         <tr>
                           <td colSpan="7" className="text-center py-10 text-slate-400 italic">
@@ -2546,7 +2747,9 @@ const Admin = () => {
                   <span className="text-[11px] font-semibold text-slate-400">Select candidate</span>
                 </div>
                 <div className="flex flex-col gap-2.5 overflow-y-auto max-h-[420px] xl:max-h-[calc(100vh-280px)]">
-                  {applications.map(app => (
+                  {applications.map(app => {
+                    const blacklisted = isCandidateBlacklisted(app.email);
+                    return (
                     <div
                       key={app._id}
                       onClick={() => {
@@ -2555,12 +2758,26 @@ const Admin = () => {
                       }}
                       className={`p-3.5 sm:p-4 rounded-2xl border cursor-pointer transition-all duration-200 ${
                         selectedApp && selectedApp._id === app._id
-                          ? 'bg-blue-50/50 border-blue-500 shadow-xs ring-1 ring-blue-500'
-                          : 'bg-white border-slate-200/80 hover:border-slate-300 hover:bg-slate-50/60'
+                          ? blacklisted
+                            ? 'bg-rose-100/60 border-rose-600 shadow-xs ring-2 ring-rose-500'
+                            : 'bg-blue-50/50 border-blue-500 shadow-xs ring-1 ring-blue-500'
+                          : blacklisted
+                            ? 'bg-rose-50/70 border-rose-300 hover:bg-rose-100/50 border-l-4 border-l-rose-600'
+                            : 'bg-white border-slate-200/80 hover:border-slate-300 hover:bg-slate-50/60'
                       }`}
                     >
                       <div className="flex justify-between items-start gap-2 mb-1">
-                        <h5 className="font-bold text-slate-900 text-sm truncate">{app.candidateName}</h5>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <h5 className={`font-bold text-sm truncate ${blacklisted ? 'text-rose-900 font-black' : 'text-slate-900'}`}>{app.candidateName}</h5>
+                            {blacklisted && (
+                              <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full text-[8px] font-black bg-rose-600 text-white tracking-wider uppercase shrink-0">
+                                <ShieldAlert className="w-2.5 h-2.5" /> Blacklisted
+                              </span>
+                            )}
+                          </div>
+                          <p className={`text-[11px] truncate ${blacklisted ? 'text-rose-700 font-semibold' : 'text-slate-400'}`}>{app.email}</p>
+                        </div>
                         <span className={`shrink-0 px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider ${
                           app.status === 'Selected' ? 'bg-teal-50 text-teal-700 border border-teal-200/60' :
                           app.status === 'Shortlisted' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' :
@@ -2571,7 +2788,7 @@ const Admin = () => {
                           {app.status || 'Applied'}
                         </span>
                       </div>
-                      <p className="text-xs font-semibold text-slate-500 mb-2 truncate">
+                      <p className={`text-xs font-semibold mb-2 truncate ${blacklisted ? 'text-rose-800' : 'text-slate-500'}`}>
                         {app.jobId ? (typeof app.jobId === 'object' ? app.jobId.title : app.jobId) : 'General Placement'}
                       </p>
                       <div className="flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase">
@@ -2579,7 +2796,8 @@ const Admin = () => {
                         <span>{app.createdAt ? new Date(app.createdAt).toLocaleDateString() : ''}</span>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                   {applications.length === 0 && (
                     <p className="text-sm text-slate-400 italic text-center p-8 bg-slate-50 border border-slate-200 rounded-2xl">
                       No applications recorded.
@@ -2633,6 +2851,27 @@ const Admin = () => {
 
                       {/* Download / Social Links */}
                       <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                        {isCandidateBlacklisted(selectedApp.email) ? (
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveBlacklistEmail(selectedApp.email)}
+                            className="px-3 py-2 rounded-xl text-xs font-bold bg-rose-100 text-rose-700 border border-rose-300 hover:bg-rose-200 transition-colors flex items-center gap-1.5 cursor-pointer"
+                            title="Remove candidate from blacklist"
+                          >
+                            <ShieldAlert className="w-3.5 h-3.5" />
+                            <span>Remove Blacklist</span>
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => handleAddBlacklistEmail(selectedApp.email, 'Flagged from review panel')}
+                            className="px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 transition-colors flex items-center gap-1.5 cursor-pointer"
+                            title="Add candidate email to blacklist"
+                          >
+                            <Ban className="w-3.5 h-3.5 text-rose-600" />
+                            <span>Blacklist Candidate</span>
+                          </button>
+                        )}
                         {selectedApp.linkedInUrl && (
                           <a
                             href={selectedApp.linkedInUrl}
@@ -2664,6 +2903,33 @@ const Admin = () => {
                         </a>
                       </div>
                     </div>
+
+                    {/* Blacklist Alert Banner if Flagged */}
+                    {isCandidateBlacklisted(selectedApp.email) && (
+                      <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 flex items-start gap-3">
+                        <div className="p-2 bg-rose-100 text-rose-700 rounded-xl shrink-0 mt-0.5">
+                          <ShieldAlert className="w-5 h-5 text-rose-600" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2 flex-wrap">
+                            <h4 className="text-sm font-black text-rose-900 flex items-center gap-1.5">
+                              Internal Review Flag: Blacklisted Candidate
+                            </h4>
+                            <span className="text-[10px] font-bold text-rose-600 uppercase tracking-wider bg-rose-100 px-2 py-0.5 rounded-md">
+                              Internal Review Only (Not Auto-Rejected)
+                            </span>
+                          </div>
+                          <p className="text-xs text-rose-700 font-medium mt-1">
+                            This candidate’s email (<span className="font-bold underline">{selectedApp.email}</span>) matches the internal blacklist registry. They were permitted to submit an application, but are displayed in red for reviewer discretion.
+                          </p>
+                          {getBlacklistEntry(selectedApp.email)?.reason && (
+                            <p className="text-xs text-rose-800 font-semibold mt-1 bg-white/80 p-2 rounded-lg border border-rose-200/60 inline-block">
+                              Reason: {getBlacklistEntry(selectedApp.email).reason}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Content Split: Details/Notes & Embed Resume Viewer */}
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 flex-1 items-stretch">
@@ -2960,36 +3226,53 @@ const Admin = () => {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 h-full">
-                {/* Birthdays Column (1/3 width) */}
-                <div data-lenis-prevent className="lg:col-span-1 bg-gradient-to-br from-indigo-50 to-pink-50 border border-indigo-100 rounded-2xl sm:rounded-[3rem] p-5 sm:p-8 flex flex-col gap-6 overflow-hidden shadow-sm max-h-[380px] lg:max-h-none">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 h-full">
+                {/* Birthdays Column (Expanded for full name readability) */}
+                <div data-lenis-prevent className="lg:col-span-5 bg-gradient-to-br from-indigo-50 to-pink-50 border border-indigo-100 rounded-2xl sm:rounded-[3rem] p-5 sm:p-7 flex flex-col gap-5 overflow-hidden shadow-sm max-h-[480px] lg:max-h-none">
                   <div className="flex items-center gap-3 border-b border-indigo-200/50 pb-4">
                     <div className="w-10 h-10 bg-indigo-500 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
                       <PartyPopper className="w-5 h-5 text-white" />
                     </div>
-                    <h4 className="text-lg sm:text-xl font-black text-indigo-950">Upcoming Birthdays</h4>
+                    <div>
+                      <h4 className="text-lg sm:text-xl font-black text-indigo-950">Upcoming Birthdays</h4>
+                      <p className="text-[11px] font-semibold text-indigo-600/70">Celebrations in your team</p>
+                    </div>
                   </div>
-                  <div className="flex-1 overflow-auto flex flex-col gap-4 pr-2">
+                  <div className="flex-1 overflow-auto flex flex-col gap-3 pr-2">
                     {getUpcomingBirthdays().length === 0 ? (
-                      <div className="text-center text-indigo-400 italic p-4">No birthdays found. Add DOB to employees.</div>
+                      <div className="text-center text-indigo-400 italic p-6 bg-white/60 rounded-2xl border border-indigo-100">
+                        No birthdays found. Add DOB to employees.
+                      </div>
                     ) : (
                       getUpcomingBirthdays().map((emp, index) => (
-                        <div key={emp.id} className="bg-white p-4 rounded-2xl shadow-sm border border-indigo-50 flex items-center gap-4 hover:shadow-md transition-all">
-                          <div className="w-12 h-12 bg-indigo-100 rounded-full flex flex-col items-center justify-center text-indigo-700 shrink-0">
-                            <span className="text-[10px] font-bold uppercase leading-none">{emp.nextBirthday.toLocaleString('default', { month: 'short' })}</span>
-                            <span className="text-lg font-black leading-none mt-0.5">{emp.nextBirthday.getDate()}</span>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="font-bold text-gray-900 truncate">{emp.name}</div>
-                            <div className="text-xs text-gray-500 truncate">{emp.department || emp.role}</div>
+                        <div key={emp.id} className="bg-white p-4 rounded-2xl shadow-sm border border-indigo-50 flex items-center justify-between gap-3.5 hover:shadow-md transition-all">
+                          <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                            <div className="w-12 h-12 bg-indigo-100 rounded-2xl flex flex-col items-center justify-center text-indigo-700 shrink-0 border border-indigo-200/60 shadow-sm">
+                              <span className="text-[10px] font-bold uppercase leading-none">{emp.nextBirthday.toLocaleString('default', { month: 'short' })}</span>
+                              <span className="text-lg font-black leading-none mt-1">{emp.nextBirthday.getDate()}</span>
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="font-bold text-gray-900 text-sm sm:text-base leading-snug break-words">
+                                {emp.name}
+                              </div>
+                              <div className="text-xs text-gray-500 font-medium break-words mt-0.5">
+                                {emp.department || emp.role || 'Team Member'}
+                              </div>
+                            </div>
                           </div>
                           <div className="text-right shrink-0">
                             {emp.daysUntil === 0 ? (
-                              <span className="text-[10px] font-black text-pink-600 bg-pink-100 px-2 py-1 rounded-full animate-pulse tracking-wide">TODAY!</span>
+                              <span className="text-[11px] font-black text-pink-600 bg-pink-100 border border-pink-200 px-2.5 py-1.5 rounded-full animate-pulse tracking-wide inline-block shadow-sm">
+                                TODAY! 🎉
+                              </span>
                             ) : emp.daysUntil === 1 ? (
-                              <span className="text-[10px] font-bold text-indigo-600 bg-indigo-100 px-2 py-1 rounded-full">Tomorrow</span>
+                              <span className="text-[11px] font-bold text-indigo-700 bg-indigo-100 border border-indigo-200 px-2.5 py-1.5 rounded-full inline-block">
+                                Tomorrow
+                              </span>
                             ) : (
-                              <span className="text-xs font-bold text-gray-500">{emp.daysUntil} days</span>
+                              <span className="text-xs font-black text-indigo-900 bg-white border border-indigo-100 px-2.5 py-1 rounded-xl shadow-xs inline-block">
+                                In {emp.daysUntil} days
+                              </span>
                             )}
                           </div>
                         </div>
@@ -2998,8 +3281,8 @@ const Admin = () => {
                   </div>
                 </div>
 
-                {/* Photo Gallery Column (2/3 width) */}
-                <div data-lenis-prevent className="lg:col-span-2 bg-[#EFF6FF] border border-[#BFDBFE] rounded-2xl sm:rounded-[3rem] p-5 sm:p-8 flex flex-col gap-6 overflow-hidden">
+                {/* Photo Gallery Column */}
+                <div data-lenis-prevent className="lg:col-span-7 bg-[#EFF6FF] border border-[#BFDBFE] rounded-2xl sm:rounded-[3rem] p-5 sm:p-8 flex flex-col gap-6 overflow-hidden">
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-[#BFDBFE]/50 pb-4">
                     <h4 className="text-lg sm:text-xl font-black text-black flex items-center gap-2">
                       <ImageIcon className="w-5 h-5 text-primary" /> Event Gallery ({eventPhotos.length})
@@ -3970,10 +4253,59 @@ const Admin = () => {
                   <span>LinkedIn</span>
                 </a>
               )}
+
+              {/* Blacklist Toggle Button */}
+              {isCandidateBlacklisted(candidateDrawerApp.email) ? (
+                <button
+                  type="button"
+                  onClick={() => handleRemoveBlacklistEmail(candidateDrawerApp.email)}
+                  className="py-2 sm:py-2.5 px-3 sm:px-4 rounded-xl font-bold text-xs bg-rose-100 text-rose-700 border border-rose-300 hover:bg-rose-200 flex items-center justify-center gap-1.5 transition-all shadow-2xs active:scale-98 shrink-0 cursor-pointer"
+                  title="Remove candidate from blacklist"
+                >
+                  <ShieldAlert className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                  <span>Remove Blacklist</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleAddBlacklistEmail(candidateDrawerApp.email, 'Flagged from candidate drawer')}
+                  className="py-2 sm:py-2.5 px-3 sm:px-4 rounded-xl font-bold text-xs bg-white border border-rose-200 text-rose-700 hover:bg-rose-50 flex items-center justify-center gap-1.5 transition-all shadow-2xs active:scale-98 shrink-0 cursor-pointer"
+                  title="Flag candidate on blacklist"
+                >
+                  <Ban className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                  <span>Blacklist Email</span>
+                </button>
+              )}
             </div>
 
             {/* Drawer Body Content */}
             <div className="p-3.5 sm:p-5 lg:p-6 flex flex-col gap-4 sm:gap-5 pb-8">
+              {/* Blacklisted Warning Banner */}
+              {isCandidateBlacklisted(candidateDrawerApp.email) && (
+                <div className="bg-rose-50 border-2 border-rose-300 rounded-2xl p-4 flex items-start gap-3 shadow-xs">
+                  <div className="p-2 bg-rose-600 text-white rounded-xl shrink-0 mt-0.5">
+                    <ShieldAlert className="w-5 h-5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                      <h4 className="text-sm font-black text-rose-950 flex items-center gap-1.5">
+                        Internal Review Flag: Blacklisted
+                      </h4>
+                      <span className="text-[10px] font-black uppercase tracking-wider bg-rose-600 text-white px-2 py-0.5 rounded-full shadow-2xs">
+                        Reviewer Notice
+                      </span>
+                    </div>
+                    <p className="text-xs text-rose-800 font-medium mt-1">
+                      This candidate was allowed to submit an application normally, but has been flagged in red as blacklisted for internal review.
+                    </p>
+                    {getBlacklistEntry(candidateDrawerApp.email)?.reason && (
+                      <p className="text-xs text-rose-900 font-bold mt-1.5 bg-white/80 p-2 rounded-lg border border-rose-200 inline-block">
+                        Reason: {getBlacklistEntry(candidateDrawerApp.email).reason}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
               {/* Profile Details Card */}
               <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-3.5 sm:p-5 flex flex-col gap-3">
                 <h4 className="text-[11px] sm:text-xs font-extrabold uppercase text-slate-500 tracking-wider">Candidate Contact & Overview</h4>
@@ -4150,6 +4482,164 @@ const Admin = () => {
           </div>
         </div>
       )}
+
+      {/* Blacklist Management Modal */}
+      {isBlacklistModalOpen && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 overflow-y-auto">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+            onClick={() => setIsBlacklistModalOpen(false)}
+          />
+
+          {/* Modal Container */}
+          <div className="relative bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-xl z-10 overflow-hidden flex flex-col my-8">
+            {/* Header */}
+            <div className="p-5 sm:p-6 bg-gradient-to-r from-rose-600 to-rose-700 text-white flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-white/10 rounded-2xl backdrop-blur-xs">
+                  <ShieldAlert className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-black tracking-tight">Blacklisted Candidates Registry</h3>
+                  <p className="text-xs text-rose-100 font-medium">Internal review flags &bull; No automatic candidate rejection</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsBlacklistModalOpen(false)}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                aria-label="Close modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Info Notice */}
+            <div className="p-4 bg-rose-50/70 border-b border-rose-100 flex items-start gap-2.5 text-xs text-rose-900">
+              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+              <div>
+                <span className="font-bold">How this works: </span>
+                Candidates with these email addresses can still apply through the career forms as normal. However, in the Admin Panel Application and Pipeline sections, they will clearly be highlighted in <span className="font-extrabold text-rose-700">red</span> with a warning badge for your internal recruitment team to review.
+              </div>
+            </div>
+
+            {/* Add Email Form */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleAddBlacklistEmail(blacklistInputEmail, blacklistInputReason);
+              }}
+              className="p-5 sm:p-6 border-b border-slate-100 flex flex-col gap-3 bg-slate-50/50"
+            >
+              <h4 className="text-xs font-black uppercase text-slate-600 tracking-wider">Add Candidate Email to Blacklist</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+                <div className="sm:col-span-6">
+                  <input
+                    type="email"
+                    required
+                    value={blacklistInputEmail}
+                    onChange={(e) => setBlacklistInputEmail(e.target.value)}
+                    placeholder="Candidate email (e.g. john@domain.com)"
+                    className="w-full bg-white border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-900 outline-none focus:border-rose-500 transition-colors shadow-2xs"
+                  />
+                </div>
+                <div className="sm:col-span-4">
+                  <input
+                    type="text"
+                    value={blacklistInputReason}
+                    onChange={(e) => setBlacklistInputReason(e.target.value)}
+                    placeholder="Reason / internal note..."
+                    className="w-full bg-white border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-900 outline-none focus:border-rose-500 transition-colors shadow-2xs"
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <button
+                    type="submit"
+                    className="w-full h-full min-h-[38px] bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-xs cursor-pointer active:scale-98"
+                  >
+                    <Plus className="w-4 h-4 shrink-0" />
+                    <span>Add</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            {/* Existing Blacklist List */}
+            <div className="p-5 sm:p-6 flex flex-col gap-3 max-h-[340px] overflow-y-auto">
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-black uppercase text-slate-600 tracking-wider">
+                  Currently Blacklisted Emails ({blacklistedEmails.length})
+                </h4>
+                {blacklistedEmails.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (window.confirm('Clear all blacklisted candidate emails?')) {
+                        setBlacklistedEmails([]);
+                        toast.info('Blacklist cleared.');
+                      }
+                    }}
+                    className="text-[11px] font-bold text-rose-600 hover:text-rose-800 transition-colors cursor-pointer"
+                  >
+                    Clear All
+                  </button>
+                )}
+              </div>
+
+              {blacklistedEmails.length === 0 ? (
+                <div className="text-center py-8 px-4 bg-slate-50 rounded-2xl border border-slate-200/80 text-slate-400 text-xs italic">
+                  No candidates currently blacklisted. Enter an email address above to flag someone for internal review.
+                </div>
+              ) : (
+                <div className="divide-y divide-slate-100 border border-slate-200/80 rounded-2xl overflow-hidden bg-white shadow-2xs">
+                  {blacklistedEmails.map((item, idx) => {
+                    const email = typeof item === 'string' ? item : item.email;
+                    const reason = typeof item === 'object' ? item.reason : '';
+                    const addedAt = typeof item === 'object' && item.addedAt ? new Date(item.addedAt).toLocaleDateString() : '';
+                    return (
+                      <div key={idx} className="p-3 sm:p-3.5 flex items-center justify-between gap-3 hover:bg-rose-50/40 transition-colors">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="w-7 h-7 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
+                            <ShieldAlert className="w-3.5 h-3.5" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-xs font-extrabold text-slate-900 truncate">{email}</p>
+                            <div className="flex items-center gap-2 text-[10px] text-slate-500 font-medium">
+                              {reason && <span className="text-rose-700 font-semibold truncate max-w-[200px]">{reason}</span>}
+                              {addedAt && <span>&bull; Added {addedAt}</span>}
+                            </div>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveBlacklistEmail(email)}
+                          className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer shrink-0"
+                          title="Remove from blacklist"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setIsBlacklistModalOpen(false)}
+                className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar theme="colored" />
     </div>
   );

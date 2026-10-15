@@ -18,6 +18,16 @@
   font-family: 'Faculty Glyphic', sans-serif !important;
 }
 
+/* Scoped font for Admin Panel only: IBM Plex Serif */
+.admin-panel-root,
+.admin-panel-root *,
+.admin-panel-root input,
+.admin-panel-root button,
+.admin-panel-root select,
+.admin-panel-root textarea {
+  font-family: 'IBM Plex Serif', serif !important;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

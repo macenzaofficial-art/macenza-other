@@ -13,7 +13,7 @@ import HCaptcha from '@hcaptcha/react-hcaptcha';
 gsap.registerPlugin(ScrollTrigger);
 
 const contactInfo = [
-  { title: "Email", value: "info@macenza.com999999999999999", icon: "✉️", bgClass: "bg-violet-500/10" },
+  { title: "Email", value: "info@macenza.com", icon: "✉️", bgClass: "bg-violet-500/10" },
   { title: "Business Inquiries", value: "shanki9414@gmail.com", icon: "💬", bgClass: "bg-teal-500/10" },
   { title: "Phone", value: "+91 94146 60123", icon: "📞", bgClass: "bg-emerald-500/10" },
   { title: "Working Hours", value: "Mon - Sat | 10 AM - 6 PM", icon: "⏰", bgClass: "bg-amber-500/10" }

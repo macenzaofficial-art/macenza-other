@@ -8,7 +8,7 @@ import { Send, ChevronDown, Loader2 } from 'lucide-react';
 const ReactGlobe = lazy(() => import('react-globe.gl'));
 import { toast } from 'react-toastify';
 import SEO from '../components/SEO';
-import ReCAPTCHA from 'react-google-recaptcha';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -64,7 +64,8 @@ const faqs = [
 const Contact = () => {
   const pageRef = useRef(null);
   const containerRef = useRef(null);
-  const recaptchaRef = useRef(null);
+  const hcaptchaRef = useRef(null);
+  const [hcaptchaToken, setHcaptchaToken] = useState('');
   const [globeInstance, setGlobeInstance] = useState(null);
   const [isGlobeInView, setIsGlobeInView] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
@@ -106,9 +107,9 @@ const Contact = () => {
       return;
     }
 
-    // reCAPTCHA verification check
-    const recaptchaToken = recaptchaRef.current ? recaptchaRef.current.getValue() : '';
-    if (!recaptchaToken) {
+    // hCaptcha verification check
+    const token = hcaptchaToken || (hcaptchaRef.current ? hcaptchaRef.current.getResponse() : '');
+    if (!token) {
       toast.error('Please verify that you are not a robot.');
       return;
     }
@@ -128,7 +129,7 @@ const Contact = () => {
           project_type: formData.project_type,
           budget: formData.budget,
           details: formData.details.trim(),
-          recaptchaToken
+          captchaToken: token
         })
       });
 
@@ -148,7 +149,8 @@ const Contact = () => {
         details: '',
         honeypot: ''
       });
-      recaptchaRef.current?.reset();
+      hcaptchaRef.current?.resetCaptcha();
+      setHcaptchaToken('');
     } catch (err) {
       console.error(err);
       toast.error('Failed to send message: ' + err.message);
@@ -490,9 +492,12 @@ const Contact = () => {
                   ></textarea>
                 </div>
                 <div className="flex justify-center py-2">
-                  <ReCAPTCHA
-                    ref={recaptchaRef}
-                    sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                  <HCaptcha
+                    ref={hcaptchaRef}
+                    sitekey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
+                    onVerify={(token) => setHcaptchaToken(token)}
+                    onExpire={() => setHcaptchaToken('')}
+                    theme="dark"
                   />
                 </div>
                 <button

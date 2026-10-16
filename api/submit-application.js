@@ -22,35 +22,38 @@ export default async function handler(req, res) {
     coverLetter,
     resumeUrl,
     jobId,
+    captchaToken,
     recaptchaToken
   } = req.body;
 
-  if (!recaptchaToken) {
-    return res.status(400).json({ error: 'reCAPTCHA token is required.' });
+  const token = captchaToken || recaptchaToken;
+
+  if (!token) {
+    return res.status(400).json({ error: 'Captcha verification token is required.' });
   }
 
-  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+  const secretKey = process.env.HCAPTCHA_SECRET_KEY || process.env.RECAPTCHA_SECRET_KEY;
   if (!secretKey) {
-    return res.status(500).json({ error: 'reCAPTCHA secret key is not configured on the server.' });
+    return res.status(500).json({ error: 'hCaptcha secret key is not configured on the server.' });
   }
 
   try {
-    // Verify reCAPTCHA token with Google
-    const verifyRes = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+    // Verify token with hCaptcha
+    const verifyRes = await fetch('https://api.hcaptcha.com/siteverify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
         secret: secretKey,
-        response: recaptchaToken,
+        response: token,
       }),
     });
 
     const verifyData = await verifyRes.json();
 
     if (!verifyData.success) {
-      return res.status(400).json({ error: 'reCAPTCHA verification failed.' });
+      return res.status(400).json({ error: 'Captcha verification failed. Please try again.' });
     }
 
     // Insert application record into Supabase (exact match of your original schema)

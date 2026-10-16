@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { fallbackJobs } from '../data/fallbackJobs';
 import Footer from '../components/Footer';
 import SEO from '../components/SEO';
-import ReCAPTCHA from 'react-google-recaptcha';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 import {
   MapPin, Clock, Briefcase, Calendar, Users, DollarSign,
   ArrowLeft, Upload, Check, ChevronRight, Share2, Award, ShieldCheck
@@ -159,7 +159,8 @@ const JobDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const pageRef = useRef(null);
-  const recaptchaRef = useRef(null);
+  const hcaptchaRef = useRef(null);
+  const [hcaptchaToken, setHcaptchaToken] = useState('');
 
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -345,9 +346,9 @@ const JobDetails = () => {
       return;
     }
 
-    // reCAPTCHA verification check
-    const recaptchaToken = recaptchaRef.current ? recaptchaRef.current.getValue() : '';
-    if (!recaptchaToken) {
+    // hCaptcha verification check
+    const token = hcaptchaToken || (hcaptchaRef.current ? hcaptchaRef.current.getResponse() : '');
+    if (!token) {
       const err = 'Please verify that you are not a robot.';
       setSubmitError(err);
       toast.error(err);
@@ -392,7 +393,7 @@ const JobDetails = () => {
           coverLetter: formData.coverLetter,
           resumeUrl: publicUrl,
           jobId: (job && (job.id || job._id)) !== 'general' ? (job.id || job._id) : null,
-          recaptchaToken
+          captchaToken: token
         })
       });
 
@@ -405,7 +406,8 @@ const JobDetails = () => {
       toast.success('Application submitted successfully!');
       setFormData(initialFormState);
       setResumeFile(null);
-      recaptchaRef.current?.reset();
+      hcaptchaRef.current?.resetCaptcha();
+      setHcaptchaToken('');
     } catch (err) {
       console.error(err);
       const errorMsg = err.message || 'Submission failed. Please check entries.';
@@ -825,11 +827,14 @@ const JobDetails = () => {
                     </label>
                   </div>
 
-                  {/* reCAPTCHA Checkbox */}
+                  {/* hCaptcha Checkbox */}
                   <div className="flex justify-center py-2">
-                    <ReCAPTCHA
-                      ref={recaptchaRef}
-                      sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                    <HCaptcha
+                      ref={hcaptchaRef}
+                      sitekey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
+                      onVerify={(token) => setHcaptchaToken(token)}
+                      onExpire={() => setHcaptchaToken('')}
+                      theme="dark"
                     />
                   </div>
 

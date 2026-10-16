@@ -7,7 +7,6 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 
 // Lazy load all pages
-const ChatWidget = lazy(() => import('./components/ChatWidget'));
 const About = lazy(() => import('./pages/About'));
 const Solutions = lazy(() => import('./pages/Solutions'));
 const Technology = lazy(() => import('./pages/Technology'));
@@ -52,11 +51,6 @@ function App() {
       <ToastContainer position="bottom-center" autoClose={3000} hideProgressBar theme="colored" />
       {!isAdmin && <SmoothScroll />}
       {!isAdmin && <Navbar />}
-      {!isAdmin && (
-        <Suspense fallback={null}>
-          <ChatWidget />
-        </Suspense>
-      )}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<Suspense fallback={<PageLoader />}><About /></Suspense>} />

@@ -10,7 +10,6 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes('node_modules')) {
             if (id.includes('@supabase/supabase-js')) return 'vendor-supabase';
-            if (id.includes('@lottiefiles/dotlottie-react') || id.includes('@lottiefiles/dotlottie-web')) return 'vendor-lottie';
             if (id.includes('react-globe.gl') || id.includes('three-globe') || id.includes('three')) return 'vendor-globe';
             if (id.includes('gsap')) return 'vendor-gsap';
             if (id.includes('lucide-react')) return 'vendor-icons';

@@ -497,7 +497,6 @@ const Contact = () => {
                     sitekey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
                     onVerify={(token) => setHcaptchaToken(token)}
                     onExpire={() => setHcaptchaToken('')}
-                    theme="dark"
                   />
                 </div>
                 <button

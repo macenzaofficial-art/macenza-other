@@ -2261,21 +2261,24 @@ const Admin = () => {
               <span className="text-xl group-hover:scale-110 transition-transform duration-200">📝</span>
               <span>Blog Editor</span>
             </a>
+
+            {/* Sign Out Admin Button */}
+            <button
+              type="button"
+              onClick={() => {
+                if (typeof window !== 'undefined' && window.innerWidth < 1024) setIsSidebarOpen(false);
+                handleSignOut();
+              }}
+              className="flex items-center gap-3 py-2.5 px-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 text-rose-600 hover:text-rose-700 hover:bg-rose-50/80 group whitespace-nowrap cursor-pointer"
+            >
+              <span className="text-xl group-hover:scale-110 transition-transform duration-200">🚪</span>
+              <span>Sign Out Admin</span>
+            </button>
           </nav>
         </div>
 
-        <div className="flex flex-col gap-3 mt-6">
-          <button
-            onClick={() => {
-              if (typeof window !== 'undefined' && window.innerWidth < 1024) setIsSidebarOpen(false);
-              handleSignOut();
-            }}
-            className="w-full flex items-center justify-center gap-2.5 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 rounded-xl font-bold text-xs tracking-wide transition-all duration-200 cursor-pointer shadow-xs"
-          >
-            <span>🚪</span> Sign Out Admin
-          </button>
-
-          {/* Info panel at bottom */}
+        {/* Info panel at bottom */}
+        <div className="mt-6">
           <div className="px-3.5 py-2 bg-white/70 border border-white/80 rounded-xl flex items-center justify-between text-slate-600 shadow-xs">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Live Database</span>
             <div className="flex items-center gap-1.5">

@@ -2194,7 +2194,7 @@ const Admin = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-72 max-w-[85vw] bg-white/10 backdrop-blur-md border-r border-white/20 shadow-xs flex flex-col justify-between h-full py-6 px-5 transition-transform duration-300 ease-in-out lg:static lg:h-screen lg:sticky lg:top-0 lg:z-0 lg:w-72 ${
+        className={`fixed inset-y-0 left-0 z-40 w-72 max-w-[85vw] bg-white/95 border-r border-slate-200 shadow-2xl flex flex-col justify-between h-full py-6 px-5 transition-transform duration-300 ease-in-out lg:static lg:h-screen lg:sticky lg:top-0 lg:z-0 lg:w-72 lg:bg-white/10 lg:backdrop-blur-md lg:border-r lg:border-white/20 lg:shadow-xs ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:hidden'
         }`}
       >
@@ -2209,7 +2209,7 @@ const Admin = () => {
             <button
               type="button"
               onClick={() => setIsSidebarOpen(false)}
-              className="lg:hidden p-1.5 rounded-xl bg-white/20 hover:bg-white/40 text-slate-700 hover:text-slate-900 transition-colors cursor-pointer"
+              className="lg:hidden p-1.5 rounded-xl bg-slate-100/80 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
               title="Close side panel"
               aria-label="Close side panel"
             >

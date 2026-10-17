@@ -168,7 +168,7 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
   const hiredCount = applications.filter(a => a.status === 'Selected' || a.status === 'Hired').length;
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-7 shadow-sm transition-all">
+    <div className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/60 shadow-sm transition-all">
       {/* Card Header & Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
         <div>
@@ -198,7 +198,7 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
             <button
               key={tab.id}
               onClick={() => setTimeRange(tab.id)}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 timeRange === tab.id
                   ? 'bg-white text-blue-600 shadow-xs font-bold'
                   : 'text-slate-600 hover:text-slate-900'

@@ -21,9 +21,9 @@ const RecentActivityAndActions = ({
   const recentApps = applications.slice(0, 5);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       {/* Left: Recent Candidate Submissions List (8 cols) */}
-      <div className="lg:col-span-8 bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-7 shadow-sm">
+      <div className="lg:col-span-8 bg-white/60 backdrop-blur-md rounded-3xl border border-white/60 p-5 sm:p-7 shadow-sm">
         <div className="flex items-center justify-between pb-4 border-b border-slate-100">
           <div>
             <h3 className="text-base font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
@@ -35,7 +35,7 @@ const RecentActivityAndActions = ({
           </div>
           <button
             onClick={() => onNavigateTab && onNavigateTab('Applications')}
-            className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 hover:underline"
+            className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 hover:underline cursor-pointer"
           >
             View All ({applications.length}) <ArrowRight className="w-3.5 h-3.5" />
           </button>
@@ -104,7 +104,7 @@ const RecentActivityAndActions = ({
       </div>
 
       {/* Right: Quick Hiring Actions (4 cols) */}
-      <div className="lg:col-span-4 bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 text-white flex flex-col justify-between shadow-md">
+      <div className="lg:col-span-4 bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-md rounded-3xl p-6 text-white flex flex-col justify-between shadow-md border border-slate-700/40">
         <div>
           <div className="flex items-center justify-between mb-4">
             <span className="text-[10px] font-bold uppercase tracking-widest text-blue-400 flex items-center gap-1.5">
@@ -123,7 +123,7 @@ const RecentActivityAndActions = ({
           <div className="flex flex-col gap-2.5">
             <button
               onClick={() => onOpenCreateJob && onOpenCreateJob()}
-              className="w-full flex items-center justify-between px-4 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl text-white text-xs font-bold transition-all shadow-sm active:scale-98"
+              className="w-full flex items-center justify-between px-4 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl text-white text-xs font-bold transition-all shadow-sm active:scale-98 cursor-pointer"
             >
               <span className="flex items-center gap-2">
                 <Plus className="w-4 h-4" /> Create New Job Posting
@@ -133,7 +133,7 @@ const RecentActivityAndActions = ({
 
             <button
               onClick={() => onNavigateTab && onNavigateTab('Applications')}
-              className="w-full flex items-center justify-between px-4 py-3 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 rounded-xl text-slate-200 text-xs font-bold transition-all active:scale-98"
+              className="w-full flex items-center justify-between px-4 py-3 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 rounded-xl text-slate-200 text-xs font-bold transition-all active:scale-98 cursor-pointer"
             >
               <span className="flex items-center gap-2">
                 <FileText className="w-4 h-4 text-slate-400" /> Review All Applications
@@ -145,7 +145,7 @@ const RecentActivityAndActions = ({
 
             <button
               onClick={() => onNavigateTab && onNavigateTab('Resume Manager')}
-              className="w-full flex items-center justify-between px-4 py-3 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 rounded-xl text-slate-200 text-xs font-bold transition-all active:scale-98"
+              className="w-full flex items-center justify-between px-4 py-3 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 rounded-xl text-slate-200 text-xs font-bold transition-all active:scale-98 cursor-pointer"
             >
               <span className="flex items-center gap-2">
                 <Users className="w-4 h-4 text-slate-400" /> Resume Evaluator

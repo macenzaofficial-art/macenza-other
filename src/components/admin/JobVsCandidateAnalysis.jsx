@@ -155,7 +155,7 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
   }, [jobStats]);
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-7 shadow-sm transition-all">
+    <div className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/60 shadow-sm transition-all">
       {/* Card Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
         <div className="flex items-center gap-2">
@@ -176,7 +176,7 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
         <div className="flex items-center gap-1.5 self-start sm:self-auto bg-slate-100/80 p-1 rounded-xl border border-slate-200/60 text-xs font-semibold">
           <button
             onClick={() => setActiveView('byJob')}
-            className={`px-3 py-1.5 rounded-lg transition-all ${
+            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
               activeView === 'byJob'
                 ? 'bg-white text-indigo-600 shadow-xs font-bold'
                 : 'text-slate-600 hover:text-slate-900'
@@ -186,7 +186,7 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
           </button>
           <button
             onClick={() => setActiveView('openingsVsApps')}
-            className={`px-3 py-1.5 rounded-lg transition-all ${
+            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
               activeView === 'openingsVsApps'
                 ? 'bg-white text-indigo-600 shadow-xs font-bold'
                 : 'text-slate-600 hover:text-slate-900'
@@ -196,7 +196,7 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
           </button>
           <button
             onClick={() => setActiveView('byDept')}
-            className={`px-3 py-1.5 rounded-lg transition-all ${
+            className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
               activeView === 'byDept'
                 ? 'bg-white text-indigo-600 shadow-xs font-bold'
                 : 'text-slate-600 hover:text-slate-900'

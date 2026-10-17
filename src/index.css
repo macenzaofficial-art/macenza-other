@@ -104,7 +104,9 @@ p {
   letter-spacing: 0.01em;
 }
 
-li, a, span {
+li,
+a,
+span {
   letter-spacing: 0.005em;
 }
 
@@ -166,6 +168,7 @@ li, a, span {
   from {
     stroke-dashoffset: 240;
   }
+
   to {
     stroke-dashoffset: 0;
   }
@@ -188,10 +191,13 @@ li, a, span {
 }
 
 @keyframes node-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.6;
   }
+
   50% {
     transform: scale(1.25);
     opacity: 1;
@@ -228,9 +234,12 @@ nav.fixed.nav-hidden {
 }
 
 @keyframes pulseGlow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4), 0 0 0 0px rgba(37, 99, 235, 0.3);
   }
+
   50% {
     box-shadow: 0 10px 30px rgba(37, 99, 235, 0.5), 0 0 0 12px rgba(37, 99, 235, 0);
   }
@@ -245,6 +254,7 @@ nav.fixed.nav-hidden {
   0% {
     transform: translateX(0%);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -254,6 +264,7 @@ nav.fixed.nav-hidden {
   0% {
     transform: translateX(-50%);
   }
+
   100% {
     transform: translateX(0%);
   }
@@ -276,6 +287,7 @@ nav.fixed.nav-hidden {
   0% {
     transform: translateX(0%);
   }
+
   100% {
     transform: translateX(-25%);
   }
@@ -292,12 +304,15 @@ nav.fixed.nav-hidden {
     transform: translateY(-120px);
     opacity: 0;
   }
+
   15% {
     opacity: 1;
   }
+
   85% {
     opacity: 1;
   }
+
   100% {
     transform: translateY(650px);
     opacity: 0;
@@ -306,4 +321,100 @@ nav.fixed.nav-hidden {
 
 .animate-beam-fall {
   animation: beam-fall 6s linear infinite;
-}
+}
+
+/* Custom Scrollbars (Transparent track, slim pill thumb) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.45) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.65);
+}
+
+::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Scoped, Frosted Glass Scrollbars for Admin Panel */
+.admin-panel-root,
+.admin-panel-root * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(2, 132, 199, 0.35) transparent;
+}
+
+.admin-panel-root ::-webkit-scrollbar,
+.admin-panel-root::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.admin-panel-root ::-webkit-scrollbar-track,
+.admin-panel-root::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-panel-root ::-webkit-scrollbar-thumb,
+.admin-panel-root::-webkit-scrollbar-thumb {
+  background: rgba(2, 132, 199, 0.35);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+.admin-panel-root ::-webkit-scrollbar-thumb:hover,
+.admin-panel-root::-webkit-scrollbar-thumb:hover {
+  background: rgba(2, 132, 199, 0.65);
+}
+
+.admin-panel-root ::-webkit-scrollbar-button,
+.admin-panel-root::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Custom Scrollbar Utility */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(2, 132, 199, 0.35) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(2, 132, 199, 0.35);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(2, 132, 199, 0.65);
+}

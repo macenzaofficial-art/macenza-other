@@ -155,25 +155,25 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
   }, [jobStats]);
 
   return (
-    <div className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/60 shadow-sm transition-all">
+    <div className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/60 shadow-sm transition-all p-6 sm:p-8 lg:p-9">
       {/* Card Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-2 border-b border-slate-100">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
             <BarChart2 className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-lg font-extrabold text-slate-900 tracking-tight">
+            <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">
               Job Posts vs. Applied Candidates Analysis
             </h3>
-            <p className="text-xs text-slate-500 font-medium">
+            <p className="text-xs text-slate-500 font-medium mt-0.5">
               Compare candidate inflow, opening demands, and departmental talent density
             </p>
           </div>
         </div>
 
         {/* View Switcher */}
-        <div className="flex items-center gap-1.5 self-start sm:self-auto bg-slate-100/80 p-1 rounded-xl border border-slate-200/60 text-xs font-semibold">
+        <div className="flex items-center gap-1.5 self-start sm:self-auto bg-slate-100/80 p-1.5 rounded-xl border border-slate-200/60 text-xs font-semibold">
           <button
             onClick={() => setActiveView('byJob')}
             className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
@@ -208,7 +208,7 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
       </div>
 
       {/* Analytical KPI Ribbon */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 py-5 border-b border-slate-100">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 py-6 border-b border-slate-100">
         <div className="flex flex-col">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
             Most Popular Role
@@ -251,33 +251,35 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
       </div>
 
       {/* Main Analysis Chart Area */}
-      <div className="pt-6">
+      <div className="pt-8">
         {activeView === 'byJob' && (
           <div className="w-full">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-5">
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
                 Candidate Applications Received per Job Post
               </span>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-slate-400 font-medium">
                 Sorted by highest volume
               </span>
             </div>
-            <div className="w-full h-72 sm:h-80">
+            <div className="w-full h-80 sm:h-96">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={jobStats} margin={{ top: 10, right: 10, left: -20, bottom: 25 }}>
+                <BarChart data={jobStats} margin={{ top: 15, right: 15, left: 5, bottom: 45 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                   <XAxis
                     dataKey="shortTitle"
                     tickLine={false}
                     axisLine={false}
                     tick={{ fill: '#64748b', fontSize: 11, fontWeight: 600 }}
-                    angle={-15}
+                    angle={-18}
                     textAnchor="end"
+                    interval={0}
                   />
                   <YAxis
                     allowDecimals={false}
                     tickLine={false}
                     axisLine={false}
+                    width={35}
                     tick={{ fill: '#94a3b8', fontSize: 11 }}
                   />
                   <Tooltip content={<CustomJobTooltip />} />
@@ -301,7 +303,7 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
 
         {activeView === 'openingsVsApps' && (
           <div className="w-full">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-5">
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
                 Job Openings (Demand) vs. Candidates Applied (Supply)
               </span>
@@ -314,22 +316,24 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
                 </span>
               </div>
             </div>
-            <div className="w-full h-72 sm:h-80">
+            <div className="w-full h-80 sm:h-96">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={jobStats} margin={{ top: 10, right: 10, left: -20, bottom: 25 }}>
+                <BarChart data={jobStats} margin={{ top: 15, right: 15, left: 5, bottom: 45 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                   <XAxis
                     dataKey="shortTitle"
                     tickLine={false}
                     axisLine={false}
                     tick={{ fill: '#64748b', fontSize: 11, fontWeight: 600 }}
-                    angle={-15}
+                    angle={-18}
                     textAnchor="end"
+                    interval={0}
                   />
                   <YAxis
                     allowDecimals={false}
                     tickLine={false}
                     axisLine={false}
+                    width={35}
                     tick={{ fill: '#94a3b8', fontSize: 11 }}
                   />
                   <Tooltip content={<CustomJobTooltip />} />
@@ -343,17 +347,17 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
 
         {activeView === 'byDept' && (
           <div className="w-full">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-5">
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
                 Departmental Talent Demand & Inflow
               </span>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-slate-400 font-medium">
                 Applicants grouped by department
               </span>
             </div>
-            <div className="w-full h-72 sm:h-80">
+            <div className="w-full h-80 sm:h-96">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={deptStats} margin={{ top: 10, right: 10, left: -20, bottom: 10 }}>
+                <BarChart data={deptStats} margin={{ top: 15, right: 15, left: 5, bottom: 25 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                   <XAxis
                     dataKey="department"
@@ -365,6 +369,7 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
                     allowDecimals={false}
                     tickLine={false}
                     axisLine={false}
+                    width={35}
                     tick={{ fill: '#94a3b8', fontSize: 11 }}
                   />
                   <Tooltip
@@ -381,14 +386,14 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
       </div>
 
       {/* Sleek Role Summary Table */}
-      <div className="mt-6 pt-5 border-t border-slate-100">
-        <div className="flex items-center justify-between mb-3">
+      <div className="mt-10 pt-8 border-t border-slate-100">
+        <div className="flex items-center justify-between mb-4">
           <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-700">
             Pipeline Health by Job Post
           </h4>
           <button
             onClick={() => onNavigateTab && onNavigateTab('Jobs')}
-            className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+            className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 cursor-pointer"
           >
             Manage All Jobs <ArrowRight className="w-3.5 h-3.5" />
           </button>
@@ -398,13 +403,13 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase text-[10px]">
-                <th className="py-2.5 px-3">Job Title</th>
-                <th className="py-2.5 px-3">Department</th>
-                <th className="py-2.5 px-3">Openings</th>
-                <th className="py-2.5 px-3">Applied</th>
-                <th className="py-2.5 px-3">Shortlisted</th>
-                <th className="py-2.5 px-3">Competition</th>
-                <th className="py-2.5 px-3 text-right">Status</th>
+                <th className="py-3 px-4">Job Title</th>
+                <th className="py-3 px-4">Department</th>
+                <th className="py-3 px-4">Openings</th>
+                <th className="py-3 px-4">Applied</th>
+                <th className="py-3 px-4">Shortlisted</th>
+                <th className="py-3 px-4">Competition</th>
+                <th className="py-3 px-4 text-right">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -414,25 +419,25 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
                   className="hover:bg-slate-50/80 transition-colors group cursor-pointer"
                   onClick={() => onNavigateTab && onNavigateTab('Jobs')}
                 >
-                  <td className="py-3 px-3 font-bold text-slate-800 flex items-center gap-2">
+                  <td className="py-3.5 px-4 font-bold text-slate-800 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0"></span>
                     <span className="truncate group-hover:text-blue-600 transition-colors">
                       {job.jobTitle}
                     </span>
                   </td>
-                  <td className="py-3 px-3 text-slate-500 font-medium">{job.department}</td>
-                  <td className="py-3 px-3 text-slate-700 font-semibold">{job.openings}</td>
-                  <td className="py-3 px-3">
-                    <span className="font-extrabold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200/50">
+                  <td className="py-3.5 px-4 text-slate-500 font-medium">{job.department}</td>
+                  <td className="py-3.5 px-4 text-slate-700 font-semibold">{job.openings}</td>
+                  <td className="py-3.5 px-4">
+                    <span className="font-extrabold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200/50">
                       {job.applicants}
                     </span>
                   </td>
-                  <td className="py-3 px-3">
+                  <td className="py-3.5 px-4">
                     <span className="font-semibold text-emerald-600">
                       {job.shortlisted}
                     </span>
                   </td>
-                  <td className="py-3 px-3">
+                  <td className="py-3.5 px-4">
                     <div className="flex items-center gap-2">
                       <div className="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
                         <div
@@ -443,7 +448,7 @@ const JobVsCandidateAnalysis = ({ jobs = [], applications = [], onSelectJob, onN
                       <span className="text-[11px] font-bold text-slate-700">{job.ratio}:1</span>
                     </div>
                   </td>
-                  <td className="py-3 px-3 text-right">
+                  <td className="py-3.5 px-4 text-right">
                     <span
                       className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                         job.status === 'Active'

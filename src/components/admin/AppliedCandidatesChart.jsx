@@ -168,19 +168,19 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
   const hiredCount = applications.filter(a => a.status === 'Selected' || a.status === 'Hired').length;
 
   return (
-    <div className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/60 shadow-sm transition-all">
+    <div className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/60 shadow-sm transition-all p-6 sm:p-8 lg:p-9">
       {/* Card Header & Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-2 border-b border-slate-100">
         <div>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
               <TrendingUp className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-lg font-extrabold text-slate-900 tracking-tight">
+              <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">
                 Applied Candidates Growth & Pipeline
               </h3>
-              <p className="text-xs text-slate-500 font-medium">
+              <p className="text-xs text-slate-500 font-medium mt-0.5">
                 Volume of incoming talent and candidate stage progression
               </p>
             </div>
@@ -188,7 +188,7 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
         </div>
 
         {/* Time range switcher */}
-        <div className="flex items-center gap-1.5 self-start sm:self-auto bg-slate-100/80 p-1 rounded-xl border border-slate-200/60 text-xs font-semibold">
+        <div className="flex items-center gap-1.5 self-start sm:self-auto bg-slate-100/80 p-1.5 rounded-xl border border-slate-200/60 text-xs font-semibold">
           {[
             { id: '7D', label: '7D' },
             { id: '30D', label: '30D' },
@@ -211,10 +211,10 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
       </div>
 
       {/* Main Charts Grid: Trend Line + Donut Funnel */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pt-6">
         {/* Left Side: Timeline Area Chart (7 cols on lg) */}
         <div className="lg:col-span-7 flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
@@ -228,7 +228,7 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
 
           <div className="w-full h-64 sm:h-72">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <AreaChart data={trendData} margin={{ top: 15, right: 15, left: 5, bottom: 5 }}>
                 <defs>
                   <linearGradient id="appliedGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.35} />
@@ -247,6 +247,7 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
                   allowDecimals={false}
                   tickLine={false}
                   axisLine={false}
+                  width={30}
                   tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 500 }}
                 />
                 <Tooltip content={<CustomAreaTooltip />} />
@@ -265,24 +266,24 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
           </div>
 
           {/* Quick Stats Pill Row */}
-          <div className="grid grid-cols-3 gap-2 pt-4 border-t border-slate-100 text-center">
-            <div className="bg-slate-50 rounded-xl p-2">
+          <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-6 mt-6 border-t border-slate-100 text-center">
+            <div className="bg-slate-50/80 rounded-2xl p-3 sm:p-3.5 border border-slate-100">
               <span className="text-[10px] uppercase font-bold text-slate-400">Total Intake</span>
-              <p className="text-base font-extrabold text-slate-800">{totalApplicationsCount}</p>
+              <p className="text-lg font-extrabold text-slate-800 mt-0.5">{totalApplicationsCount}</p>
             </div>
-            <div className="bg-emerald-50/60 rounded-xl p-2">
+            <div className="bg-emerald-50/60 rounded-2xl p-3 sm:p-3.5 border border-emerald-100/60">
               <span className="text-[10px] uppercase font-bold text-emerald-600">Shortlisted</span>
-              <p className="text-base font-extrabold text-emerald-700">{shortlistedCount}</p>
+              <p className="text-lg font-extrabold text-emerald-700 mt-0.5">{shortlistedCount}</p>
             </div>
-            <div className="bg-purple-50/60 rounded-xl p-2">
+            <div className="bg-purple-50/60 rounded-2xl p-3 sm:p-3.5 border border-purple-100/60">
               <span className="text-[10px] uppercase font-bold text-purple-600">Interviews</span>
-              <p className="text-base font-extrabold text-purple-700">{scheduledCount}</p>
+              <p className="text-lg font-extrabold text-purple-700 mt-0.5">{scheduledCount}</p>
             </div>
           </div>
         </div>
 
         {/* Right Side: Donut / Stage Distribution (5 cols on lg) */}
-        <div className="lg:col-span-5 flex flex-col justify-between bg-slate-50/70 rounded-2xl p-5 border border-slate-200/60">
+        <div className="lg:col-span-5 flex flex-col justify-between bg-slate-50/80 rounded-2xl p-6 sm:p-7 border border-slate-200/60">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
               <Layers className="w-3.5 h-3.5 text-slate-500" /> Stage Breakdown

@@ -33,6 +33,7 @@ const teamMembers = [
   { name: "Sonal Bairwa", role: "Manager", image: "/Team/Sonal Bairwa.webp" },
   { name: "Daksh Singh", role: "Android Developer", image: "/Team/Daksh Singh.webp" },
   { name: "Aachal Kumari", role: "Fullstack Developer", image: "/Team/Aachal Kumari.webp" },
+  { name: "Akshata Baloj", role: "Fullstack Developer", image: "/Team/Akshata Baloj Fullstack Developer.webp" },
   { name: "Kapil Sharma", role: "Backend Developer", image: "/Team/A Kapil Sharma Backend Developer.webp" },
   { name: "Naman", role: "Business Development", image: "/Team/A Naman Business Developmenet.webp" },
   { name: "Preet Meena", role: "Marketing", image: "/Team/A Preet Meena Markating.webp" },
@@ -323,58 +324,58 @@ const About = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 reveal-up">
           {/* Main big image (1) */}
           <div className="md:col-span-6 md:row-span-2 rounded-[2.5rem] overflow-hidden aspect-[4/3] md:aspect-auto group relative shadow-lg">
-            <img 
-              src="/portfolio/1.webp" 
-              alt="Macenza Office Space" 
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+            <img
+              src="/portfolio/1.webp"
+              alt="Macenza Office Space"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
               <span className="text-white font-bold text-lg">Main Collaboration Area</span>
             </div>
           </div>
-          
+
           {/* Small image 2 */}
           <div className="md:col-span-3 rounded-[2rem] overflow-hidden aspect-square group relative shadow-md">
-            <img 
-              src="/portfolio/2.webp" 
-              alt="Macenza Meeting Room" 
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+            <img
+              src="/portfolio/2.webp"
+              alt="Macenza Meeting Room"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
               <span className="text-white font-bold text-sm">Meeting Room</span>
             </div>
           </div>
-          
+
           {/* Small image 3 */}
           <div className="md:col-span-3 rounded-[2rem] overflow-hidden aspect-square group relative shadow-md">
-            <img 
-              src="/portfolio/3.webp" 
-              alt="Macenza Ideation Zone" 
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+            <img
+              src="/portfolio/3.webp"
+              alt="Macenza Ideation Zone"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
               <span className="text-white font-bold text-sm">Ideation Zone</span>
             </div>
           </div>
-          
+
           {/* Small image 4 */}
           <div className="md:col-span-3 rounded-[2rem] overflow-hidden aspect-square group relative shadow-md">
-            <img 
-              src="/portfolio/4.webp" 
-              alt="Macenza Desk Setups" 
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+            <img
+              src="/portfolio/4.webp"
+              alt="Macenza Desk Setups"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
               <span className="text-white font-bold text-sm">Creative Desk Setups</span>
             </div>
           </div>
-          
+
           {/* Small image 5 */}
           <div className="md:col-span-3 rounded-[2rem] overflow-hidden aspect-square group relative shadow-md">
-            <img 
-              src="/portfolio/5.webp" 
-              alt="Macenza Lounge Area" 
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+            <img
+              src="/portfolio/5.webp"
+              alt="Macenza Lounge Area"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
               <span className="text-white font-bold text-sm">Lounge Area</span>
@@ -383,10 +384,10 @@ const About = () => {
 
           {/* Image 6 */}
           <div className="md:col-span-3 rounded-[2rem] overflow-hidden aspect-square group relative shadow-md">
-            <img 
-              src="/portfolio/6.webp" 
-              alt="Macenza Engineering Hub" 
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+            <img
+              src="/portfolio/6.webp"
+              alt="Macenza Engineering Hub"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
               <span className="text-white font-bold text-sm">Engineering Hub</span>
@@ -395,10 +396,10 @@ const About = () => {
 
           {/* Image 7 */}
           <div className="md:col-span-3 rounded-[2rem] overflow-hidden aspect-square group relative shadow-md">
-            <img 
-              src="/portfolio/7.webp" 
-              alt="Macenza Executive Suite" 
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+            <img
+              src="/portfolio/7.webp"
+              alt="Macenza Executive Suite"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
               <span className="text-white font-bold text-sm">Executive Suite</span>
@@ -407,10 +408,10 @@ const About = () => {
 
           {/* Image 8 */}
           <div className="md:col-span-3 rounded-[2rem] overflow-hidden aspect-square group relative shadow-md">
-            <img 
-              src="/portfolio/8.webp" 
-              alt="Macenza Innovation Lab" 
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+            <img
+              src="/portfolio/8.webp"
+              alt="Macenza Innovation Lab"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
               <span className="text-white font-bold text-sm">Innovation Lab</span>
@@ -419,10 +420,10 @@ const About = () => {
 
           {/* Image 9 */}
           <div className="md:col-span-3 rounded-[2rem] overflow-hidden aspect-square group relative shadow-md">
-            <img 
-              src="/portfolio/9.webp" 
-              alt="Macenza Breakout Zone" 
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+            <img
+              src="/portfolio/9.webp"
+              alt="Macenza Breakout Zone"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
               <span className="text-white font-bold text-sm">Breakout Zone</span>

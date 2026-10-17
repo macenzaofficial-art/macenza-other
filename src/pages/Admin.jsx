@@ -2186,7 +2186,7 @@ const Admin = () => {
       {/* Mobile Backdrop Overlay */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-30 lg:hidden transition-opacity"
           onClick={() => setIsSidebarOpen(false)}
           aria-label="Close sidebar overlay"
         />
@@ -2194,22 +2194,22 @@ const Admin = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-white border-r border-slate-200 shadow-2xl flex flex-col justify-between h-full py-6 px-5 transition-transform duration-300 ease-in-out lg:static lg:h-screen lg:sticky lg:top-0 lg:z-20 lg:bg-transparent lg:border-r-0 lg:shadow-none ${
+        className={`fixed inset-y-0 left-0 z-40 w-72 max-w-[85vw] bg-white/95 border-r border-slate-200 shadow-2xl flex flex-col justify-between h-full py-6 px-5 transition-transform duration-300 ease-in-out lg:static lg:h-screen lg:sticky lg:top-0 lg:z-0 lg:w-72 lg:bg-white/10 lg:backdrop-blur-md lg:border-r lg:border-white/20 lg:shadow-xs ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:hidden'
         }`}
       >
         <div className="flex flex-col gap-6 sm:gap-8 overflow-y-auto">
-          {/* Brand Logo & Close Button */}
+          {/* Brand Logo & Mobile Close Button */}
           <div className="flex items-center justify-between pl-1">
             <div className="flex items-center gap-3">
               <img src="/logo.svg" alt="Macenza Logo" className="w-9 h-9 object-contain drop-shadow-sm" />
               <span className="text-xl font-black tracking-tight text-slate-900 uppercase">MACENZA ADMIN</span>
             </div>
-            {/* Close button: closes drawer on mobile, or collapses sidebar on desktop */}
+            {/* Close button: closes drawer on mobile only */}
             <button
               type="button"
               onClick={() => setIsSidebarOpen(false)}
-              className="p-1.5 rounded-xl bg-slate-100/80 hover:bg-slate-200/80 text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
+              className="lg:hidden p-1.5 rounded-xl bg-slate-100/80 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
               title="Close side panel"
               aria-label="Close side panel"
             >
@@ -2224,10 +2224,10 @@ const Admin = () => {
               { id: 'Jobs', label: 'Jobs', icon: "💼" },
               { id: 'Applications', label: 'Applications', icon: "📋" },
               { id: 'Resume Manager', label: 'Resume Manager', icon: "🔍" },
-              { id: 'Employees', label: 'Employee Management', icon: <Users className="w-5 h-5 text-cyan-600" /> },
-              { id: 'Finance', label: 'Finance & Bills', icon: <Banknote className="w-5 h-5 text-cyan-600" /> },
-              { id: 'Events', label: 'Events & Birthdays', icon: <PartyPopper className="w-5 h-5 text-cyan-600" /> },
-              { id: 'Analytics', label: 'Analytics', icon: <BarChart3 className="w-5 h-5 text-cyan-600" /> }
+              { id: 'Employees', label: 'Employee Management', icon: <Users className="w-5 h-5" /> },
+              { id: 'Finance', label: 'Finance & Bills', icon: <Banknote className="w-5 h-5" /> },
+              { id: 'Events', label: 'Events & Birthdays', icon: <PartyPopper className="w-5 h-5" /> },
+              { id: 'Analytics', label: 'Analytics', icon: <BarChart3 className="w-5 h-5" /> }
             ].map(item => {
               const isActive = activeTab === item.id;
               return (
@@ -2236,11 +2236,11 @@ const Admin = () => {
                   onClick={() => handleTabSelect(item.id)}
                   className={`flex items-center gap-3 py-2.5 px-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 group whitespace-nowrap cursor-pointer ${
                     isActive
-                      ? 'bg-blue-50 text-blue-700 font-extrabold shadow-xs border border-blue-200/60'
-                      : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100/70'
+                      ? 'bg-blue-600 text-white font-extrabold shadow-md shadow-blue-500/25 ring-1 ring-blue-500/30'
+                      : 'text-slate-700 hover:text-slate-900 hover:bg-white/80'
                   }`}
                 >
-                  <span className={`text-xl transition-transform duration-200 group-hover:scale-110 ${isActive ? 'scale-110' : ''}`}>
+                  <span className={`text-xl transition-transform duration-200 group-hover:scale-110 ${isActive ? 'scale-110 text-white' : 'text-cyan-600'}`}>
                     {item.icon}
                   </span>
                   <span>{item.label}</span>
@@ -2256,7 +2256,7 @@ const Admin = () => {
               onClick={() => {
                 if (typeof window !== 'undefined' && window.innerWidth < 1024) setIsSidebarOpen(false);
               }}
-              className="flex items-center gap-3 py-2.5 px-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 text-slate-700 hover:text-blue-700 hover:bg-slate-100/70 group whitespace-nowrap mt-2 pt-3 border-t border-slate-200/80"
+              className="flex items-center gap-3 py-2.5 px-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 text-slate-700 hover:text-blue-700 hover:bg-white/80 group whitespace-nowrap mt-2 pt-3 border-t border-slate-200/60"
             >
               <span className="text-xl group-hover:scale-110 transition-transform duration-200">📝</span>
               <span>Blog Editor</span>
@@ -2276,7 +2276,7 @@ const Admin = () => {
           </button>
 
           {/* Info panel at bottom */}
-          <div className="px-3.5 py-2 bg-slate-50/80 border border-slate-200/60 rounded-xl flex items-center justify-between text-slate-600">
+          <div className="px-3.5 py-2 bg-white/70 border border-white/80 rounded-xl flex items-center justify-between text-slate-600 shadow-xs">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Live Database</span>
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -2287,7 +2287,7 @@ const Admin = () => {
       </aside>
 
       {/* Main Workspace */}
-      <main className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden relative z-10">
+      <main className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
         {/* Topbar - Boxless Seamless Header */}
         <header className="h-16 sm:h-20 bg-transparent px-3 sm:px-6 lg:px-10 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
@@ -4106,7 +4106,7 @@ const Admin = () => {
           {selectedEmployee && !isEditingEmployee && (
             <div
               onClick={() => setSelectedEmployee(null)}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 cursor-pointer"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-3 sm:p-4 cursor-pointer"
             >
               <div
                 onClick={(e) => e.stopPropagation()}
@@ -4379,7 +4379,7 @@ const Admin = () => {
 
           {/* Edit Employee Profile Modal */}
           {isEditingEmployee && editEmployeeForm && (
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-3 sm:p-4">
               <form
                 onSubmit={handleSaveEmployeeEdit}
                 data-lenis-prevent

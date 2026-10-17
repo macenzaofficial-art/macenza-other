@@ -2186,19 +2186,19 @@ const Admin = () => {
       {/* Mobile Backdrop Overlay */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden transition-opacity"
           onClick={() => setIsSidebarOpen(false)}
           aria-label="Close sidebar overlay"
         />
       )}
 
-      {/* Sidebar - Boxless, Transparent Sleek Navbar */}
+      {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-transparent flex flex-col justify-between h-full py-6 px-5 transition-transform duration-300 ease-in-out lg:static lg:h-screen lg:sticky lg:top-0 lg:z-20 ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-white border-r border-slate-200 shadow-2xl flex flex-col justify-between h-full py-6 px-5 transition-transform duration-300 ease-in-out lg:static lg:h-screen lg:sticky lg:top-0 lg:z-20 lg:bg-transparent lg:border-r-0 lg:shadow-none ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:hidden'
         }`}
       >
-        <div className="flex flex-col gap-8 sm:gap-10 overflow-y-auto">
+        <div className="flex flex-col gap-6 sm:gap-8 overflow-y-auto">
           {/* Brand Logo & Close Button */}
           <div className="flex items-center justify-between pl-1">
             <div className="flex items-center gap-3">
@@ -2209,7 +2209,7 @@ const Admin = () => {
             <button
               type="button"
               onClick={() => setIsSidebarOpen(false)}
-              className="p-1.5 rounded-xl hover:bg-slate-900/10 text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
+              className="p-1.5 rounded-xl bg-slate-100/80 hover:bg-slate-200/80 text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
               title="Close side panel"
               aria-label="Close side panel"
             >
@@ -2217,38 +2217,33 @@ const Admin = () => {
             </button>
           </div>
 
-          {/* Navigation Items - Boxless, Underlined/Indicator Style */}
-          <nav className="flex flex-col gap-1">
+          {/* Navigation Items */}
+          <nav className="flex flex-col gap-1.5">
             {[
               { id: 'Dashboard', label: 'Dashboard', icon: "📊" },
               { id: 'Jobs', label: 'Jobs', icon: "💼" },
               { id: 'Applications', label: 'Applications', icon: "📋" },
               { id: 'Resume Manager', label: 'Resume Manager', icon: "🔍" },
-              { id: 'Employees', label: 'Employee Management', icon: <Users className="w-5 h-5" /> },
-              { id: 'Finance', label: 'Finance & Bills', icon: <Banknote className="w-5 h-5" /> },
-              { id: 'Events', label: 'Events & Birthdays', icon: <PartyPopper className="w-5 h-5" /> },
-              { id: 'Analytics', label: 'Analytics', icon: <BarChart3 className="w-5 h-5" /> }
+              { id: 'Employees', label: 'Employee Management', icon: <Users className="w-5 h-5 text-cyan-600" /> },
+              { id: 'Finance', label: 'Finance & Bills', icon: <Banknote className="w-5 h-5 text-cyan-600" /> },
+              { id: 'Events', label: 'Events & Birthdays', icon: <PartyPopper className="w-5 h-5 text-cyan-600" /> },
+              { id: 'Analytics', label: 'Analytics', icon: <BarChart3 className="w-5 h-5 text-cyan-600" /> }
             ].map(item => {
               const isActive = activeTab === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => handleTabSelect(item.id)}
-                  className={`flex items-center gap-3 py-3 px-3 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 group whitespace-nowrap cursor-pointer ${
+                  className={`flex items-center gap-3 py-2.5 px-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 group whitespace-nowrap cursor-pointer ${
                     isActive
-                      ? 'text-blue-700 font-extrabold translate-x-1'
-                      : 'text-slate-700 hover:text-slate-900 hover:translate-x-0.5'
+                      ? 'bg-blue-50 text-blue-700 font-extrabold shadow-xs border border-blue-200/60'
+                      : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100/70'
                   }`}
                 >
                   <span className={`text-xl transition-transform duration-200 group-hover:scale-110 ${isActive ? 'scale-110' : ''}`}>
                     {item.icon}
                   </span>
-                  <span className="relative">
-                    {item.label}
-                    {isActive && (
-                      <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-sky-500 rounded-full" />
-                    )}
-                  </span>
+                  <span>{item.label}</span>
                 </button>
               );
             })}
@@ -2261,28 +2256,28 @@ const Admin = () => {
               onClick={() => {
                 if (typeof window !== 'undefined' && window.innerWidth < 1024) setIsSidebarOpen(false);
               }}
-              className="flex items-center gap-3 py-3 px-3 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 text-slate-700 hover:text-blue-700 group whitespace-nowrap mt-2 pt-3"
+              className="flex items-center gap-3 py-2.5 px-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 text-slate-700 hover:text-blue-700 hover:bg-slate-100/70 group whitespace-nowrap mt-2 pt-3 border-t border-slate-200/80"
             >
               <span className="text-xl group-hover:scale-110 transition-transform duration-200">📝</span>
-              Blog Editor
+              <span>Blog Editor</span>
             </a>
           </nav>
         </div>
 
-        <div className="flex flex-col gap-4 mt-6">
+        <div className="flex flex-col gap-3 mt-6">
           <button
             onClick={() => {
               if (typeof window !== 'undefined' && window.innerWidth < 1024) setIsSidebarOpen(false);
               handleSignOut();
             }}
-            className="w-full flex items-center justify-center gap-2.5 py-2.5 text-rose-600 hover:text-rose-700 hover:bg-rose-500/10 rounded-xl font-bold text-xs tracking-wide transition-all duration-200 cursor-pointer"
+            className="w-full flex items-center justify-center gap-2.5 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 rounded-xl font-bold text-xs tracking-wide transition-all duration-200 cursor-pointer shadow-xs"
           >
             <span>🚪</span> Sign Out Admin
           </button>
 
-          {/* Info panel at bottom - Unboxed indicator */}
-          <div className="px-3 py-2 flex items-center justify-between text-slate-600">
-            <span className="text-[10px] font-bold uppercase tracking-wider">Live Database</span>
+          {/* Info panel at bottom */}
+          <div className="px-3.5 py-2 bg-slate-50/80 border border-slate-200/60 rounded-xl flex items-center justify-between text-slate-600">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Live Database</span>
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               <span className="text-xs font-semibold text-slate-800">Sync Active</span>

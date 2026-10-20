@@ -51,6 +51,8 @@ import AppliedCandidatesChart from '../components/admin/AppliedCandidatesChart';
 import JobVsCandidateAnalysis from '../components/admin/JobVsCandidateAnalysis';
 import RecentActivityAndActions from '../components/admin/RecentActivityAndActions';
 import FuturisticAnalytics from '../components/admin/FuturisticAnalytics';
+import AdminMobileBottomNav from '../components/admin/AdminMobileBottomNav';
+import AdminMobileHeader from '../components/admin/AdminMobileHeader';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 
 const TAB_TO_SLUG = {
@@ -2186,7 +2188,7 @@ const Admin = () => {
       {/* Mobile Backdrop Overlay */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-30 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[60] lg:hidden transition-opacity"
           onClick={() => setIsSidebarOpen(false)}
           aria-label="Close sidebar overlay"
         />
@@ -2194,13 +2196,13 @@ const Admin = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 w-72 max-w-[85vw] bg-white/95 border-r border-slate-200 shadow-2xl flex flex-col justify-between h-full py-6 px-5 transition-transform duration-300 ease-in-out lg:static lg:h-screen lg:sticky lg:top-0 lg:z-0 lg:w-72 lg:bg-white/10 lg:backdrop-blur-md lg:border-r lg:border-white/20 lg:shadow-xs ${
+        className={`fixed inset-y-0 left-0 z-[70] w-72 max-w-[85vw] bg-gradient-to-b from-[#e0f2fe] via-[#bae6fd] to-[#e0f7fa] border-r border-sky-300/80 shadow-2xl flex flex-col justify-between h-full py-6 px-5 pt-[max(1.5rem,env(safe-area-inset-top))] transition-transform duration-300 ease-in-out lg:static lg:h-screen lg:sticky lg:top-0 lg:z-0 lg:w-72 lg:bg-white/15 lg:backdrop-blur-md lg:border-r lg:border-sky-300/30 lg:shadow-xs ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:hidden'
         }`}
       >
         <div className="flex flex-col gap-6 sm:gap-8 overflow-y-auto">
           {/* Brand Logo & Mobile Close Button */}
-          <div className="flex items-center justify-between pl-1">
+          <div className="flex items-center justify-between pl-1 pb-2 border-b border-sky-200/60 shrink-0">
             <div className="flex items-center gap-3">
               <img src="/logo.svg" alt="Macenza Logo" className="w-9 h-9 object-contain drop-shadow-sm" />
               <span className="text-xl font-black tracking-tight text-slate-900 uppercase">MACENZA ADMIN</span>
@@ -2292,7 +2294,15 @@ const Admin = () => {
       {/* Main Workspace */}
       <main className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
         {/* Topbar - Boxless Seamless Header */}
-        <header className="h-16 sm:h-20 bg-transparent px-3 sm:px-6 lg:px-10 flex items-center justify-between shrink-0">
+        <AdminMobileHeader
+          activeTab={activeTab}
+          onOpenSidebar={() => setIsSidebarOpen(true)}
+          onSignOut={handleSignOut}
+          userEmail={user?.email || 'admin@macenza.com'}
+        />
+
+        {/* Desktop Topbar - Boxless Seamless Header (Hidden on mobile < md) */}
+        <header className="hidden md:flex h-16 sm:h-20 bg-transparent px-3 sm:px-6 lg:px-10 items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
             {/* Open / Close Side Panel Button */}
             <button
@@ -2324,7 +2334,7 @@ const Admin = () => {
         </header>
 
         {/* Work Area - Transparent background to reveal blue canvas curves and leaves */}
-        <div className="flex-1 p-3 sm:p-6 lg:p-10 bg-transparent overflow-y-auto overflow-x-hidden" data-lenis-prevent>
+        <div className="admin-mobile-content-area flex-1 p-3 sm:p-6 lg:p-10 bg-transparent overflow-y-auto overflow-x-hidden pb-24 md:pb-10" data-lenis-prevent>
           {error && (
             <div className="bg-amber-500/10 border border-amber-400/40 p-4 rounded-2xl mb-8 flex items-center gap-3 text-amber-200 font-bold text-sm">
               <span className="w-3 h-3 bg-amber-400 rounded-full animate-ping"></span>
@@ -5441,6 +5451,13 @@ const Admin = () => {
           </div>
         </div>
       )}
+
+      <AdminMobileBottomNav
+        activeTab={activeTab}
+        onSelectTab={handleTabSelect}
+        applicationsCount={applications.length}
+        upcomingBirthdaysCount={getUpcomingBirthdays().length}
+      />
 
       <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar theme="colored" />
     </div>

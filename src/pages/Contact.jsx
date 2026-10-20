@@ -13,9 +13,18 @@ import HCaptcha from '@hcaptcha/react-hcaptcha';
 gsap.registerPlugin(ScrollTrigger);
 
 const contactInfo = [
-  { title: "Email", value: "info@macenza.com", icon: "✉️", bgClass: "bg-violet-500/10" },
-  { title: "Business Inquiries", value: "shanki9414@gmail.com", icon: "💬", bgClass: "bg-teal-500/10" },
-  { title: "Phone", value: "+91 94146 60123", icon: "📞", bgClass: "bg-emerald-500/10" },
+  { title: "Email", value: "info@macenza.com", href: "mailto:info@macenza.com", icon: "✉️", bgClass: "bg-violet-500/10" },
+  { title: "Business Inquiries", value: "shanki9414@gmail.com", href: "mailto:shanki9414@gmail.com", icon: "💬", bgClass: "bg-teal-500/10" },
+  { 
+    title: "Phone", 
+    value: "+91 94146 60123, +91 94136 60123", 
+    values: [
+      { text: "+91 94146 60123", href: "tel:+919414660123" },
+      { text: "+91 94136 60123", href: "tel:+919413660123" }
+    ],
+    icon: "📞", 
+    bgClass: "bg-emerald-500/10" 
+  },
   { title: "Working Hours", value: "Mon - Sat | 10 AM - 6 PM", icon: "⏰", bgClass: "bg-amber-500/10" }
 ];
 
@@ -266,6 +275,7 @@ const Contact = () => {
       "@type": "Organization",
       "name": "Macenza",
       "email": "info@macenza.com",
+      "telephone": ["+91-94146-60123", "+91-94136-60123"],
       "url": "https://www.macenza.com/"
     }
   };
@@ -389,7 +399,28 @@ const Contact = () => {
                     {info.icon}
                   </div>
                   <h4 className="text-sm font-black text-black/30 uppercase tracking-[0.2em] mb-1">{info.title}</h4>
-                  <p className="text-black font-bold break-words">{info.value}</p>
+                  {info.values ? (
+                    <div className="flex flex-col gap-1">
+                      {info.values.map((v, idx) => (
+                        <a
+                          key={idx}
+                          href={v.href}
+                          className="text-black font-bold break-words hover:text-primary transition-colors"
+                        >
+                          {v.text}
+                        </a>
+                      ))}
+                    </div>
+                  ) : info.href ? (
+                    <a
+                      href={info.href}
+                      className="text-black font-bold break-words hover:text-primary transition-colors block"
+                    >
+                      {info.value}
+                    </a>
+                  ) : (
+                    <p className="text-black font-bold break-words">{info.value}</p>
+                  )}
                 </div>
               ))}
             </div>

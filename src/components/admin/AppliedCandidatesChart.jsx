@@ -36,7 +36,7 @@ const STATUS_COLORS = {
 const CustomAreaTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-slate-900/95 backdrop-blur-md text-white px-3.5 py-2.5 rounded-xl shadow-xl border border-slate-700/60 text-xs">
+      <div className="bg-slate-900/90 backdrop-blur-xl text-white px-3.5 py-2.5 rounded-2xl shadow-xl border border-white/20 text-xs">
         <p className="font-semibold text-slate-300 mb-1">{label}</p>
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
@@ -54,7 +54,7 @@ const CustomPieTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const data = payload[0];
     return (
-      <div className="bg-slate-900/95 backdrop-blur-md text-white px-3.5 py-2.5 rounded-xl shadow-xl border border-slate-700/60 text-xs">
+      <div className="bg-slate-900/90 backdrop-blur-xl text-white px-3.5 py-2.5 rounded-2xl shadow-xl border border-white/20 text-xs">
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: data.payload.fill }} />
           <span className="font-semibold">{data.name}:</span>
@@ -168,13 +168,13 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
   const hiredCount = applications.filter(a => a.status === 'Selected' || a.status === 'Hired').length;
 
   return (
-    <div className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/60 shadow-sm transition-all p-6 sm:p-8 lg:p-9">
+    <div className="relative bg-white/25 backdrop-blur-2xl rounded-3xl border border-white/50 shadow-[0_16px_40px_-10px_rgba(56,189,248,0.12)] transition-all p-6 sm:p-8 lg:p-9">
       {/* Card Header & Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-2 border-b border-slate-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-2 border-b border-white/30">
         <div>
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-              <TrendingUp className="w-4 h-4" />
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-white/40 backdrop-blur-xl border border-white/60 shadow-md shadow-sky-500/10 flex items-center justify-center text-blue-600 font-bold shrink-0">
+              <TrendingUp className="w-5 h-5" />
             </div>
             <div>
               <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">
@@ -187,8 +187,8 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
           </div>
         </div>
 
-        {/* Time range switcher */}
-        <div className="flex items-center gap-1.5 self-start sm:self-auto bg-slate-100/80 p-1.5 rounded-xl border border-slate-200/60 text-xs font-semibold">
+        {/* Time range switcher with transparent frosted glass */}
+        <div className="flex items-center gap-1 self-start sm:self-auto bg-white/25 backdrop-blur-xl p-1 rounded-2xl border border-white/40 shadow-xs text-xs font-semibold">
           {[
             { id: '7D', label: '7D' },
             { id: '30D', label: '30D' },
@@ -198,10 +198,10 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
             <button
               key={tab.id}
               onClick={() => setTimeRange(tab.id)}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-xl transition-all cursor-pointer ${
                 timeRange === tab.id
-                  ? 'bg-white text-blue-600 shadow-xs font-bold'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white/80 text-blue-600 shadow-sm font-extrabold backdrop-blur-md'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/30'
               }`}
             >
               {tab.label}
@@ -211,12 +211,12 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
       </div>
 
       {/* Main Charts Grid: Trend Line + Donut Funnel */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pt-6">
-        {/* Left Side: Timeline Area Chart (7 cols on lg) */}
-        <div className="lg:col-span-7 flex flex-col justify-between">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 pt-6">
+        {/* Left Side: Timeline Area Chart (7 cols on lg) with Transparent Frosted Glass */}
+        <div className="lg:col-span-7 flex flex-col justify-between bg-white/20 backdrop-blur-xl rounded-2xl p-5 sm:p-6 border border-white/45 shadow-xs transition-all hover:bg-white/30">
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.6)]" />
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
                 Application Intake Velocity
               </span>
@@ -231,16 +231,16 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
               <AreaChart data={trendData} margin={{ top: 15, right: 15, left: 5, bottom: 5 }}>
                 <defs>
                   <linearGradient id="appliedGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.35} />
+                    <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.45} />
                     <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255, 255, 255, 0.4)" />
                 <XAxis
                   dataKey="date"
                   tickLine={false}
                   axisLine={false}
-                  tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 500 }}
+                  tick={{ fill: '#64748b', fontSize: 11, fontWeight: 500 }}
                   interval="preserveStartEnd"
                 />
                 <YAxis
@@ -248,7 +248,7 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
                   tickLine={false}
                   axisLine={false}
                   width={30}
-                  tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 500 }}
+                  tick={{ fill: '#64748b', fontSize: 11, fontWeight: 500 }}
                 />
                 <Tooltip content={<CustomAreaTooltip />} />
                 <Area
@@ -258,7 +258,7 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
                   strokeWidth={2.5}
                   fillOpacity={1}
                   fill="url(#appliedGradient)"
-                  dot={{ r: 3, fill: '#2563eb', strokeWidth: 2, stroke: '#ffffff' }}
+                  dot={{ r: 3.5, fill: '#ffffff', stroke: '#2563eb', strokeWidth: 2 }}
                   activeDot={{ r: 6, fill: '#1d4ed8', stroke: '#ffffff', strokeWidth: 2 }}
                 />
               </AreaChart>
@@ -266,24 +266,24 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
           </div>
 
           {/* Quick Stats Pill Row */}
-          <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-6 mt-6 border-t border-slate-100 text-center">
-            <div className="bg-slate-50/80 rounded-2xl p-3 sm:p-3.5 border border-slate-100">
+          <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-5 mt-5 border-t border-white/20 text-center">
+            <div className="bg-white/30 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-white/45 shadow-xs">
               <span className="text-[10px] uppercase font-bold text-slate-400">Total Intake</span>
               <p className="text-lg font-extrabold text-slate-800 mt-0.5">{totalApplicationsCount}</p>
             </div>
-            <div className="bg-emerald-50/60 rounded-2xl p-3 sm:p-3.5 border border-emerald-100/60">
-              <span className="text-[10px] uppercase font-bold text-emerald-600">Shortlisted</span>
-              <p className="text-lg font-extrabold text-emerald-700 mt-0.5">{shortlistedCount}</p>
+            <div className="bg-emerald-50/40 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-emerald-200/50 shadow-xs">
+              <span className="text-[10px] uppercase font-bold text-emerald-700">Shortlisted</span>
+              <p className="text-lg font-extrabold text-emerald-800 mt-0.5">{shortlistedCount}</p>
             </div>
-            <div className="bg-purple-50/60 rounded-2xl p-3 sm:p-3.5 border border-purple-100/60">
-              <span className="text-[10px] uppercase font-bold text-purple-600">Interviews</span>
-              <p className="text-lg font-extrabold text-purple-700 mt-0.5">{scheduledCount}</p>
+            <div className="bg-purple-50/40 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-purple-200/50 shadow-xs">
+              <span className="text-[10px] uppercase font-bold text-purple-700">Interviews</span>
+              <p className="text-lg font-extrabold text-purple-800 mt-0.5">{scheduledCount}</p>
             </div>
           </div>
         </div>
 
-        {/* Right Side: Donut / Stage Distribution (5 cols on lg) */}
-        <div className="lg:col-span-5 flex flex-col justify-between bg-slate-50/80 rounded-2xl p-6 sm:p-7 border border-slate-200/60">
+        {/* Right Side: Donut / Stage Distribution (5 cols on lg) with Transparent Frosted Glass */}
+        <div className="lg:col-span-5 flex flex-col justify-between bg-white/20 backdrop-blur-xl rounded-2xl p-5 sm:p-6 border border-white/45 shadow-xs transition-all hover:bg-white/30">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
               <Layers className="w-3.5 h-3.5 text-slate-500" /> Stage Breakdown
@@ -302,8 +302,8 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
                   data={statusCounts}
                   cx="50%"
                   cy="50%"
-                  innerRadius={52}
-                  outerRadius={78}
+                  innerRadius={54}
+                  outerRadius={80}
                   paddingAngle={3}
                   dataKey="value"
                 >
@@ -316,25 +316,25 @@ const AppliedCandidatesChart = ({ applications = [], onSelectCandidateTab }) => 
 
             {/* Inner Center Label */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-2xl font-black text-slate-900 leading-none">
+              <span className="text-3xl font-black text-slate-900 leading-none">
                 {totalApplicationsCount}
               </span>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">
-                Applicants
+                Total
               </span>
             </div>
           </div>
 
           {/* Status Legend & Direct Action List */}
-          <div className="flex flex-col gap-2 pt-3 border-t border-slate-200/60">
+          <div className="flex flex-col gap-1.5 pt-3 border-t border-white/20">
             {statusCounts.map((item) => (
               <div
                 key={item.name}
                 onClick={() => onSelectCandidateTab && onSelectCandidateTab('Applications')}
-                className="flex items-center justify-between text-xs py-1 px-2 rounded-lg hover:bg-white/80 transition-colors cursor-pointer"
+                className="flex items-center justify-between text-xs py-1.5 px-2.5 rounded-xl hover:bg-white/40 backdrop-blur-md transition-all cursor-pointer"
               >
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.fill }} />
+                  <span className="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs" style={{ backgroundColor: item.fill }} />
                   <span className="font-semibold text-slate-700">{item.name}</span>
                 </div>
                 <div className="flex items-center gap-2">

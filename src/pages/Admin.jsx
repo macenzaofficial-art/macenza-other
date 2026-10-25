@@ -38,7 +38,9 @@ import {
   Filter,
   ShieldAlert,
   AlertTriangle,
-  Ban
+  Ban,
+  ChevronRight,
+  ChevronLeft
 } from 'lucide-react';
 
 import { supabase } from '../supabaseClient';
@@ -2028,6 +2030,9 @@ const Admin = () => {
         <div className="absolute top-1/3 -right-40 w-[700px] h-[700px] bg-blue-300/30 rounded-full blur-[150px]" />
         <div className="absolute -bottom-40 left-1/4 w-[750px] h-[750px] bg-cyan-200/40 rounded-full blur-[160px]" />
         <div className="absolute bottom-10 right-10 w-[500px] h-[500px] bg-teal-200/35 rounded-full blur-[130px]" />
+        {/* Iridescent Violet & Sky Wave Gradient (Refraction behind Glass Sidebar & Mobile Nav) */}
+        <div className="absolute top-1/4 -left-20 w-[450px] h-[750px] bg-gradient-to-b from-indigo-300/30 via-purple-300/25 to-sky-300/35 rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute -bottom-24 left-1/3 w-[500px] h-[350px] bg-gradient-to-r from-purple-300/25 via-sky-300/30 to-teal-200/25 rounded-full blur-[120px] pointer-events-none" />
 
         {/* Decorative SVG: Flowing Random Curved Lines & Floating Leaves */}
         <svg
@@ -2196,56 +2201,65 @@ const Admin = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-[70] w-72 max-w-[85vw] bg-gradient-to-b from-[#e0f2fe] via-[#bae6fd] to-[#e0f7fa] border-r border-sky-300/80 shadow-2xl flex flex-col justify-between h-full py-6 px-5 pt-[max(1.5rem,env(safe-area-inset-top))] transition-transform duration-300 ease-in-out lg:static lg:h-screen lg:sticky lg:top-0 lg:z-0 lg:w-72 lg:bg-white/15 lg:backdrop-blur-md lg:border-r lg:border-sky-300/30 lg:shadow-xs ${
+        className={`glass-effect-panel fixed inset-y-0 left-0 z-[70] w-72 max-w-[85vw] flex flex-col justify-between h-full py-6 px-5 pt-[max(1.5rem,env(safe-area-inset-top))] transition-transform duration-300 ease-in-out lg:static lg:h-screen lg:sticky lg:top-0 lg:z-0 lg:w-72 ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:hidden'
         }`}
       >
-        <div className="flex flex-col gap-6 sm:gap-8 overflow-y-auto">
-          {/* Brand Logo & Mobile Close Button */}
-          <div className="flex items-center justify-between pl-1 pb-2 border-b border-sky-200/60 shrink-0">
+        <div className="flex flex-col gap-6 sm:gap-7 overflow-y-auto">
+          {/* Brand Logo & Sidebar Close / Collapse Button */}
+          <div className="glass-effect-subcard flex items-center justify-between p-2.5 rounded-2xl shrink-0">
             <div className="flex items-center gap-3">
-              <img src="/logo.svg" alt="Macenza Logo" className="w-9 h-9 object-contain drop-shadow-sm" />
+              <div className="w-9 h-9 rounded-xl bg-white/90 p-1 shadow-sm border border-white/80 flex items-center justify-center">
+                <img src="/logo.svg" alt="Macenza Logo" className="w-full h-full object-contain" />
+              </div>
               <span className="text-xl font-black tracking-tight text-slate-900 uppercase">MACENZA ADMIN</span>
             </div>
-            {/* Close button: closes drawer on mobile only */}
+            {/* Collapse button: closes drawer on mobile and collapses on desktop */}
             <button
               type="button"
               onClick={() => setIsSidebarOpen(false)}
-              className="lg:hidden p-1.5 rounded-xl bg-slate-100/80 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
+              className="p-1.5 rounded-full bg-white/50 hover:bg-white/90 border border-white/70 text-slate-600 hover:text-slate-900 transition-all cursor-pointer shadow-xs"
               title="Close side panel"
               aria-label="Close side panel"
             >
-              <X className="w-5 h-5" />
+              <ChevronLeft className="w-4 h-4" />
             </button>
           </div>
 
           {/* Navigation Items */}
-          <nav className="flex flex-col gap-1.5">
+          <nav className="flex flex-col gap-2">
             {[
-              { id: 'Dashboard', label: 'Dashboard', icon: "📊" },
-              { id: 'Jobs', label: 'Jobs', icon: "💼" },
-              { id: 'Applications', label: 'Applications', icon: "📋" },
-              { id: 'Resume Manager', label: 'Resume Manager', icon: "🔍" },
-              { id: 'Employees', label: 'Employee Management', icon: <Users className="w-5 h-5" /> },
-              { id: 'Finance', label: 'Finance & Bills', icon: <Banknote className="w-5 h-5" /> },
-              { id: 'Events', label: 'Events & Birthdays', icon: <PartyPopper className="w-5 h-5" /> },
-              { id: 'Analytics', label: 'Analytics', icon: <BarChart3 className="w-5 h-5" /> }
+              { id: 'Dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
+              { id: 'Jobs', label: 'Jobs', icon: <Briefcase className="w-5 h-5 text-amber-700" /> },
+              { id: 'Applications', label: 'Applications', icon: <FileText className="w-5 h-5 text-orange-600" /> },
+              { id: 'Resume Manager', label: 'Resume Manager', icon: <FileSearch className="w-5 h-5 text-cyan-600" /> },
+              { id: 'Employees', label: 'Employee Management', icon: <Users className="w-5 h-5 text-teal-600" /> },
+              { id: 'Finance', label: 'Finance & Bills', icon: <Banknote className="w-5 h-5 text-sky-600" /> },
+              { id: 'Events', label: 'Events & Birthdays', icon: <PartyPopper className="w-5 h-5 text-purple-600" /> },
+              { id: 'Analytics', label: 'Analytics', icon: <BarChart3 className="w-5 h-5 text-indigo-600" /> }
             ].map(item => {
               const isActive = activeTab === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => handleTabSelect(item.id)}
-                  className={`flex items-center gap-3 py-2.5 px-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 group whitespace-nowrap cursor-pointer ${
+                  className={`flex items-center justify-between py-2.5 px-3.5 rounded-2xl font-bold text-sm tracking-wide transition-all duration-200 group whitespace-nowrap cursor-pointer ${
                     isActive
-                      ? 'bg-blue-600 text-white font-extrabold shadow-md shadow-blue-500/25 ring-1 ring-blue-500/30'
-                      : 'text-slate-700 hover:text-slate-900 hover:bg-white/80'
+                      ? 'bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 text-white font-extrabold shadow-[0_8px_20px_-3px_rgba(37,99,235,0.45)] ring-1 ring-white/30'
+                      : 'bg-white/20 hover:bg-white/40 backdrop-blur-xl border border-white/40 text-slate-700 hover:text-slate-900 shadow-xs hover:shadow-md'
                   }`}
                 >
-                  <span className={`text-xl transition-transform duration-200 group-hover:scale-110 ${isActive ? 'scale-110 text-white' : 'text-cyan-600'}`}>
-                    {item.icon}
-                  </span>
-                  <span>{item.label}</span>
+                  <div className="flex items-center gap-3">
+                    <span className={`transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-white' : ''}`}>
+                      {item.icon}
+                    </span>
+                    <span>{item.label}</span>
+                  </div>
+                  {isActive && (
+                    <div className="w-6 h-6 rounded-full bg-white/25 backdrop-blur-sm flex items-center justify-center text-white shrink-0 ml-2">
+                      <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                    </div>
+                  )}
                 </button>
               );
             })}
@@ -2258,9 +2272,9 @@ const Admin = () => {
               onClick={() => {
                 if (typeof window !== 'undefined' && window.innerWidth < 1024) setIsSidebarOpen(false);
               }}
-              className="flex items-center gap-3 py-2.5 px-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 text-slate-700 hover:text-blue-700 hover:bg-white/80 group whitespace-nowrap mt-2 pt-3 border-t border-slate-200/60"
+              className="flex items-center gap-3 py-2.5 px-3.5 rounded-2xl font-bold text-sm tracking-wide transition-all duration-200 bg-white/20 hover:bg-white/40 backdrop-blur-xl border border-white/40 text-slate-700 hover:text-blue-700 shadow-xs hover:shadow-md group whitespace-nowrap mt-2 pt-3"
             >
-              <span className="text-xl group-hover:scale-110 transition-transform duration-200">📝</span>
+              <span className="text-lg group-hover:scale-110 transition-transform duration-200">📝</span>
               <span>Blog Editor</span>
             </a>
 
@@ -2271,9 +2285,9 @@ const Admin = () => {
                 if (typeof window !== 'undefined' && window.innerWidth < 1024) setIsSidebarOpen(false);
                 handleSignOut();
               }}
-              className="flex items-center gap-3 py-2.5 px-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 text-rose-600 hover:text-rose-700 hover:bg-rose-50/80 group whitespace-nowrap cursor-pointer"
+              className="flex items-center gap-3 py-2.5 px-3.5 rounded-2xl font-bold text-sm tracking-wide transition-all duration-200 bg-rose-50/60 hover:bg-rose-100/80 backdrop-blur-md border border-rose-200/60 text-rose-600 hover:text-rose-700 shadow-xs group whitespace-nowrap cursor-pointer mt-1"
             >
-              <span className="text-xl group-hover:scale-110 transition-transform duration-200">🚪</span>
+              <span className="text-lg group-hover:scale-110 transition-transform duration-200">🚪</span>
               <span>Sign Out Admin</span>
             </button>
           </nav>
@@ -2281,11 +2295,11 @@ const Admin = () => {
 
         {/* Info panel at bottom */}
         <div className="mt-6">
-          <div className="px-3.5 py-2 bg-white/70 border border-white/80 rounded-xl flex items-center justify-between text-slate-600 shadow-xs">
+          <div className="glass-effect-subcard px-4 py-2.5 rounded-2xl flex items-center justify-between text-slate-600 shadow-xs">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Live Database</span>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="text-xs font-semibold text-slate-800">Sync Active</span>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.7)]"></span>
+              <span className="text-xs font-bold text-slate-800">Sync Active</span>
             </div>
           </div>
         </div>
@@ -2303,33 +2317,38 @@ const Admin = () => {
 
         {/* Desktop Topbar - Boxless Seamless Header (Hidden on mobile < md) */}
         <header className="hidden md:flex h-16 sm:h-20 bg-transparent px-3 sm:px-6 lg:px-10 items-center justify-between shrink-0">
-          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
             {/* Open / Close Side Panel Button */}
             <button
               type="button"
               onClick={() => setIsSidebarOpen(prev => !prev)}
-              className="p-2 sm:p-2.5 rounded-xl hover:bg-slate-900/10 text-slate-800 transition-all active:scale-95 flex items-center gap-2 shrink-0 cursor-pointer"
+              className="px-3.5 py-2 rounded-2xl bg-white/25 hover:bg-white/45 backdrop-blur-xl border border-white/50 text-slate-800 shadow-xs flex items-center gap-2 transition-all active:scale-95 shrink-0 cursor-pointer"
               title={isSidebarOpen ? "Close side panel" : "Open side panel"}
               aria-label={isSidebarOpen ? "Close side panel" : "Open side panel"}
             >
-              <Menu className="w-5 h-5 text-slate-800" />
+              <Menu className="w-4 h-4 text-slate-800" />
               <span className="hidden sm:inline text-xs font-bold text-slate-800">
                 {isSidebarOpen ? 'Hide Menu' : 'Menu'}
               </span>
             </button>
 
-            <h2 className="text-sm sm:text-lg lg:text-2xl font-black tracking-tight text-slate-900 flex items-center gap-1.5 sm:gap-2 truncate">
+            <h2 className="text-sm sm:text-lg lg:text-2xl font-black tracking-tight text-slate-900 flex items-center gap-1.5 sm:gap-2.5 truncate">
               <span className="hidden md:inline">MACENZA CAREERS HUB</span>
               <span className="md:hidden">MACENZA</span>
               <span className="text-sky-500/60 font-normal">|</span>
-              <span className="text-blue-700 italic text-xs sm:text-base lg:text-lg font-bold truncate">{activeTab}</span>
+              <span className="text-blue-600 italic text-xs sm:text-base lg:text-lg font-bold truncate">{activeTab}</span>
             </h2>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-6 shrink-0">
-            <span className="hidden md:inline-flex text-xs sm:text-sm font-semibold text-slate-600">
-              {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
-            </span>
+            <div className="px-3.5 py-1.5 rounded-2xl bg-white/25 backdrop-blur-xl border border-white/50 shadow-sm shadow-sky-500/10 flex items-center gap-2.5 text-slate-700 font-semibold text-xs sm:text-sm">
+              <div className="w-6 h-6 rounded-lg bg-blue-500/15 border border-blue-400/30 flex items-center justify-center text-blue-600">
+                <CalendarDays className="w-3.5 h-3.5" />
+              </div>
+              <span>
+                {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+              </span>
+            </div>
           </div>
         </header>
 

@@ -32,11 +32,13 @@ const DashboardKpiMetrics = ({ jobs = [], applications = [], onSelectTab }) => {
       value: activeJobs,
       subValue: `${totalJobs} total (${totalOpenings} openings)`,
       badge: `${totalOpenings} Openings`,
-      badgeColor: 'bg-blue-50 text-blue-700 border-blue-200/60',
+      badgeColor: 'bg-sky-500/15 text-sky-800 border-sky-300/40',
       icon: Briefcase,
-      iconBg: 'bg-blue-500/10 text-blue-600',
-      gradient: 'from-blue-500/5 to-transparent',
-      borderColor: 'hover:border-blue-300',
+      iconGrad: 'from-blue-600 to-sky-400 shadow-blue-500/30',
+      glowBorder: 'border-sky-300/50 shadow-[0_12px_32px_-6px_rgba(56,189,248,0.22)]',
+      bgTint: 'from-sky-100/25 via-white/20 to-white/10',
+      ambientGlow: 'bg-sky-400/20',
+      watermarkType: 'bars',
       tab: 'Jobs'
     },
     {
@@ -45,11 +47,13 @@ const DashboardKpiMetrics = ({ jobs = [], applications = [], onSelectTab }) => {
       value: totalApps,
       subValue: `${candidateToJobRatio} avg candidates / role`,
       badge: '+18% this month',
-      badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-200/60',
+      badgeColor: 'bg-purple-500/15 text-purple-800 border-purple-300/40',
       icon: Users,
-      iconBg: 'bg-indigo-500/10 text-indigo-600',
-      gradient: 'from-indigo-500/5 to-transparent',
-      borderColor: 'hover:border-indigo-300',
+      iconGrad: 'from-purple-600 to-indigo-500 shadow-purple-500/30',
+      glowBorder: 'border-purple-300/50 shadow-[0_12px_32px_-6px_rgba(168,85,247,0.22)]',
+      bgTint: 'from-purple-100/25 via-white/20 to-white/10',
+      ambientGlow: 'bg-purple-400/20',
+      watermarkType: 'users',
       tab: 'Applications'
     },
     {
@@ -58,11 +62,13 @@ const DashboardKpiMetrics = ({ jobs = [], applications = [], onSelectTab }) => {
       value: newApps,
       subValue: 'Awaiting initial profile review',
       badge: newApps > 0 ? 'Pending review' : 'All clear',
-      badgeColor: newApps > 0 ? 'bg-amber-50 text-amber-700 border-amber-200/60' : 'bg-emerald-50 text-emerald-700 border-emerald-200/60',
+      badgeColor: newApps > 0 ? 'bg-amber-500/15 text-amber-900 border-amber-300/40' : 'bg-emerald-500/15 text-emerald-900 border-emerald-300/40',
       icon: FileText,
-      iconBg: 'bg-amber-500/10 text-amber-600',
-      gradient: 'from-amber-500/5 to-transparent',
-      borderColor: 'hover:border-amber-300',
+      iconGrad: 'from-amber-500 to-orange-400 shadow-amber-500/30',
+      glowBorder: 'border-amber-300/50 shadow-[0_12px_32px_-6px_rgba(251,146,60,0.25)]',
+      bgTint: 'from-amber-100/25 via-white/20 to-white/10',
+      ambientGlow: 'bg-amber-400/20',
+      watermarkType: 'file',
       tab: 'Applications'
     },
     {
@@ -71,11 +77,13 @@ const DashboardKpiMetrics = ({ jobs = [], applications = [], onSelectTab }) => {
       value: shortlistedApps,
       subValue: `${shortlistRate}% qualification rate`,
       badge: `${shortlistRate}% rate`,
-      badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200/60',
+      badgeColor: 'bg-emerald-500/15 text-emerald-900 border-emerald-300/40',
       icon: UserCheck,
-      iconBg: 'bg-emerald-500/10 text-emerald-600',
-      gradient: 'from-emerald-500/5 to-transparent',
-      borderColor: 'hover:border-emerald-300',
+      iconGrad: 'from-emerald-500 to-teal-400 shadow-emerald-500/30',
+      glowBorder: 'border-emerald-300/50 shadow-[0_12px_32px_-6px_rgba(52,211,153,0.25)]',
+      bgTint: 'from-emerald-100/25 via-white/20 to-white/10',
+      ambientGlow: 'bg-emerald-400/20',
+      watermarkType: 'userCheck',
       tab: 'Applications'
     },
     {
@@ -84,11 +92,13 @@ const DashboardKpiMetrics = ({ jobs = [], applications = [], onSelectTab }) => {
       value: scheduledApps,
       subValue: 'Active screening & rounds',
       badge: 'Calendar active',
-      badgeColor: 'bg-purple-50 text-purple-700 border-purple-200/60',
+      badgeColor: 'bg-violet-500/15 text-violet-800 border-violet-300/40',
       icon: Clock,
-      iconBg: 'bg-purple-500/10 text-purple-600',
-      gradient: 'from-purple-500/5 to-transparent',
-      borderColor: 'hover:border-purple-300',
+      iconGrad: 'from-violet-600 to-purple-400 shadow-violet-500/30',
+      glowBorder: 'border-violet-300/50 shadow-[0_12px_32px_-6px_rgba(139,92,246,0.22)]',
+      bgTint: 'from-violet-100/25 via-white/20 to-white/10',
+      ambientGlow: 'bg-violet-400/20',
+      watermarkType: 'clock',
       tab: 'Applications'
     },
     {
@@ -97,14 +107,41 @@ const DashboardKpiMetrics = ({ jobs = [], applications = [], onSelectTab }) => {
       value: selectedApps,
       subValue: `${rejectedApps} candidates closed`,
       badge: `${hireRate}% conversion`,
-      badgeColor: 'bg-teal-50 text-teal-700 border-teal-200/60',
+      badgeColor: 'bg-teal-500/15 text-teal-900 border-teal-300/40',
       icon: CheckCircle2,
-      iconBg: 'bg-teal-500/10 text-teal-600',
-      gradient: 'from-teal-500/5 to-transparent',
-      borderColor: 'hover:border-teal-300',
+      iconGrad: 'from-teal-500 to-cyan-400 shadow-teal-500/30',
+      glowBorder: 'border-teal-300/50 shadow-[0_12px_32px_-6px_rgba(45,212,191,0.25)]',
+      bgTint: 'from-teal-100/25 via-white/20 to-white/10',
+      ambientGlow: 'bg-teal-400/20',
+      watermarkType: 'check',
       tab: 'Applications'
     }
   ];
+
+  const renderWatermark = (type) => {
+    switch (type) {
+      case 'bars':
+        return (
+          <div className="flex items-end gap-1 opacity-25 text-sky-500">
+            <div className="w-1.5 h-3.5 bg-current rounded-full" />
+            <div className="w-1.5 h-6.5 bg-current rounded-full" />
+            <div className="w-1.5 h-9 bg-current rounded-full" />
+          </div>
+        );
+      case 'users':
+        return <Users className="w-14 h-14 text-purple-600/20 stroke-[1.5]" />;
+      case 'file':
+        return <FileText className="w-14 h-14 text-amber-600/20 stroke-[1.5]" />;
+      case 'userCheck':
+        return <UserCheck className="w-14 h-14 text-emerald-600/20 stroke-[1.5]" />;
+      case 'clock':
+        return <Clock className="w-14 h-14 text-violet-600/20 stroke-[1.5]" />;
+      case 'check':
+        return <CheckCircle2 className="w-14 h-14 text-teal-600/20 stroke-[1.5]" />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="w-full">
@@ -115,31 +152,53 @@ const DashboardKpiMetrics = ({ jobs = [], applications = [], onSelectTab }) => {
             <div
               key={kpi.id}
               onClick={() => onSelectTab && onSelectTab(kpi.tab)}
-              className={`group relative overflow-hidden bg-white rounded-2xl border border-slate-200/80 p-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer ${kpi.borderColor}`}
+              className="group relative cursor-pointer select-none"
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${kpi.gradient} opacity-40 pointer-events-none`} />
+              {/* Outer Ambient Glow Effect */}
+              <div
+                className={`absolute -inset-1 rounded-3xl opacity-35 blur-lg pointer-events-none transition-opacity duration-300 group-hover:opacity-65 ${kpi.ambientGlow}`}
+              />
 
-              <div className="relative z-10 flex flex-col justify-between h-full">
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110 ${kpi.iconBg}`}>
-                    <Icon className="w-4 h-4" />
+              {/* Single-Cut Corner Card Body with Guaranteed Transparency & Blur */}
+              <div
+                className={`admin-cut-card relative overflow-hidden bg-gradient-to-b ${kpi.bgTint} backdrop-blur-2xl border border-white/60 ${kpi.glowBorder} p-3.5 sm:p-4 flex flex-col justify-between h-full min-h-[155px]`}
+              >
+                {/* Diagonal cut corner glowing line */}
+                <div className="absolute top-0 right-0 w-[34px] h-[34px] pointer-events-none overflow-hidden z-20">
+                  <div className="absolute top-[16px] -right-[8px] w-[48px] h-[1.5px] bg-white/80 rotate-45 shadow-[0_0_8px_rgba(255,255,255,0.7)]" />
+                </div>
+
+                {/* Subtle Watermark in Lower Right */}
+                <div className="absolute bottom-1 right-2 pointer-events-none z-0">
+                  {renderWatermark(kpi.watermarkType)}
+                </div>
+
+                {/* Card Top: Icon & Badge */}
+                <div className="relative z-10 flex items-center justify-between gap-2 mb-2 sm:mb-3">
+                  <div
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110 bg-gradient-to-br ${kpi.iconGrad} shadow-md`}
+                  >
+                    <Icon className="w-4 h-4 text-white" />
                   </div>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border truncate ${kpi.badgeColor}`}>
+                  <span
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full border backdrop-blur-md shadow-xs truncate max-w-[95px] sm:max-w-[110px] ${kpi.badgeColor}`}
+                  >
                     {kpi.badge}
                   </span>
                 </div>
 
-                <div>
+                {/* Card Bottom: Big Number, Title, Subtitle */}
+                <div className="relative z-10">
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+                    <span className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 group-hover:text-blue-700 transition-colors">
                       {kpi.value}
                     </span>
                     <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <h4 className="text-xs font-bold text-slate-600 mt-0.5 tracking-wide">
+                  <h4 className="text-xs font-bold text-slate-700 mt-0.5 tracking-wide truncate">
                     {kpi.title}
                   </h4>
-                  <p className="text-[11px] font-medium text-slate-400 mt-1 truncate">
+                  <p className="text-[11px] font-medium text-slate-400 mt-0.5 truncate">
                     {kpi.subValue}
                   </p>
                 </div>

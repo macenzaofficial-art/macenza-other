@@ -38,7 +38,9 @@ import {
   Filter,
   ShieldAlert,
   AlertTriangle,
-  Ban
+  Ban,
+  ChevronRight,
+  ChevronLeft
 } from 'lucide-react';
 
 import { supabase } from '../supabaseClient';
@@ -2028,6 +2030,9 @@ const Admin = () => {
         <div className="absolute top-1/3 -right-40 w-[700px] h-[700px] bg-blue-300/30 rounded-full blur-[150px]" />
         <div className="absolute -bottom-40 left-1/4 w-[750px] h-[750px] bg-cyan-200/40 rounded-full blur-[160px]" />
         <div className="absolute bottom-10 right-10 w-[500px] h-[500px] bg-teal-200/35 rounded-full blur-[130px]" />
+        {/* Iridescent Violet & Sky Wave Gradient (Refraction behind Glass Sidebar & Mobile Nav) */}
+        <div className="absolute top-1/4 -left-20 w-[450px] h-[750px] bg-gradient-to-b from-indigo-300/30 via-purple-300/25 to-sky-300/35 rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute -bottom-24 left-1/3 w-[500px] h-[350px] bg-gradient-to-r from-purple-300/25 via-sky-300/30 to-teal-200/25 rounded-full blur-[120px] pointer-events-none" />
 
         {/* Decorative SVG: Flowing Random Curved Lines & Floating Leaves */}
         <svg
@@ -2196,56 +2201,63 @@ const Admin = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-[70] w-72 max-w-[85vw] bg-gradient-to-b from-[#e0f2fe] via-[#bae6fd] to-[#e0f7fa] border-r border-sky-300/80 shadow-2xl flex flex-col justify-between h-full py-6 px-5 pt-[max(1.5rem,env(safe-area-inset-top))] transition-transform duration-300 ease-in-out lg:static lg:h-screen lg:sticky lg:top-0 lg:z-0 lg:w-72 lg:bg-white/15 lg:backdrop-blur-md lg:border-r lg:border-sky-300/30 lg:shadow-xs ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:hidden'
-        }`}
+        className={`glass-effect-panel fixed inset-y-0 left-0 z-[70] w-72 max-w-[85vw] flex flex-col justify-between h-full py-6 px-5 pt-[max(1.5rem,env(safe-area-inset-top))] transition-transform duration-300 ease-in-out lg:static lg:h-screen lg:sticky lg:top-0 lg:z-0 lg:w-72 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:hidden'
+          }`}
       >
-        <div className="flex flex-col gap-6 sm:gap-8 overflow-y-auto">
-          {/* Brand Logo & Mobile Close Button */}
-          <div className="flex items-center justify-between pl-1 pb-2 border-b border-sky-200/60 shrink-0">
+        <div className="flex flex-col gap-6 sm:gap-7 overflow-y-auto">
+          {/* Brand Logo & Sidebar Close / Collapse Button */}
+          <div className="glass-effect-subcard flex items-center justify-between p-2.5 rounded-2xl shrink-0">
             <div className="flex items-center gap-3">
-              <img src="/logo.svg" alt="Macenza Logo" className="w-9 h-9 object-contain drop-shadow-sm" />
+              <div className="w-9 h-9 rounded-xl bg-white/90 p-1 shadow-sm border border-white/80 flex items-center justify-center">
+                <img src="/logo.svg" alt="Macenza Logo" className="w-full h-full object-contain" />
+              </div>
               <span className="text-xl font-black tracking-tight text-slate-900 uppercase">MACENZA ADMIN</span>
             </div>
-            {/* Close button: closes drawer on mobile only */}
+            {/* Collapse button: closes drawer on mobile and collapses on desktop */}
             <button
               type="button"
               onClick={() => setIsSidebarOpen(false)}
-              className="lg:hidden p-1.5 rounded-xl bg-slate-100/80 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
+              className="p-1.5 rounded-full bg-white/50 hover:bg-white/90 border border-white/70 text-slate-600 hover:text-slate-900 transition-all cursor-pointer shadow-xs"
               title="Close side panel"
               aria-label="Close side panel"
             >
-              <X className="w-5 h-5" />
+              <ChevronLeft className="w-4 h-4" />
             </button>
           </div>
 
           {/* Navigation Items */}
-          <nav className="flex flex-col gap-1.5">
+          <nav className="flex flex-col gap-2">
             {[
-              { id: 'Dashboard', label: 'Dashboard', icon: "📊" },
-              { id: 'Jobs', label: 'Jobs', icon: "💼" },
-              { id: 'Applications', label: 'Applications', icon: "📋" },
-              { id: 'Resume Manager', label: 'Resume Manager', icon: "🔍" },
-              { id: 'Employees', label: 'Employee Management', icon: <Users className="w-5 h-5" /> },
-              { id: 'Finance', label: 'Finance & Bills', icon: <Banknote className="w-5 h-5" /> },
-              { id: 'Events', label: 'Events & Birthdays', icon: <PartyPopper className="w-5 h-5" /> },
-              { id: 'Analytics', label: 'Analytics', icon: <BarChart3 className="w-5 h-5" /> }
+              { id: 'Dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
+              { id: 'Jobs', label: 'Jobs', icon: <Briefcase className="w-5 h-5 text-amber-700" /> },
+              { id: 'Applications', label: 'Applications', icon: <FileText className="w-5 h-5 text-orange-600" /> },
+              { id: 'Resume Manager', label: 'Resume Manager', icon: <FileSearch className="w-5 h-5 text-cyan-600" /> },
+              { id: 'Employees', label: 'Employee Management', icon: <Users className="w-5 h-5 text-teal-600" /> },
+              { id: 'Finance', label: 'Finance & Bills', icon: <Banknote className="w-5 h-5 text-sky-600" /> },
+              { id: 'Events', label: 'Events & Birthdays', icon: <PartyPopper className="w-5 h-5 text-purple-600" /> },
+              { id: 'Analytics', label: 'Analytics', icon: <BarChart3 className="w-5 h-5 text-indigo-600" /> }
             ].map(item => {
               const isActive = activeTab === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => handleTabSelect(item.id)}
-                  className={`flex items-center gap-3 py-2.5 px-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 group whitespace-nowrap cursor-pointer ${
-                    isActive
-                      ? 'bg-blue-600 text-white font-extrabold shadow-md shadow-blue-500/25 ring-1 ring-blue-500/30'
-                      : 'text-slate-700 hover:text-slate-900 hover:bg-white/80'
-                  }`}
+                  className={`flex items-center justify-between py-2.5 px-3.5 rounded-2xl font-bold text-sm tracking-wide transition-all duration-200 group whitespace-nowrap cursor-pointer ${isActive
+                    ? 'bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 text-white font-extrabold shadow-[0_8px_20px_-3px_rgba(37,99,235,0.45)] ring-1 ring-white/30'
+                    : 'bg-white/20 hover:bg-white/40 backdrop-blur-xl border border-white/40 text-slate-700 hover:text-slate-900 shadow-xs hover:shadow-md'
+                    }`}
                 >
-                  <span className={`text-xl transition-transform duration-200 group-hover:scale-110 ${isActive ? 'scale-110 text-white' : 'text-cyan-600'}`}>
-                    {item.icon}
-                  </span>
-                  <span>{item.label}</span>
+                  <div className="flex items-center gap-3">
+                    <span className={`transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-white' : ''}`}>
+                      {item.icon}
+                    </span>
+                    <span>{item.label}</span>
+                  </div>
+                  {isActive && (
+                    <div className="w-6 h-6 rounded-full bg-white/25 backdrop-blur-sm flex items-center justify-center text-white shrink-0 ml-2">
+                      <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                    </div>
+                  )}
                 </button>
               );
             })}
@@ -2258,9 +2270,9 @@ const Admin = () => {
               onClick={() => {
                 if (typeof window !== 'undefined' && window.innerWidth < 1024) setIsSidebarOpen(false);
               }}
-              className="flex items-center gap-3 py-2.5 px-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 text-slate-700 hover:text-blue-700 hover:bg-white/80 group whitespace-nowrap mt-2 pt-3 border-t border-slate-200/60"
+              className="flex items-center gap-3 py-2.5 px-3.5 rounded-2xl font-bold text-sm tracking-wide transition-all duration-200 bg-white/20 hover:bg-white/40 backdrop-blur-xl border border-white/40 text-slate-700 hover:text-blue-700 shadow-xs hover:shadow-md group whitespace-nowrap mt-2 pt-3"
             >
-              <span className="text-xl group-hover:scale-110 transition-transform duration-200">📝</span>
+              <span className="text-lg group-hover:scale-110 transition-transform duration-200">📝</span>
               <span>Blog Editor</span>
             </a>
 
@@ -2271,9 +2283,9 @@ const Admin = () => {
                 if (typeof window !== 'undefined' && window.innerWidth < 1024) setIsSidebarOpen(false);
                 handleSignOut();
               }}
-              className="flex items-center gap-3 py-2.5 px-3.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-200 text-rose-600 hover:text-rose-700 hover:bg-rose-50/80 group whitespace-nowrap cursor-pointer"
+              className="flex items-center gap-3 py-2.5 px-3.5 rounded-2xl font-bold text-sm tracking-wide transition-all duration-200 bg-rose-50/60 hover:bg-rose-100/80 backdrop-blur-md border border-rose-200/60 text-rose-600 hover:text-rose-700 shadow-xs group whitespace-nowrap cursor-pointer mt-1"
             >
-              <span className="text-xl group-hover:scale-110 transition-transform duration-200">🚪</span>
+              <span className="text-lg group-hover:scale-110 transition-transform duration-200">🚪</span>
               <span>Sign Out Admin</span>
             </button>
           </nav>
@@ -2281,11 +2293,11 @@ const Admin = () => {
 
         {/* Info panel at bottom */}
         <div className="mt-6">
-          <div className="px-3.5 py-2 bg-white/70 border border-white/80 rounded-xl flex items-center justify-between text-slate-600 shadow-xs">
+          <div className="glass-effect-subcard px-4 py-2.5 rounded-2xl flex items-center justify-between text-slate-600 shadow-xs">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Live Database</span>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="text-xs font-semibold text-slate-800">Sync Active</span>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.7)]"></span>
+              <span className="text-xs font-bold text-slate-800">Sync Active</span>
             </div>
           </div>
         </div>
@@ -2303,33 +2315,38 @@ const Admin = () => {
 
         {/* Desktop Topbar - Boxless Seamless Header (Hidden on mobile < md) */}
         <header className="hidden md:flex h-16 sm:h-20 bg-transparent px-3 sm:px-6 lg:px-10 items-center justify-between shrink-0">
-          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
             {/* Open / Close Side Panel Button */}
             <button
               type="button"
               onClick={() => setIsSidebarOpen(prev => !prev)}
-              className="p-2 sm:p-2.5 rounded-xl hover:bg-slate-900/10 text-slate-800 transition-all active:scale-95 flex items-center gap-2 shrink-0 cursor-pointer"
+              className="px-3.5 py-2 rounded-2xl bg-white/25 hover:bg-white/45 backdrop-blur-xl border border-white/50 text-slate-800 shadow-xs flex items-center gap-2 transition-all active:scale-95 shrink-0 cursor-pointer"
               title={isSidebarOpen ? "Close side panel" : "Open side panel"}
               aria-label={isSidebarOpen ? "Close side panel" : "Open side panel"}
             >
-              <Menu className="w-5 h-5 text-slate-800" />
+              <Menu className="w-4 h-4 text-slate-800" />
               <span className="hidden sm:inline text-xs font-bold text-slate-800">
                 {isSidebarOpen ? 'Hide Menu' : 'Menu'}
               </span>
             </button>
 
-            <h2 className="text-sm sm:text-lg lg:text-2xl font-black tracking-tight text-slate-900 flex items-center gap-1.5 sm:gap-2 truncate">
+            <h2 className="text-sm sm:text-lg lg:text-2xl font-black tracking-tight text-slate-900 flex items-center gap-1.5 sm:gap-2.5 truncate">
               <span className="hidden md:inline">MACENZA CAREERS HUB</span>
               <span className="md:hidden">MACENZA</span>
               <span className="text-sky-500/60 font-normal">|</span>
-              <span className="text-blue-700 italic text-xs sm:text-base lg:text-lg font-bold truncate">{activeTab}</span>
+              <span className="text-blue-600 italic text-xs sm:text-base lg:text-lg font-bold truncate">{activeTab}</span>
             </h2>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-6 shrink-0">
-            <span className="hidden md:inline-flex text-xs sm:text-sm font-semibold text-slate-600">
-              {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
-            </span>
+            <div className="px-3.5 py-1.5 rounded-2xl bg-white/25 backdrop-blur-xl border border-white/50 shadow-sm shadow-sky-500/10 flex items-center gap-2.5 text-slate-700 font-semibold text-xs sm:text-sm">
+              <div className="w-6 h-6 rounded-lg bg-blue-500/15 border border-blue-400/30 flex items-center justify-center text-blue-600">
+                <CalendarDays className="w-3.5 h-3.5" />
+              </div>
+              <span>
+                {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+              </span>
+            </div>
           </div>
         </header>
 
@@ -2638,21 +2655,19 @@ const Admin = () => {
                   {jobs.map(job => (
                     <div
                       key={job._id}
-                      className={`p-4 sm:p-5 rounded-2xl transition-all duration-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 ${
-                        editingJobId === job._id
-                          ? 'border border-cyan-500 bg-cyan-50/70 shadow-md ring-1 ring-cyan-400'
-                          : 'bg-white/70 border border-slate-200/80 hover:bg-white/95 hover:shadow-xs'
-                      }`}
+                      className={`p-4 sm:p-5 rounded-2xl transition-all duration-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 ${editingJobId === job._id
+                        ? 'border border-cyan-500 bg-cyan-50/70 shadow-md ring-1 ring-cyan-400'
+                        : 'bg-white/70 border border-slate-200/80 hover:bg-white/95 hover:shadow-xs'
+                        }`}
                     >
                       <div className="flex flex-col gap-1.5">
                         <div className="flex items-center gap-2.5 flex-wrap">
                           <h5 className="text-base font-bold text-slate-900">{job.title}</h5>
                           <span
-                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
-                              job.status === 'Active'
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                : 'bg-amber-50 text-amber-700 border border-amber-200'
-                            }`}
+                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${job.status === 'Active'
+                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                              : 'bg-amber-50 text-amber-700 border border-amber-200'
+                              }`}
                           >
                             {job.status}
                           </span>
@@ -2827,11 +2842,10 @@ const Admin = () => {
                     <button
                       type="button"
                       onClick={() => setFilterBlacklistOnly(!filterBlacklistOnly)}
-                      className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer border ${
-                        filterBlacklistOnly
-                          ? 'bg-rose-600 text-white border-rose-500 shadow-sm'
-                          : 'bg-white/80 border-slate-200 text-slate-700 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300'
-                      }`}
+                      className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer border ${filterBlacklistOnly
+                        ? 'bg-rose-600 text-white border-rose-500 shadow-sm'
+                        : 'bg-white/80 border-slate-200 text-slate-700 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300'
+                        }`}
                     >
                       <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
                       <span className="truncate">{filterBlacklistOnly ? 'Blacklisted Only' : 'All Candidates'}</span>
@@ -2879,93 +2893,89 @@ const Admin = () => {
                   {filteredApplications.map(app => {
                     const blacklisted = isCandidateBlacklisted(app.email);
                     return (
-                    <div
-                      key={app._id}
-                      onClick={() => {
-                        setCandidateDrawerApp(app);
-                        setDrawerNotesText(app.notes || '');
-                      }}
-                      className={`p-4 transition-colors cursor-pointer flex flex-col gap-3 ${
-                        blacklisted
+                      <div
+                        key={app._id}
+                        onClick={() => {
+                          setCandidateDrawerApp(app);
+                          setDrawerNotesText(app.notes || '');
+                        }}
+                        className={`p-4 transition-colors cursor-pointer flex flex-col gap-3 ${blacklisted
                           ? 'bg-rose-50/80 hover:bg-rose-100/80 border-l-4 border-l-rose-500'
                           : 'hover:bg-slate-50/60 active:bg-slate-100/60'
-                      }`}
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div className={`w-10 h-10 rounded-xl font-bold text-sm flex items-center justify-center shrink-0 border ${
-                            blacklisted
+                          }`}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className={`w-10 h-10 rounded-xl font-bold text-sm flex items-center justify-center shrink-0 border ${blacklisted
                               ? 'bg-rose-100 text-rose-700 border-rose-300'
                               : 'bg-cyan-50 text-cyan-700 border-cyan-200'
-                          }`}>
-                            {(app.candidateName || 'C').charAt(0).toUpperCase()}
-                          </div>
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-1.5 flex-wrap">
-                              <h5 className={`text-sm font-bold truncate ${blacklisted ? 'text-rose-900 font-black' : 'text-slate-900'}`}>
-                                {app.candidateName}
-                              </h5>
-                              {blacklisted && (
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-600 text-white tracking-wider uppercase shrink-0">
-                                  <ShieldAlert className="w-2.5 h-2.5" /> Blacklisted
-                                </span>
-                              )}
+                              }`}>
+                              {(app.candidateName || 'C').charAt(0).toUpperCase()}
                             </div>
-                            <p className={`text-[11px] truncate ${blacklisted ? 'text-rose-600 font-semibold' : 'text-slate-500'}`}>{app.email}</p>
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <h5 className={`text-sm font-bold truncate ${blacklisted ? 'text-rose-900 font-black' : 'text-slate-900'}`}>
+                                  {app.candidateName}
+                                </h5>
+                                {blacklisted && (
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-600 text-white tracking-wider uppercase shrink-0">
+                                    <ShieldAlert className="w-2.5 h-2.5" /> Blacklisted
+                                  </span>
+                                )}
+                              </div>
+                              <p className={`text-[11px] truncate ${blacklisted ? 'text-rose-600 font-semibold' : 'text-slate-500'}`}>{app.email}</p>
+                            </div>
                           </div>
-                        </div>
 
-                        <span className={`shrink-0 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
-                          app.status === 'Selected' ? 'bg-teal-50 text-teal-700 border border-teal-200' :
-                          app.status === 'Shortlisted' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
-                          app.status === 'Interview Scheduled' ? 'bg-purple-50 text-purple-700 border border-purple-200' :
-                          app.status === 'Rejected' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
-                          'bg-blue-50 text-blue-700 border border-blue-200'
-                        }`}>
-                          {app.status || 'Applied'}
-                        </span>
-                      </div>
-
-                      <div className={`rounded-xl p-2.5 border flex flex-col gap-1.5 text-xs ${
-                        blacklisted
-                          ? 'bg-rose-50/60 border-rose-200 text-rose-800'
-                          : 'bg-slate-50/80 border-slate-200 text-slate-700'
-                      }`}>
-                        <div className="flex items-center justify-between font-semibold">
-                          <span className="text-slate-500 text-[11px]">Role:</span>
-                          <span className="text-right truncate max-w-[200px] text-cyan-800 font-bold">
-                            {app.jobId ? (typeof app.jobId === 'object' ? app.jobId.title : app.jobId) : 'General Placement'}
+                          <span className={`shrink-0 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${app.status === 'Selected' ? 'bg-teal-50 text-teal-700 border border-teal-200' :
+                            app.status === 'Shortlisted' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                              app.status === 'Interview Scheduled' ? 'bg-purple-50 text-purple-700 border border-purple-200' :
+                                app.status === 'Rejected' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                                  'bg-blue-50 text-blue-700 border border-blue-200'
+                            }`}>
+                            {app.status || 'Applied'}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between text-slate-700">
-                          <span className="text-slate-500 text-[11px]">Experience:</span>
-                          <span>{app.experience || 'Not specified'}</span>
-                        </div>
-                        <div className="flex items-center justify-between text-slate-700">
-                          <span className="text-slate-500 text-[11px]">Location:</span>
-                          <span>{app.location || 'Remote'}</span>
-                        </div>
-                        <div className="flex items-center justify-between text-slate-700">
-                          <span className="text-slate-500 text-[11px]">Applied:</span>
-                          <span>{app.createdAt ? new Date(app.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A'}</span>
-                        </div>
-                      </div>
 
-                      <div className="flex items-center justify-between pt-1">
-                        <span className="text-[11px] font-semibold text-slate-500">Tap candidate to view details</span>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setCandidateDrawerApp(app);
-                            setDrawerNotesText(app.notes || '');
-                          }}
-                          className="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-cyan-700 rounded-lg font-bold text-xs transition-colors inline-flex items-center gap-1 cursor-pointer shadow-xs"
-                        >
-                          View <ArrowRight className="w-3 h-3" />
-                        </button>
+                        <div className={`rounded-xl p-2.5 border flex flex-col gap-1.5 text-xs ${blacklisted
+                          ? 'bg-rose-50/60 border-rose-200 text-rose-800'
+                          : 'bg-slate-50/80 border-slate-200 text-slate-700'
+                          }`}>
+                          <div className="flex items-center justify-between font-semibold">
+                            <span className="text-slate-500 text-[11px]">Role:</span>
+                            <span className="text-right truncate max-w-[200px] text-cyan-800 font-bold">
+                              {app.jobId ? (typeof app.jobId === 'object' ? app.jobId.title : app.jobId) : 'General Placement'}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between text-slate-700">
+                            <span className="text-slate-500 text-[11px]">Experience:</span>
+                            <span>{app.experience || 'Not specified'}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-slate-700">
+                            <span className="text-slate-500 text-[11px]">Location:</span>
+                            <span>{app.location || 'Remote'}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-slate-700">
+                            <span className="text-slate-500 text-[11px]">Applied:</span>
+                            <span>{app.createdAt ? new Date(app.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A'}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between pt-1">
+                          <span className="text-[11px] font-semibold text-slate-500">Tap candidate to view details</span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCandidateDrawerApp(app);
+                              setDrawerNotesText(app.notes || '');
+                            }}
+                            className="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-cyan-700 rounded-lg font-bold text-xs transition-colors inline-flex items-center gap-1 cursor-pointer shadow-xs"
+                          >
+                            View <ArrowRight className="w-3 h-3" />
+                          </button>
+                        </div>
                       </div>
-                    </div>
                     );
                   })}
 
@@ -2994,80 +3004,76 @@ const Admin = () => {
                       {filteredApplications.map(app => {
                         const blacklisted = isCandidateBlacklisted(app.email);
                         return (
-                        <tr
-                          key={app._id}
-                          className={`transition-colors font-medium ${
-                            blacklisted
+                          <tr
+                            key={app._id}
+                            className={`transition-colors font-medium ${blacklisted
                               ? 'bg-rose-50/70 hover:bg-rose-100/70 border-l-4 border-l-rose-500'
                               : 'hover:bg-slate-50/60'
-                          }`}
-                        >
-                          <td className="px-6 py-4">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setCandidateDrawerApp(app);
-                                setDrawerNotesText(app.notes || '');
-                              }}
-                              className="flex items-center gap-3 text-left group cursor-pointer focus:outline-none"
-                            >
-                              <div className={`w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center shrink-0 border ${
-                                blacklisted
+                              }`}
+                          >
+                            <td className="px-6 py-4">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setCandidateDrawerApp(app);
+                                  setDrawerNotesText(app.notes || '');
+                                }}
+                                className="flex items-center gap-3 text-left group cursor-pointer focus:outline-none"
+                              >
+                                <div className={`w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center shrink-0 border ${blacklisted
                                   ? 'bg-rose-100 text-rose-700 border-rose-300'
                                   : 'bg-cyan-50 text-cyan-700 border-cyan-200'
-                              }`}>
-                                {(app.candidateName || 'C').charAt(0).toUpperCase()}
-                              </div>
-                              <div className="flex flex-col">
-                                <div className="flex items-center gap-1.5 flex-wrap">
-                                  <span className={`font-bold text-sm transition-colors ${
-                                    blacklisted
+                                  }`}>
+                                  {(app.candidateName || 'C').charAt(0).toUpperCase()}
+                                </div>
+                                <div className="flex flex-col">
+                                  <div className="flex items-center gap-1.5 flex-wrap">
+                                    <span className={`font-bold text-sm transition-colors ${blacklisted
                                       ? 'text-rose-900 font-black'
                                       : 'text-slate-900 group-hover:text-cyan-700'
-                                  }`}>
-                                    {app.candidateName}
-                                  </span>
-                                  {blacklisted && (
-                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-600 text-white tracking-wider uppercase shrink-0">
-                                      <ShieldAlert className="w-2.5 h-2.5" /> Blacklisted
+                                      }`}>
+                                      {app.candidateName}
                                     </span>
-                                  )}
+                                    {blacklisted && (
+                                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-600 text-white tracking-wider uppercase shrink-0">
+                                        <ShieldAlert className="w-2.5 h-2.5" /> Blacklisted
+                                      </span>
+                                    )}
+                                  </div>
+                                  <span className={`text-[11px] ${blacklisted ? 'text-rose-600 font-semibold' : 'text-slate-500'}`}>{app.email}</span>
                                 </div>
-                                <span className={`text-[11px] ${blacklisted ? 'text-rose-600 font-semibold' : 'text-slate-500'}`}>{app.email}</span>
-                              </div>
-                            </button>
-                          </td>
-                          <td className="px-5 py-4 text-slate-800 font-semibold">
-                            {app.jobId ? (typeof app.jobId === 'object' ? app.jobId.title : app.jobId) : 'General Placement'}
-                          </td>
-                          <td className="px-5 py-4 text-slate-600">{app.experience}</td>
-                          <td className="px-5 py-4 text-slate-600">{app.location || 'Remote'}</td>
-                          <td className="px-5 py-4 text-slate-500">
-                            {new Date(app.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                          </td>
-                          <td className="px-5 py-4">
-                            <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
-                              app.status === 'Selected' ? 'bg-teal-50 text-teal-700 border border-teal-200' :
-                              app.status === 'Shortlisted' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
-                              app.status === 'Interview Scheduled' ? 'bg-purple-50 text-purple-700 border border-purple-200' :
-                              app.status === 'Rejected' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
-                              'bg-blue-50 text-blue-700 border border-blue-200'
-                            }`}>
-                              {app.status || 'Applied'}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            <button
-                              onClick={() => {
-                                setCandidateDrawerApp(app);
-                                setDrawerNotesText(app.notes || '');
-                              }}
-                              className="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-slate-900 rounded-lg font-bold text-xs transition-colors inline-flex items-center gap-1 cursor-pointer shadow-xs"
-                            >
-                              View <ArrowRight className="w-3 h-3" />
-                            </button>
-                          </td>
-                        </tr>
+                              </button>
+                            </td>
+                            <td className="px-5 py-4 text-slate-800 font-semibold">
+                              {app.jobId ? (typeof app.jobId === 'object' ? app.jobId.title : app.jobId) : 'General Placement'}
+                            </td>
+                            <td className="px-5 py-4 text-slate-600">{app.experience}</td>
+                            <td className="px-5 py-4 text-slate-600">{app.location || 'Remote'}</td>
+                            <td className="px-5 py-4 text-slate-500">
+                              {new Date(app.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </td>
+                            <td className="px-5 py-4">
+                              <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${app.status === 'Selected' ? 'bg-teal-50 text-teal-700 border border-teal-200' :
+                                app.status === 'Shortlisted' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                                  app.status === 'Interview Scheduled' ? 'bg-purple-50 text-purple-700 border border-purple-200' :
+                                    app.status === 'Rejected' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                                      'bg-blue-50 text-blue-700 border border-blue-200'
+                                }`}>
+                                {app.status || 'Applied'}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <button
+                                onClick={() => {
+                                  setCandidateDrawerApp(app);
+                                  setDrawerNotesText(app.notes || '');
+                                }}
+                                className="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-slate-900 rounded-lg font-bold text-xs transition-colors inline-flex items-center gap-1 cursor-pointer shadow-xs"
+                              >
+                                View <ArrowRight className="w-3 h-3" />
+                              </button>
+                            </td>
+                          </tr>
                         );
                       })}
                       {filteredApplications.length === 0 && (
@@ -3090,9 +3096,8 @@ const Admin = () => {
               {/* Candidates Side List / Pipeline */}
               <div
                 data-lenis-prevent
-                className={`xl:col-span-4 bg-white/60 backdrop-blur-md border border-white/60 rounded-2xl sm:rounded-3xl p-4 sm:p-5 lg:p-6 shadow-sm flex flex-col gap-3 sm:gap-4 ${
-                  selectedApp ? 'hidden xl:flex' : 'flex'
-                }`}
+                className={`xl:col-span-4 bg-white/60 backdrop-blur-md border border-white/60 rounded-2xl sm:rounded-3xl p-4 sm:p-5 lg:p-6 shadow-sm flex flex-col gap-3 sm:gap-4 ${selectedApp ? 'hidden xl:flex' : 'flex'
+                  }`}
               >
                 <div className="flex items-center justify-between pb-3 border-b border-slate-200/80">
                   <h4 className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
@@ -3105,52 +3110,50 @@ const Admin = () => {
                     const blacklisted = isCandidateBlacklisted(app.email);
                     const isSelected = selectedApp && selectedApp._id === app._id;
                     return (
-                    <div
-                      key={app._id}
-                      onClick={() => {
-                        setSelectedApp(app);
-                        setNotesText(app.notes || '');
-                      }}
-                      className={`p-3.5 sm:p-4 rounded-2xl cursor-pointer transition-all duration-200 border ${
-                        isSelected
+                      <div
+                        key={app._id}
+                        onClick={() => {
+                          setSelectedApp(app);
+                          setNotesText(app.notes || '');
+                        }}
+                        className={`p-3.5 sm:p-4 rounded-2xl cursor-pointer transition-all duration-200 border ${isSelected
                           ? blacklisted
                             ? 'bg-rose-50 border-rose-400 shadow-md ring-2 ring-rose-400'
                             : 'bg-cyan-50/80 border-cyan-500 shadow-sm ring-1 ring-cyan-500'
                           : blacklisted
                             ? 'bg-rose-50/70 border-rose-300/80 hover:bg-rose-100/70 border-l-4 border-l-rose-500'
                             : 'bg-white/70 border-slate-200/80 hover:border-slate-300 hover:bg-white/95'
-                      }`}
-                    >
-                      <div className="flex justify-between items-start gap-2 mb-1">
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            <h5 className={`font-bold text-sm truncate ${blacklisted ? 'text-rose-900 font-black' : 'text-slate-900'}`}>{app.candidateName}</h5>
-                            {blacklisted && (
-                              <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full text-[8px] font-black bg-rose-600 text-white tracking-wider uppercase shrink-0">
-                                <ShieldAlert className="w-2.5 h-2.5" /> Blacklisted
-                              </span>
-                            )}
+                          }`}
+                      >
+                        <div className="flex justify-between items-start gap-2 mb-1">
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <h5 className={`font-bold text-sm truncate ${blacklisted ? 'text-rose-900 font-black' : 'text-slate-900'}`}>{app.candidateName}</h5>
+                              {blacklisted && (
+                                <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full text-[8px] font-black bg-rose-600 text-white tracking-wider uppercase shrink-0">
+                                  <ShieldAlert className="w-2.5 h-2.5" /> Blacklisted
+                                </span>
+                              )}
+                            </div>
+                            <p className={`text-[11px] truncate ${blacklisted ? 'text-rose-600 font-semibold' : 'text-slate-500'}`}>{app.email}</p>
                           </div>
-                          <p className={`text-[11px] truncate ${blacklisted ? 'text-rose-600 font-semibold' : 'text-slate-500'}`}>{app.email}</p>
+                          <span className={`shrink-0 px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider ${app.status === 'Selected' ? 'bg-teal-50 text-teal-700 border border-teal-200' :
+                            app.status === 'Shortlisted' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                              app.status === 'Interview Scheduled' ? 'bg-purple-50 text-purple-700 border border-purple-200' :
+                                app.status === 'Rejected' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                                  'bg-blue-50 text-blue-700 border border-blue-200'
+                            }`}>
+                            {app.status || 'Applied'}
+                          </span>
                         </div>
-                        <span className={`shrink-0 px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider ${
-                          app.status === 'Selected' ? 'bg-teal-50 text-teal-700 border border-teal-200' :
-                          app.status === 'Shortlisted' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
-                          app.status === 'Interview Scheduled' ? 'bg-purple-50 text-purple-700 border border-purple-200' :
-                          app.status === 'Rejected' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
-                          'bg-blue-50 text-blue-700 border border-blue-200'
-                        }`}>
-                          {app.status || 'Applied'}
-                        </span>
+                        <p className={`text-xs font-semibold mb-2 truncate ${blacklisted ? 'text-rose-700 font-bold' : 'text-cyan-800 font-bold'}`}>
+                          {app.jobId ? (typeof app.jobId === 'object' ? app.jobId.title : app.jobId) : 'General Placement'}
+                        </p>
+                        <div className="flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase">
+                          <span>{app.experience || 'Exp not specified'}</span>
+                          <span>{app.createdAt ? new Date(app.createdAt).toLocaleDateString() : ''}</span>
+                        </div>
                       </div>
-                      <p className={`text-xs font-semibold mb-2 truncate ${blacklisted ? 'text-rose-700 font-bold' : 'text-cyan-800 font-bold'}`}>
-                        {app.jobId ? (typeof app.jobId === 'object' ? app.jobId.title : app.jobId) : 'General Placement'}
-                      </p>
-                      <div className="flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase">
-                        <span>{app.experience || 'Exp not specified'}</span>
-                        <span>{app.createdAt ? new Date(app.createdAt).toLocaleDateString() : ''}</span>
-                      </div>
-                    </div>
                     );
                   })}
                   {applications.length === 0 && (
@@ -3164,9 +3167,8 @@ const Admin = () => {
               {/* Recruitment Review Panel & Resume Viewer */}
               <div
                 data-lenis-prevent
-                className={`xl:col-span-8 bg-white/60 backdrop-blur-md border border-white/60 rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-sm flex flex-col gap-5 sm:gap-6 overflow-y-auto ${
-                  !selectedApp ? 'hidden xl:flex' : 'flex'
-                }`}
+                className={`xl:col-span-8 bg-white/60 backdrop-blur-md border border-white/60 rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-sm flex flex-col gap-5 sm:gap-6 overflow-y-auto ${!selectedApp ? 'hidden xl:flex' : 'flex'
+                  }`}
               >
                 {selectedApp ? (
                   <div className="flex flex-col gap-5 sm:gap-6 w-full">
@@ -3189,13 +3191,12 @@ const Admin = () => {
                       <div className="flex flex-col gap-1.5 min-w-0">
                         <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
                           <h3 className="text-lg sm:text-2xl font-black text-slate-900 truncate">{selectedApp.candidateName}</h3>
-                          <span className={`px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
-                            selectedApp.status === 'Selected' ? 'bg-teal-50 text-teal-700 border border-teal-200' :
+                          <span className={`px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${selectedApp.status === 'Selected' ? 'bg-teal-50 text-teal-700 border border-teal-200' :
                             selectedApp.status === 'Shortlisted' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
-                            selectedApp.status === 'Interview Scheduled' ? 'bg-purple-50 text-purple-700 border border-purple-200' :
-                            selectedApp.status === 'Rejected' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
-                            'bg-blue-50 text-blue-700 border border-blue-200'
-                          }`}>
+                              selectedApp.status === 'Interview Scheduled' ? 'bg-purple-50 text-purple-700 border border-purple-200' :
+                                selectedApp.status === 'Rejected' ? 'bg-rose-50 text-rose-700 border border-rose-200' :
+                                  'bg-blue-50 text-blue-700 border border-blue-200'
+                            }`}>
                             {selectedApp.status || 'Applied'}
                           </span>
                         </div>
@@ -3910,9 +3911,8 @@ const Admin = () => {
                           setEditEmployeeForm(emp);
                           loadEmployeeCertificates(emp.id);
                         }}
-                        className={`p-4 transition-colors cursor-pointer flex flex-col gap-3 rounded-2xl ${
-                          selectedRows.includes(emp.id) ? 'bg-cyan-50/80 border border-cyan-300' : 'hover:bg-slate-50/60'
-                        }`}
+                        className={`p-4 transition-colors cursor-pointer flex flex-col gap-3 rounded-2xl ${selectedRows.includes(emp.id) ? 'bg-cyan-50/80 border border-cyan-300' : 'hover:bg-slate-50/60'
+                          }`}
                       >
                         <div className="flex items-start justify-between gap-2.5">
                           <div className="flex items-center gap-3 min-w-0">
@@ -4826,11 +4826,10 @@ const Admin = () => {
               <button
                 onClick={(e) => handleDownloadResume(e, candidateDrawerApp.resume, candidateDrawerApp.candidateName)}
                 disabled={!candidateDrawerApp.resume}
-                className={`flex-1 min-w-[120px] py-2 sm:py-2.5 px-3 sm:px-4 rounded-xl font-bold text-xs tracking-wide flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-xs ${
-                  candidateDrawerApp.resume
-                    ? 'bg-blue-600 text-white hover:bg-blue-700 active:scale-98 cursor-pointer'
-                    : 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                }`}
+                className={`flex-1 min-w-[120px] py-2 sm:py-2.5 px-3 sm:px-4 rounded-xl font-bold text-xs tracking-wide flex items-center justify-center gap-1.5 sm:gap-2 transition-all shadow-xs ${candidateDrawerApp.resume
+                  ? 'bg-blue-600 text-white hover:bg-blue-700 active:scale-98 cursor-pointer'
+                  : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  }`}
               >
                 <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
                 <span className="truncate">Download Resume</span>
@@ -5015,11 +5014,10 @@ const Admin = () => {
                     <button
                       key={statusOption}
                       onClick={() => handleDrawerStatusUpdate(candidateDrawerApp, statusOption)}
-                      className={`px-2.5 sm:px-3.5 py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all text-center truncate ${
-                        candidateDrawerApp.status === statusOption
-                          ? 'bg-blue-600 text-white shadow-xs'
-                          : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 cursor-pointer'
-                      }`}
+                      className={`px-2.5 sm:px-3.5 py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all text-center truncate ${candidateDrawerApp.status === statusOption
+                        ? 'bg-blue-600 text-white shadow-xs'
+                        : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 cursor-pointer'
+                        }`}
                     >
                       {statusOption}
                     </button>

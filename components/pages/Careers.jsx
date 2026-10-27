@@ -67,10 +67,10 @@ const testimonials = [
   }
 ];
 
-const Careers = () => {
+const Careers = ({ initialJobs = [] }) => {
   const pageRef = useRef(null);
   const router = useRouter();
-  const [jobsList, setJobsList] = useState([]);
+  const [jobsList, setJobsList] = useState(initialJobs && initialJobs.length > 0 ? initialJobs : []);
 
   // Fetch dynamic jobs from Supabase
   const fetchJobs = async () => {
@@ -96,7 +96,11 @@ const Careers = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchJobs();
+    if (!initialJobs || initialJobs.length === 0) {
+      fetchJobs();
+    } else {
+      setJobsList(initialJobs);
+    }
 
     const ctx = gsap.context(() => {
       // Animate each reveal-up element individually when it enters the viewport

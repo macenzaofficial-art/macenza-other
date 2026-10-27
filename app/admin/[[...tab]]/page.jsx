@@ -1,4 +1,4 @@
-import Admin from '@/components/pages/Admin';
+import AdminClientWrapper from '@/components/admin/AdminClientWrapper';
 
 export const metadata = {
   title: 'Admin Dashboard | Macenza',
@@ -9,5 +9,5 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <Admin />;
+  return <AdminClientWrapper />;
 }

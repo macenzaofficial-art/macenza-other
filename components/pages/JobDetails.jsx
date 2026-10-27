@@ -1,12 +1,15 @@
+'use client';
+
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { supabase } from '../supabaseClient';
+import { supabase } from '@/lib/supabaseClient';
 import { toast } from 'react-toastify';
-import { fallbackJobs } from '../data/fallbackJobs';
-import Footer from '../components/Footer';
-import SEO from '../components/SEO';
+import { fallbackJobs } from '@/data/fallbackJobs';
+import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import {
   MapPin, Clock, Briefcase, Calendar, Users, DollarSign,
@@ -157,7 +160,6 @@ const buildJobPostingSchema = (job, currentId) => {
 
 const JobDetails = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const pageRef = useRef(null);
   const hcaptchaRef = useRef(null);
   const [hcaptchaToken, setHcaptchaToken] = useState('');
@@ -439,7 +441,7 @@ const JobDetails = () => {
           The job application page you are looking for may have been closed or removed.
         </p>
         <Link
-          to="/careers"
+          href="/careers"
           className="px-8 py-4 bg-primary text-white rounded-full font-bold text-sm shadow-xl shadow-primary/20 hover:bg-primary-dark transition-all duration-300 flex items-center gap-2"
         >
           <ArrowLeft className="w-4 h-4" /> Return to Careers
@@ -465,7 +467,7 @@ const JobDetails = () => {
       <div className="container mx-auto px-6 pb-24 relative z-10">
         {/* Back Link */}
         <Link
-          to="/careers"
+          href="/careers"
           className="inline-flex items-center gap-2 text-black/60 hover:text-primary font-bold text-sm mb-10 transition-colors group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -608,7 +610,7 @@ const JobDetails = () => {
                     Thank you for applying. Our talent acquisition specialists have saved your details and resume. We will contact you soon.
                   </p>
                   <Link
-                    to="/careers"
+                    href="/careers"
                     className="mt-6 inline-block px-8 py-3.5 bg-primary text-white rounded-full font-bold text-sm hover:bg-primary-dark transition-all duration-300 shadow-xl shadow-primary/20"
                   >
                     Return to Careers Page
@@ -804,7 +806,7 @@ const JobDetails = () => {
                           Privacy Policy
                         </a>{' '}
                         and{' '}
-                        <Link to="/terms" target="_blank" className="text-primary font-bold hover:underline">
+                        <Link href="/terms" target="_blank" className="text-primary font-bold hover:underline">
                           Terms &amp; Conditions
                         </Link>
                         , and I consent to Macenza collecting and processing the information I provide for recruitment and employment-related purposes.

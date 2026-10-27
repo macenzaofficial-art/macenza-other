@@ -1,18 +1,20 @@
+'use client';
+
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Section from '../components/Section';
-import ScrollJourney from '../components/ScrollJourney';
-import BouncyText from '../components/BouncyText';
-import Footer from '../components/Footer';
+import Section from '@/components/Section';
+import ScrollJourney from '@/components/ScrollJourney';
+import BouncyText from '@/components/BouncyText';
+import Footer from '@/components/Footer';
 import {
   Brain, Code, Globe, Smartphone, Zap, Cloud,
   Search, Target, Rocket, Shield, ArrowRight,
   Database, Layers, Cpu, CheckCircle2, MessageSquare,
   Mic, UserCheck, BarChart3, ChevronRight
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import SEO from '../components/SEO';
+import Link from 'next/link';
+import SEO from '@/components/SEO';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -208,7 +210,7 @@ const Solutions = () => {
               We design and build custom web applications, automate business processes, and configure cloud hosting setups to streamline your company operations.
             </p>
             <div className="flex justify-start reveal-up">
-              <Link to="/contact" className="px-12 py-5 bg-primary text-white rounded-full font-bold text-lg glow-blue hover:bg-primary-dark transition-all duration-300 shadow-xl shadow-primary/20 text-center">
+              <Link href="/contact" className="px-12 py-5 bg-primary text-white rounded-full font-bold text-lg glow-blue hover:bg-primary-dark transition-all duration-300 shadow-xl shadow-primary/20 text-center">
                 Book Consultation
               </Link>
             </div>
@@ -398,7 +400,7 @@ const Solutions = () => {
               <p className="font-light leading-relaxed mb-10 text-black/60">
                 {model.desc}
               </p>
-              <Link to="/contact" className="block w-full py-4 rounded-full font-bold text-sm bg-black text-white hover:bg-primary transition-all text-center">
+              <Link href="/contact" className="block w-full py-4 rounded-full font-bold text-sm bg-black text-white hover:bg-primary transition-all text-center">
                 Learn More
               </Link>
             </div>
@@ -445,7 +447,7 @@ const Solutions = () => {
           <p className="text-2xl text-white/80 font-light mb-12 max-w-3xl mx-auto leading-relaxed">
             Partner with Macenza to design database architectures, build custom web interfaces, and automate your company workflows.
           </p>
-          <Link to="/contact" className="relative z-10 inline-block px-8 py-4 sm:px-16 sm:py-6 bg-white text-primary rounded-full font-bold text-base sm:text-xl hover:bg-dark hover:text-white transition-all duration-300 shadow-2xl whitespace-nowrap">
+          <Link href="/contact" className="relative z-10 inline-block px-8 py-4 sm:px-16 sm:py-6 bg-white text-primary rounded-full font-bold text-base sm:text-xl hover:bg-dark hover:text-white transition-all duration-300 shadow-2xl whitespace-nowrap">
             Start Your Project
           </Link>
         </div>

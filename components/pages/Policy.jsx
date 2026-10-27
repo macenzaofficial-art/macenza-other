@@ -1,10 +1,12 @@
+'use client';
+
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Section from '../components/Section';
-import BouncyText from '../components/BouncyText';
-import Footer from '../components/Footer';
-import SEO from '../components/SEO';
+import Section from '@/components/Section';
+import BouncyText from '@/components/BouncyText';
+import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 
 const Policy = () => {
   const pageRef = useRef(null);

@@ -1,13 +1,16 @@
-import { useEffect, useRef, useState, Suspense, lazy } from 'react';
+'use client';
+
+import { useEffect, useRef, useState, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Section from '../components/Section';
-import BouncyText from '../components/BouncyText';
-import Footer from '../components/Footer';
+import Section from '@/components/Section';
+import BouncyText from '@/components/BouncyText';
+import Footer from '@/components/Footer';
 import { Send, ChevronDown, Loader2 } from 'lucide-react';
-const ReactGlobe = lazy(() => import('react-globe.gl'));
+const ReactGlobe = dynamic(() => import('react-globe.gl'), { ssr: false });
 import { toast } from 'react-toastify';
-import SEO from '../components/SEO';
+import SEO from '@/components/SEO';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 
 gsap.registerPlugin(ScrollTrigger);

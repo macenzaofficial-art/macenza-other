@@ -1,8 +1,10 @@
+'use client';
+
 import React, { useEffect } from 'react';
-import Section from '../components/Section';
-import BouncyText from '../components/BouncyText';
-import Footer from '../components/Footer';
-import SEO from '../components/SEO';
+import Section from '@/components/Section';
+import BouncyText from '@/components/BouncyText';
+import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 
 const CookiePolicy = () => {
   useEffect(() => {

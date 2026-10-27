@@ -1,11 +1,13 @@
+'use client';
+
 import React, { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Section from '../components/Section';
-import BouncyText from '../components/BouncyText';
-import Footer from '../components/Footer';
-import SEO from '../components/SEO';
+import Section from '@/components/Section';
+import BouncyText from '@/components/BouncyText';
+import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 import { 
   ArrowRight, 
   CheckCircle2, 
@@ -69,7 +71,7 @@ const comparisonData = [
 
 const Partnership = () => {
   const pageRef = useRef(null);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -105,7 +107,7 @@ const Partnership = () => {
   };
 
   const handleGoToContact = () => {
-    navigate('/contact');
+    router.push('/contact');
   };
 
   const partnershipSchema = {

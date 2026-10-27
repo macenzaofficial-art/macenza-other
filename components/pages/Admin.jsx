@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard,
@@ -43,19 +45,19 @@ import {
   ChevronLeft
 } from 'lucide-react';
 
-import { supabase } from '../supabaseClient';
+import { supabase } from '@/lib/supabaseClient';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import SEO from '../components/SEO';
+import SEO from '@/components/SEO';
 import JSZip from 'jszip';
-import DashboardKpiMetrics from '../components/admin/DashboardKpiMetrics';
-import AppliedCandidatesChart from '../components/admin/AppliedCandidatesChart';
-import JobVsCandidateAnalysis from '../components/admin/JobVsCandidateAnalysis';
-import RecentActivityAndActions from '../components/admin/RecentActivityAndActions';
-import FuturisticAnalytics from '../components/admin/FuturisticAnalytics';
-import AdminMobileBottomNav from '../components/admin/AdminMobileBottomNav';
-import AdminMobileHeader from '../components/admin/AdminMobileHeader';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import DashboardKpiMetrics from '@/components/admin/DashboardKpiMetrics';
+import AppliedCandidatesChart from '@/components/admin/AppliedCandidatesChart';
+import JobVsCandidateAnalysis from '@/components/admin/JobVsCandidateAnalysis';
+import RecentActivityAndActions from '@/components/admin/RecentActivityAndActions';
+import FuturisticAnalytics from '@/components/admin/FuturisticAnalytics';
+import AdminMobileBottomNav from '@/components/admin/AdminMobileBottomNav';
+import AdminMobileHeader from '@/components/admin/AdminMobileHeader';
+import { useParams, useRouter, usePathname } from 'next/navigation';
 
 const TAB_TO_SLUG = {
   'Dashboard': 'dashboard',
@@ -83,9 +85,11 @@ const SLUG_TO_TAB = {
 };
 
 const Admin = () => {
-  const { tab: tabParam } = useParams();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const params = useParams();
+  const rawTab = params?.tab;
+  const tabParam = Array.isArray(rawTab) ? rawTab[0] : rawTab;
+  const router = useRouter();
+  const pathname = usePathname();
 
   // Authentication states
   const [user, setUser] = useState(null);
@@ -112,12 +116,12 @@ const Admin = () => {
       if (resolved !== activeTab) {
         setActiveTab(resolved);
       }
-    } else if (location.pathname === '/admin' || location.pathname === '/admin/') {
+    } else if (pathname === '/admin' || pathname === '/admin/') {
       if (activeTab !== 'Dashboard') {
         setActiveTab('Dashboard');
       }
     }
-  }, [tabParam, location.pathname]);
+  }, [tabParam, pathname]);
 
   // Handle escape key to close sidebar on mobile
   useEffect(() => {
@@ -133,7 +137,7 @@ const Admin = () => {
   const handleTabSelect = (tabId) => {
     setActiveTab(tabId);
     const slug = TAB_TO_SLUG[tabId] || tabId.toLowerCase();
-    navigate(`/admin/${slug}`);
+    router.push(`/admin/${slug}`);
     if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       setIsSidebarOpen(false);
     }

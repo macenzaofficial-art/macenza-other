@@ -1,20 +1,23 @@
+'use client';
+
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Section from '../components/Section';
-import ScrollJourney from '../components/ScrollJourney';
-import BouncyText from '../components/BouncyText';
-import Footer from '../components/Footer';
+import Section from '@/components/Section';
+import ScrollJourney from '@/components/ScrollJourney';
+import BouncyText from '@/components/BouncyText';
+import Footer from '@/components/Footer';
 import {
   Rocket, Brain, Target, Zap, Lightbulb, Globe,
   Search, ArrowRight, CheckCircle2, Star, Users,
   Heart, Briefcase, MapPin, Clock, ArrowDown, X, Upload, Check
 } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
-import { supabase } from '../supabaseClient';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
 import { toast } from 'react-toastify';
-import { fallbackJobs } from '../data/fallbackJobs';
-import SEO from '../components/SEO';
+import { fallbackJobs } from '@/data/fallbackJobs';
+import SEO from '@/components/SEO';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -66,7 +69,7 @@ const testimonials = [
 
 const Careers = () => {
   const pageRef = useRef(null);
-  const navigate = useNavigate();
+  const router = useRouter();
   const [jobsList, setJobsList] = useState([]);
 
   // Fetch dynamic jobs from Supabase
@@ -412,7 +415,7 @@ const Careers = () => {
             Join Macenza and build custom web applications, APIs, and database structures.
           </p>
           <button
-            onClick={() => navigate('/careers/general')}
+            onClick={() => router.push('/careers/general')}
             className="relative z-10 inline-block px-8 py-4 sm:px-16 sm:py-6 bg-white text-primary rounded-full font-bold text-base sm:text-xl hover:bg-dark hover:text-white transition-all duration-300 shadow-2xl whitespace-nowrap"
           >
             Apply Now

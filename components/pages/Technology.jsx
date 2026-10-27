@@ -1,17 +1,19 @@
+'use client';
+
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Section from '../components/Section';
-import BouncyText from '../components/BouncyText';
-import Footer from '../components/Footer';
+import Section from '@/components/Section';
+import BouncyText from '@/components/BouncyText';
+import Footer from '@/components/Footer';
 import {
   Monitor, Server, Smartphone, Database, Brain, Cloud,
   Shield, Zap, Cpu, Globe, Rocket, Terminal,
   Layers, Code, Lock, Activity, Search, ArrowRight,
   ArrowDown
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import SEO from '../components/SEO';
+import Link from 'next/link';
+import SEO from '@/components/SEO';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -202,7 +204,7 @@ const Technology = () => {
                 Explore Stack <ArrowDown className="w-5 h-5" />
               </button>
               <Link
-                to="/contact"
+                href="/contact"
                 className="px-10 py-5 glass-morphism text-black rounded-full font-bold text-lg hover:bg-black hover:text-white hover:!border-black transition-all duration-300 border !border-black/15 text-center"
               >
                 Book Consultation
@@ -474,7 +476,7 @@ const Technology = () => {
           <p className="text-2xl text-white/80 font-light mb-12 max-w-3xl mx-auto leading-relaxed">
             Contact our engineering team to discuss your application architecture, schedule a database consult, or review a codebase audit.
           </p>
-          <Link to="/contact" className="relative z-10 inline-block px-8 py-4 sm:px-16 sm:py-6 bg-white text-primary rounded-full font-bold text-base sm:text-xl hover:bg-dark hover:text-white transition-all duration-300 shadow-2xl whitespace-nowrap">
+          <Link href="/contact" className="relative z-10 inline-block px-8 py-4 sm:px-16 sm:py-6 bg-white text-primary rounded-full font-bold text-base sm:text-xl hover:bg-dark hover:text-white transition-all duration-300 shadow-2xl whitespace-nowrap">
             Talk to Our Engineers
           </Link>
         </div>

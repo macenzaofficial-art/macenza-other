@@ -1,17 +1,20 @@
+'use client';
+
 import React, { useEffect, useState, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Search, Cpu, Code, Globe, Smartphone, Zap, Cloud, ArrowRight } from 'lucide-react';
-import HeroSequence from '../components/HeroSequence';
-import HeroOverlay from '../components/HeroOverlay';
-import Section from '../components/Section';
-import Footer from '../components/Footer';
-import LogoLoop from '../components/LogoLoop';
-import ScrollVelocity from '../components/ScrollVelocity';
-import { TestimonialCard } from '../components/ui/testimonial-cards';
-import { cn } from '../lib/utils';
-import SEO from '../components/SEO';
+import HeroSequence from '@/components/HeroSequence';
+import HeroOverlay from '@/components/HeroOverlay';
+import Section from '@/components/Section';
+import Footer from '@/components/Footer';
+import LogoLoop from '@/components/LogoLoop';
+import ScrollVelocity from '@/components/ScrollVelocity';
+import { TestimonialCard } from '@/components/ui/testimonial-cards';
+import { cn } from '@/lib/utils';
+import SEO from '@/components/SEO';
 
 const services = [
   { image: "/portfolio/website_development.webp", title: "Website Development", desc: "We design and build custom frontend websites and headless CMS integrations. We use Next.js and Tailwind CSS to ensure rapid load times, responsive layouts, and search engine optimization, resolving slow load speeds and high bounce rates for consumer brands.", link: "/solutions" },
@@ -253,7 +256,7 @@ const Marquee = ({ items }) => {
 };
 
 const Home = React.memo(() => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleLoadingComplete = () => {
     ScrollTrigger.refresh();
@@ -352,7 +355,7 @@ const Home = React.memo(() => {
                   if (service.link.startsWith('http')) {
                     window.open(service.link, '_blank', 'noopener,noreferrer');
                   } else {
-                    navigate(service.link);
+                    router.push(service.link);
                   }
                 }
               }}
@@ -446,7 +449,7 @@ const Home = React.memo(() => {
                 if (isExternal) {
                   window.open(project.url, '_blank', 'noopener,noreferrer');
                 } else {
-                  navigate(project.url);
+                  router.push(project.url);
                 }
               }
             };
@@ -621,13 +624,13 @@ const Home = React.memo(() => {
               {/* Buttons */}
               <div className="flex flex-col min-[480px]:flex-row flex-wrap gap-3 sm:gap-4 mt-2 sm:mt-4">
                 <Link
-                  to="/contact"
+                  href="/contact"
                   className="px-6 py-3.5 sm:px-8 sm:py-4 bg-primary text-white rounded-full font-bold text-sm hover:bg-primary-dark transition-all duration-300 shadow-md flex items-center justify-center gap-2 min-h-[44px]"
                 >
                   Let's Build Together
                 </Link>
                 <Link
-                  to="/solutions"
+                  href="/solutions"
                   className="px-6 py-3.5 sm:px-8 sm:py-4 bg-white text-black border border-black/10 rounded-full font-bold text-sm hover:bg-black hover:text-white transition-all duration-300 shadow-sm flex items-center justify-center min-h-[44px]"
                 >
                   View Our Work
@@ -648,7 +651,7 @@ const Home = React.memo(() => {
           <p className="text-base sm:text-xl md:text-2xl text-white/85 font-light mb-8 sm:mb-10 md:mb-12 max-w-3xl mx-auto leading-relaxed">
             Get in touch with our engineering team to discuss your application requirements, database schema design, and cloud hosting specifications.
           </p>
-          <Link to="/contact" className="relative z-10 inline-block px-7 py-3.5 sm:px-12 sm:py-5 md:px-16 md:py-6 bg-white text-primary rounded-full font-bold text-sm sm:text-lg md:text-xl hover:bg-dark hover:text-white transition-all duration-300 shadow-2xl whitespace-nowrap min-h-[48px]">
+          <Link href="/contact" className="relative z-10 inline-block px-7 py-3.5 sm:px-12 sm:py-5 md:px-16 md:py-6 bg-white text-primary rounded-full font-bold text-sm sm:text-lg md:text-xl hover:bg-dark hover:text-white transition-all duration-300 shadow-2xl whitespace-nowrap min-h-[48px]">
             Get in Touch
           </Link>
         </div>

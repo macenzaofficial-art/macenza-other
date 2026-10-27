@@ -1,14 +1,16 @@
+'use client';
+
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Link } from 'react-router-dom';
-import { supabase } from '../supabaseClient';
+import Link from 'next/link';
+import { supabase } from '@/lib/supabaseClient';
 import { Search, Loader2, CheckCircle2, AlertCircle, FileCheck, Download, User, Briefcase, Award } from 'lucide-react';
-import Section from '../components/Section';
-import BouncyText from '../components/BouncyText';
-import Footer from '../components/Footer';
+import Section from '@/components/Section';
+import BouncyText from '@/components/BouncyText';
+import Footer from '@/components/Footer';
 import { toast } from 'react-toastify';
-import SEO from '../components/SEO';
+import SEO from '@/components/SEO';
 
 const CertificateVerification = () => {
   const pageRef = useRef(null);

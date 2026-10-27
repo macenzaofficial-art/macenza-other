@@ -1,15 +1,18 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { sanityClient, urlFor } from '../sanityClient';
+import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { sanityClient, urlFor } from '@/lib/sanityClient';
 import {
   Calendar, Clock, User, ArrowLeft, Share2,
   Copy, Check, ChevronRight, Bookmark, ArrowRight,
   Sparkles
 } from 'lucide-react';
 import { toast } from 'react-toastify';
-import SEO from '../components/SEO';
-import Section from '../components/Section';
-import Footer from '../components/Footer';
+import SEO from '@/components/SEO';
+import Section from '@/components/Section';
+import Footer from '@/components/Footer';
 
 export const generateSlug = (text) => {
   if (!text) return '';
@@ -136,7 +139,6 @@ const PortableText = ({ value }) => {
 
 const BlogPost = () => {
   const { slug } = useParams();
-  const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [relatedPosts, setRelatedPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -246,7 +248,7 @@ const BlogPost = () => {
             The article you are looking for may have been moved, updated, or does not exist.
           </p>
           <Link
-            to="/blog"
+            href="/blog"
             className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-bold text-sm rounded-full shadow-lg shadow-primary/20 hover:bg-primary-dark transition-all duration-300"
           >
             <ArrowLeft className="w-4 h-4" /> Back to Blog Archives
@@ -306,15 +308,15 @@ const BlogPost = () => {
       <div className="border-b border-[#BFDBFE]/40 bg-[#EFF6FF]/40 py-4">
         <div className="container mx-auto px-6 flex items-center justify-between gap-4 text-xs font-semibold text-black/60">
           <div className="flex items-center gap-2 overflow-hidden whitespace-nowrap">
-            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
+            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
             <ChevronRight className="w-3.5 h-3.5 text-black/30 shrink-0" />
-            <Link to="/blog" className="hover:text-primary transition-colors">Blog</Link>
+            <Link href="/blog" className="hover:text-primary transition-colors">Blog</Link>
             <ChevronRight className="w-3.5 h-3.5 text-black/30 shrink-0" />
             <span className="text-black font-bold truncate max-w-[200px] sm:max-w-md">{post.title}</span>
           </div>
 
           <Link
-            to="/blog"
+            href="/blog"
             className="inline-flex items-center gap-1.5 text-primary hover:text-primary-dark font-bold shrink-0 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> All Articles
@@ -474,7 +476,7 @@ const BlogPost = () => {
             </p>
           </div>
           <Link
-            to="/contact"
+            href="/contact"
             className="px-8 py-4 bg-white text-primary rounded-full font-bold text-sm hover:bg-black hover:text-white transition-all duration-300 shrink-0 shadow-md"
           >
             Start a Conversation
@@ -492,7 +494,7 @@ const BlogPost = () => {
                 <h2 className="text-3xl font-black text-black tracking-tight mt-1">More Insights &amp; Articles</h2>
               </div>
               <Link
-                to="/blog"
+                href="/blog"
                 className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:text-primary-dark transition-colors group"
               >
                 View All <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -505,7 +507,7 @@ const BlogPost = () => {
                 return (
                   <Link
                     key={related._id}
-                    to={`/blog/${relSlug}`}
+                    href={`/blog/${relSlug}`}
                     className="bg-white border border-[#BFDBFE] rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/30 transition-all duration-300 flex flex-col justify-between group"
                   >
                     <div>

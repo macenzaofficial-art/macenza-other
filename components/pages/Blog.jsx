@@ -1,16 +1,17 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { sanityClient, urlFor } from '../sanityClient';
+import Link from 'next/link';
+import { sanityClient, urlFor } from '@/lib/sanityClient';
 import { Calendar, User, ArrowRight, ChevronRight, Award } from 'lucide-react';
 import { toast } from 'react-toastify';
-import SEO from '../components/SEO';
-import Section from '../components/Section';
-import BouncyText from '../components/BouncyText';
-import Footer from '../components/Footer';
+import SEO from '@/components/SEO';
+import Section from '@/components/Section';
+import BouncyText from '@/components/BouncyText';
+import Footer from '@/components/Footer';
 import { getPostSlug } from './BlogPost';
 
 const Blog = () => {
-  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('All');
@@ -133,7 +134,7 @@ const Blog = () => {
               const featuredSlug = getPostSlug(featuredPost);
               return (
                 <Link 
-                  to={`/blog/${featuredSlug}`}
+                  href={`/blog/${featuredSlug}`}
                   className="bg-white border border-[#BFDBFE] rounded-[3rem] overflow-hidden shadow-sm hover:shadow-2xl hover:border-primary/30 transition-[border-color,box-shadow] duration-500 flex flex-col lg:flex-row group"
                 >
                   <div className="lg:w-1/2 min-h-[300px] max-h-[500px] overflow-hidden relative">
@@ -203,7 +204,7 @@ const Blog = () => {
                 return (
                   <Link 
                     key={post._id}
-                    to={`/blog/${postSlug}`}
+                    href={`/blog/${postSlug}`}
                     className="bg-white border border-[#BFDBFE] rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/20 transition-[border-color,box-shadow] duration-300 group flex flex-col justify-between"
                   >
                     <div>

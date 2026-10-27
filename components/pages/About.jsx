@@ -16,7 +16,7 @@ import SEO from '@/components/SEO';
 
 const teamMembers = [
 
-  { name: "Shashank Shubham", role: "Founder & CEO", image: "/Team/Shashank Shubham Founder & CEO.webp" },
+  { name: "Shashank Shubham", role: "Founder & CEO", image: "/Team/Shashank Shubham Founder.webp" },
   { name: "Garima", role: "CTO", image: "/Team/Garima CTO.webp" },
   { name: "Dipanshu Shubham", role: "CMO", image: "/Team/A Dipanshu Shubham CMO.webp" },
   { name: "Kavita", role: "Marketing", image: "/Team/A Kavita Markating.webp" },
@@ -46,7 +46,7 @@ const teamMembers = [
   { name: "Devendra Singh", role: "Backend Engineer", image: "/Team/Devendra Singh Backend Engineer.webp" },
   { name: "Kavita Yadhav", role: "Frontend Engineer", image: "/Team/Kavita Yadhav Frontend Engineer.webp" },
   { name: "Kuldeep Kothari", role: "Cybersecurity Engineer", image: "/Team/Kuldeep kothari Cybersecurity Engineer.webp" },
-  { name: "Rohit", role: "Tester & Backend Developer", image: "/Team/Rohit Tester & Backend Developer.webp" },
+  { name: "Rohit", role: "Tester & Backend Developer", image: "/Team/Rohit Backend Developer.webp" },
   { name: "Yashika Agarwal", role: "Data Scientist", image: "/Team/Yashika Agarwal Data Scientist.webp" },
   { name: "Deepak Gupta", role: "Security Tester", image: "/Team/A Deepak Gupta Secutry Tester.webp" }
 

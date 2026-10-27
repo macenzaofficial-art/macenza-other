@@ -1,6 +1,8 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Mail, ArrowRight, ExternalLink } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { BackgroundBeamsWithCollision } from './ui/background-beams-with-collision';
 
 const Footer = () => {
@@ -122,11 +124,11 @@ const Footer = () => {
             <div className="flex flex-col gap-5">
               <h4 className="font-bold text-black text-lg tracking-tight">Company</h4>
               <div className="flex flex-col gap-3 text-sm text-black/60">
-                <Link to="/about" className="hover:text-primary hover:translate-x-1 transition-all duration-200">About Us</Link>
-                <Link to="/technology" className="hover:text-primary hover:translate-x-1 transition-all duration-200">Technology</Link>
-                <Link to="/partnership" className="hover:text-primary hover:translate-x-1 transition-all duration-200">Partnership</Link>
-                <Link to="/careers" className="hover:text-primary hover:translate-x-1 transition-all duration-200">Careers</Link>
-                <Link to="/contact" className="hover:text-primary hover:translate-x-1 transition-all duration-200">Contact Us</Link>
+                <Link href="/about" className="hover:text-primary hover:translate-x-1 transition-all duration-200">About Us</Link>
+                <Link href="/technology" className="hover:text-primary hover:translate-x-1 transition-all duration-200">Technology</Link>
+                <Link href="/partnership" className="hover:text-primary hover:translate-x-1 transition-all duration-200">Partnership</Link>
+                <Link href="/careers" className="hover:text-primary hover:translate-x-1 transition-all duration-200">Careers</Link>
+                <Link href="/contact" className="hover:text-primary hover:translate-x-1 transition-all duration-200">Contact Us</Link>
               </div>
             </div>
 
@@ -181,10 +183,10 @@ const Footer = () => {
             </div>
 
             <div className="flex flex-wrap justify-center gap-6 text-sm font-medium text-black/50">
-              <Link to="/certificateverification" className="hover:text-primary transition-colors">Verify Certificate</Link>
-              <Link to="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
-              <Link to="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
-              <Link to="/cookie-policy" className="hover:text-primary transition-colors">Cookie Policy</Link>
+              <Link href="/certificateverification" className="hover:text-primary transition-colors">Verify Certificate</Link>
+              <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
+              <Link href="/cookie-policy" className="hover:text-primary transition-colors">Cookie Policy</Link>
             </div>
           </div>
         </div>

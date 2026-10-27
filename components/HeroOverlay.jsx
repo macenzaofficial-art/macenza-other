@@ -1,7 +1,9 @@
+'use client';
+
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ArrowRight, Users, Rocket, Globe, Shield, ChevronDown } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import BouncyText from './BouncyText';
 
 const HeroOverlay = () => {
@@ -74,7 +76,7 @@ const HeroOverlay = () => {
             </h1>
           </div>
           <div className="hero-btns flex flex-wrap gap-3 sm:gap-4">
-            <Link to="/contact" className="px-6 py-3.5 sm:px-8 sm:py-4 bg-primary text-white rounded-2xl font-bold flex items-center justify-center gap-2 glow-blue hover:bg-primary-dark transition-all duration-300 text-sm sm:text-base min-h-[48px]">
+            <Link href="/contact" className="px-6 py-3.5 sm:px-8 sm:py-4 bg-primary text-white rounded-2xl font-bold flex items-center justify-center gap-2 glow-blue hover:bg-primary-dark transition-all duration-300 text-sm sm:text-base min-h-[48px]">
               Contact Us <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </Link>
           </div>

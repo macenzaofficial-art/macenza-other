@@ -1,13 +1,13 @@
 .font-klandestin {
-  font-family: 'Syne', sans-serif !important;
+  font-family: var(--font-syne), 'Syne', sans-serif !important;
 }
 
 .font-martell {
-  font-family: 'Playfair Display', serif !important;
+  font-family: var(--font-playfair), 'Playfair Display', serif !important;
 }
 
 .font-pinyon {
-  font-family: 'Pinyon Script', cursive !important;
+  font-family: var(--font-pinyon), 'Pinyon Script', cursive !important;
 }
 
 .font-turret {
@@ -25,7 +25,7 @@
 .admin-panel-root button,
 .admin-panel-root select,
 .admin-panel-root textarea {
-  font-family: 'IBM Plex Serif', serif !important;
+  font-family: var(--font-ibm-plex), 'IBM Plex Serif', serif !important;
 }
 
 @tailwind base;
@@ -33,7 +33,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-outfit), 'Outfit', system-ui, -apple-system, sans-serif;
   line-height: 1.65;
   font-weight: 400;
 
@@ -82,7 +82,7 @@ canvas {
 }
 
 h1 {
-  font-family: 'Syne', sans-serif !important;
+  font-family: var(--font-syne), 'Syne', sans-serif !important;
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -93,7 +93,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-playfair), 'Playfair Display', serif;
   font-weight: 700;
   letter-spacing: -0.015em;
   line-height: 1.3;

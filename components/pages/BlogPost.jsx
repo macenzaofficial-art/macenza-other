@@ -13,28 +13,9 @@ import { toast } from 'react-toastify';
 import SEO from '@/components/SEO';
 import Section from '@/components/Section';
 import Footer from '@/components/Footer';
+import { generateSlug, getPostSlug } from '@/lib/slugUtils';
 
-export const generateSlug = (text) => {
-  if (!text) return '';
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/[\s_-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-};
-
-export const getPostSlug = (post) => {
-  if (!post) return '';
-  if (post.slug?.current) {
-    return generateSlug(post.slug.current);
-  }
-  if (typeof post.slug === 'string') {
-    return generateSlug(post.slug);
-  }
-  return generateSlug(post.title) || post._id || '';
-};
+export { generateSlug, getPostSlug };
 
 // Safe link href helper to prevent XSS protocol injection
 export const getSafeHref = (href) => {
@@ -137,34 +118,53 @@ const PortableText = ({ value }) => {
   });
 };
 
-const BlogPost = () => {
+const BlogPost = ({ initialPost = null, initialRelatedPosts = [] }) => {
   const { slug } = useParams();
-  const [post, setPost] = useState(null);
-  const [relatedPosts, setRelatedPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [post, setPost] = useState(initialPost);
+  const [relatedPosts, setRelatedPosts] = useState(initialRelatedPosts);
+  const [loading, setLoading] = useState(!initialPost);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
+    if (initialPost) {
+      setPost(initialPost);
+      setRelatedPosts(initialRelatedPosts);
+      setLoading(false);
+      return;
+    }
+
     const fetchPostDetails = async () => {
       setLoading(true);
       try {
-        // Fetch all posts to ensure matching by Sanity slug, sluggified title, or _id
-        const allPostsQuery = `*[_type == "post"] | order(publishedAt desc) {
-          _id,
-          title,
-          slug,
-          mainImage,
-          publishedAt,
-          body,
-          "authorName": author->name,
-          "authorImage": author->image,
-          "authorBio": author->bio,
-          "categories": categories[]->title
-        }`;
+        // Fetch via internal API route first (avoids browser CORS issues)
+        let allPosts = [];
+        try {
+          const apiRes = await fetch('/api/blog-posts');
+          if (apiRes.ok) {
+            allPosts = await apiRes.json();
+          }
+        } catch {
+          allPosts = [];
+        }
 
-        const allPosts = await sanityClient.fetch(allPostsQuery);
+        // Fallback to direct Sanity client if internal API route is unavailable
+        if (!allPosts || allPosts.length === 0) {
+          const allPostsQuery = `*[_type == "post"] | order(publishedAt desc) {
+            _id,
+            title,
+            slug,
+            mainImage,
+            publishedAt,
+            body,
+            "authorName": author->name,
+            "authorImage": author->image,
+            "authorBio": author->bio,
+            "categories": categories[]->title
+          }`;
+          allPosts = await sanityClient.fetch(allPostsQuery);
+        }
 
         if (allPosts && allPosts.length > 0) {
           const cleanParamSlug = generateSlug(decodeURIComponent(slug || ''));
@@ -207,7 +207,7 @@ const BlogPost = () => {
     };
 
     fetchPostDetails();
-  }, [slug]);
+  }, [slug, initialPost, initialRelatedPosts]);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);

@@ -9,29 +9,47 @@ import SEO from '@/components/SEO';
 import Section from '@/components/Section';
 import BouncyText from '@/components/BouncyText';
 import Footer from '@/components/Footer';
-import { getPostSlug } from './BlogPost';
+import { getPostSlug } from '@/lib/slugUtils';
 
-const Blog = () => {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+const Blog = ({ initialPosts = [] }) => {
+  const [posts, setPosts] = useState(initialPosts && initialPosts.length > 0 ? initialPosts : []);
+  const [loading, setLoading] = useState(!initialPosts || initialPosts.length === 0);
   const [activeCategory, setActiveCategory] = useState('All');
 
-  // Fetch all posts from Sanity
+  // Fetch all posts from Sanity (client-side fallback/refresh)
   useEffect(() => {
+    if (initialPosts && initialPosts.length > 0) {
+      setPosts(initialPosts);
+      setLoading(false);
+      return;
+    }
+
     const fetchPosts = async () => {
       try {
-        const query = `*[_type == "post"] | order(publishedAt desc) {
-          _id,
-          title,
-          slug,
-          mainImage,
-          publishedAt,
-          body,
-          "authorName": author->name,
-          "authorImage": author->image,
-          "categories": categories[]->title
-        }`;
-        const data = await sanityClient.fetch(query);
+        let data = [];
+        try {
+          const apiRes = await fetch('/api/blog-posts');
+          if (apiRes.ok) {
+            data = await apiRes.json();
+          }
+        } catch {
+          data = [];
+        }
+
+        if (!data || data.length === 0) {
+          const query = `*[_type == "post"] | order(publishedAt desc) {
+            _id,
+            title,
+            slug,
+            mainImage,
+            publishedAt,
+            body,
+            "authorName": author->name,
+            "authorImage": author->image,
+            "categories": categories[]->title
+          }`;
+          data = await sanityClient.fetch(query);
+        }
         setPosts(data || []);
       } catch (err) {
         console.error('Failed to load blog posts from Sanity:', err);
@@ -42,7 +60,7 @@ const Blog = () => {
     };
 
     fetchPosts();
-  }, []);
+  }, [initialPosts]);
 
   // Extract all categories from posts
   const categoriesList = ['All', ...new Set(posts.flatMap(post => post.categories || []))];

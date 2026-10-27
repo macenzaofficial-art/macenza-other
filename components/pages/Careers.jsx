@@ -191,7 +191,7 @@ const Careers = () => {
                 View Open Positions <ArrowDown className="w-5 h-5" />
               </button>
               <button
-                onClick={() => navigate('/careers/general')}
+                onClick={() => router.push('/careers/general')}
                 className="px-10 py-5 glass-morphism text-black rounded-full font-bold text-lg hover:bg-black hover:text-white hover:!border-black transition-all duration-300 border !border-black/15 text-center"
               >
                 Join Our Mission
@@ -356,7 +356,7 @@ const Careers = () => {
                 </div>
               </div>
               <button
-                onClick={() => navigate(`/careers/${generateSlug(job.title)}`)}
+                onClick={() => router.push(`/careers/${generateSlug(job.title)}`)}
                 className="px-8 py-4 bg-black text-white rounded-full font-bold text-sm hover:bg-primary transition-all duration-300 shadow-lg group-hover:shadow-primary/20 text-center whitespace-nowrap"
               >
                 Apply Now

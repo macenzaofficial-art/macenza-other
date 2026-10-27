@@ -84,6 +84,11 @@ const SLUG_TO_TAB = {
   'analytics': 'Analytics'
 };
 
+// In-memory module cache to preserve admin data across tab switches & soft re-renders
+let cachedJobs = null;
+let cachedApplications = null;
+let cachedEmployees = null;
+
 const Admin = () => {
   const params = useParams();
   const rawTab = params?.tab;
@@ -108,6 +113,21 @@ const Admin = () => {
     }
     return false;
   });
+
+  // Handle browser back/forward buttons seamlessly
+  useEffect(() => {
+    const handlePopState = () => {
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      const currentSlug = pathParts[1];
+      if (currentSlug && SLUG_TO_TAB[currentSlug.toLowerCase()]) {
+        setActiveTab(SLUG_TO_TAB[currentSlug.toLowerCase()]);
+      } else if (window.location.pathname === '/admin' || window.location.pathname === '/admin/') {
+        setActiveTab('Dashboard');
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   // Keep activeTab in sync when URL parameter changes (e.g. back/forward navigation or direct link)
   useEffect(() => {
@@ -137,16 +157,19 @@ const Admin = () => {
   const handleTabSelect = (tabId) => {
     setActiveTab(tabId);
     const slug = TAB_TO_SLUG[tabId] || tabId.toLowerCase();
-    router.push(`/admin/${slug}`);
+    // Update URL bar via pushState to prevent Next.js from destroying & remounting the entire admin page
+    if (typeof window !== 'undefined') {
+      window.history.pushState(null, '', `/admin/${slug}`);
+    }
     if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       setIsSidebarOpen(false);
     }
   };
 
-  const [jobs, setJobs] = useState([]);
-  const [applications, setApplications] = useState([]);
+  const [jobs, setJobs] = useState(() => cachedJobs || []);
+  const [applications, setApplications] = useState(() => cachedApplications || []);
   const [downloadingResumes, setDownloadingResumes] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => !cachedJobs);
   const [error, setError] = useState(null);
 
   // Filter States
@@ -391,7 +414,7 @@ const Admin = () => {
   };
 
   // Employees states
-  const [employees, setEmployees] = useState([]);
+  const [employees, setEmployees] = useState(() => cachedEmployees || []);
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [isAddingEmployee, setIsAddingEmployee] = useState(false);
@@ -851,7 +874,9 @@ const Admin = () => {
   // Fetch Jobs and Applications
   const fetchData = async () => {
     try {
-      setLoading(true);
+      if (!cachedJobs) {
+        setLoading(true);
+      }
 
       // Fetch all jobs from Supabase
       const { data: jobsData, error: jobsError } = await supabase
@@ -892,6 +917,8 @@ const Admin = () => {
         } : null
       }));
 
+      cachedJobs = mappedJobs;
+      cachedApplications = mappedApps;
       setJobs(mappedJobs);
       setApplications(mappedApps);
 
@@ -1275,6 +1302,7 @@ const Admin = () => {
               console.warn('Failed to parse employee sort order:', jsonErr);
             }
           }
+          cachedEmployees = loadedWithPics;
           setEmployees(loadedWithPics);
         } catch (err) {
           console.error('Failed to load employees from database:', err.message);

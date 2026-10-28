@@ -5,7 +5,9 @@ import { sanityClient } from '@/lib/sanityClient';
 export const revalidate = 300;
 
 export const metadata = {
-  title: 'Insights & Articles | Macenza Blog',
+  title: {
+    absolute: 'Insights & Articles | Macenza Blog',
+  },
   description: 'Explore the latest articles, guides, tech updates, and AI trends from the engineering team at Macenza.',
   alternates: {
     canonical: 'https://www.macenza.com/blog',

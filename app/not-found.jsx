@@ -4,7 +4,7 @@ import { Home, BookOpen, Compass, ArrowLeft } from 'lucide-react';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: '404 - Page Not Found | Macenza',
+  title: '404 - Page Not Found',
   description: 'The requested page could not be found.',
 };
 

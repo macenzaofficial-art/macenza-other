@@ -48,7 +48,9 @@ export async function generateMetadata({ params }) {
 
   if (!job) {
     return {
-      title: 'Job Posting Not Found | Careers at Macenza',
+      title: {
+        absolute: 'Job Posting Not Found | Careers at Macenza',
+      },
       description: 'The requested job application page could not be found or has expired.',
       alternates: {
         canonical: `https://www.macenza.com/careers/${id}`,
@@ -62,7 +64,9 @@ export async function generateMetadata({ params }) {
     : 'View full role responsibilities, tech stack specifications, and submit your application at Macenza.';
 
   return {
-    title: `${job.title} | Careers at Macenza`,
+    title: {
+      absolute: `${job.title} | Careers at Macenza`,
+    },
     description,
     alternates: {
       canonical: `https://www.macenza.com/careers/${jobSlug}`,

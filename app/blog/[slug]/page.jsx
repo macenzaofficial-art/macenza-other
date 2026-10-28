@@ -57,7 +57,9 @@ export async function generateMetadata({ params }) {
 
   if (!post) {
     return {
-      title: 'Article Not Found | Macenza Blog',
+      title: {
+        absolute: 'Article Not Found | Macenza Blog',
+      },
       description: 'The requested article could not be found.',
     };
   }
@@ -72,7 +74,9 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${post.title} | Macenza Blog`,
+    title: {
+      absolute: `${post.title} | Macenza Blog`,
+    },
     description: post.title,
     alternates: {
       canonical: `https://www.macenza.com/blog/${getPostSlug(post)}`,

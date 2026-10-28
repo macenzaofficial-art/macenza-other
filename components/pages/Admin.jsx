@@ -84,6 +84,19 @@ const SLUG_TO_TAB = {
   'analytics': 'Analytics'
 };
 
+const getTabFromPath = (path) => {
+  if (!path) return null;
+  const cleanPath = path.split('?')[0].split('#')[0];
+  const parts = cleanPath.split('/').filter(Boolean);
+  const adminIndex = parts.findIndex(p => p.toLowerCase() === 'admin');
+  if (adminIndex === -1) return null;
+  const slug = parts[adminIndex + 1]?.toLowerCase();
+  if (!slug) {
+    return 'Dashboard';
+  }
+  return SLUG_TO_TAB[slug] || null;
+};
+
 // In-memory module cache to preserve admin data across tab switches & soft re-renders
 let cachedJobs = null;
 let cachedApplications = null;
@@ -105,7 +118,7 @@ const Admin = () => {
   const [signingIn, setSigningIn] = useState(false);
 
   // Dashboard states
-  const initialTab = (tabParam && SLUG_TO_TAB[tabParam.toLowerCase()]) || 'Dashboard';
+  const initialTab = (pathname && getTabFromPath(pathname)) || (tabParam && SLUG_TO_TAB[tabParam.toLowerCase()]) || 'Dashboard';
   const [activeTab, setActiveTab] = useState(initialTab);
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -117,31 +130,22 @@ const Admin = () => {
   // Handle browser back/forward buttons seamlessly
   useEffect(() => {
     const handlePopState = () => {
-      const pathParts = window.location.pathname.split('/').filter(Boolean);
-      const currentSlug = pathParts[1];
-      if (currentSlug && SLUG_TO_TAB[currentSlug.toLowerCase()]) {
-        setActiveTab(SLUG_TO_TAB[currentSlug.toLowerCase()]);
-      } else if (window.location.pathname === '/admin' || window.location.pathname === '/admin/') {
-        setActiveTab('Dashboard');
+      const resolved = getTabFromPath(window.location.pathname);
+      if (resolved) {
+        setActiveTab(prev => (prev !== resolved ? resolved : prev));
       }
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Keep activeTab in sync when URL parameter changes (e.g. back/forward navigation or direct link)
+  // Keep activeTab in sync when pathname changes (e.g. back/forward navigation or direct link)
   useEffect(() => {
-    if (tabParam && SLUG_TO_TAB[tabParam.toLowerCase()]) {
-      const resolved = SLUG_TO_TAB[tabParam.toLowerCase()];
-      if (resolved !== activeTab) {
-        setActiveTab(resolved);
-      }
-    } else if (pathname === '/admin' || pathname === '/admin/') {
-      if (activeTab !== 'Dashboard') {
-        setActiveTab('Dashboard');
-      }
+    const resolved = getTabFromPath(pathname);
+    if (resolved) {
+      setActiveTab(prev => (prev !== resolved ? resolved : prev));
     }
-  }, [tabParam, pathname]);
+  }, [pathname]);
 
   // Handle escape key to close sidebar on mobile
   useEffect(() => {

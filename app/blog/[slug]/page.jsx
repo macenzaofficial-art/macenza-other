@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import BlogPost from '@/components/pages/BlogPost';
 import { generateSlug, getPostSlug } from '@/lib/slugUtils';
 import { sanityClient, urlFor } from '@/lib/sanityClient';
@@ -20,7 +21,7 @@ async function getPostData(slug) {
     }`;
 
     const allPosts = await sanityClient.fetch(allPostsQuery);
-    if (!allPosts || allPosts.length === 0) return { post: null, relatedPosts: [] };
+    if (!allPosts || allPosts.length === 0) return { post: null, relatedPosts: [], notFound: true };
 
     const cleanParamSlug = generateSlug(decodeURIComponent(slug || ''));
     const matched = allPosts.find(p => {
@@ -39,13 +40,13 @@ async function getPostData(slug) {
       );
     });
 
-    if (!matched) return { post: null, relatedPosts: [] };
+    if (!matched) return { post: null, relatedPosts: [], notFound: true };
 
     const others = allPosts.filter(p => p._id !== matched._id).slice(0, 3);
-    return { post: matched, relatedPosts: others };
+    return { post: matched, relatedPosts: others, notFound: false };
   } catch (err) {
     console.error('Server-side post fetch failed:', err);
-    return { post: null, relatedPosts: [] };
+    return { post: null, relatedPosts: [], notFound: false, fetchFailed: true };
   }
 }
 
@@ -90,7 +91,11 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
   const resolvedParams = await params;
   const slug = resolvedParams?.slug || '';
-  const { post, relatedPosts } = await getPostData(slug);
+  const { post, relatedPosts, notFound: postNotFound } = await getPostData(slug);
+
+  if (postNotFound) {
+    notFound();
+  }
 
   return <BlogPost initialPost={post} initialRelatedPosts={relatedPosts} />;
 }

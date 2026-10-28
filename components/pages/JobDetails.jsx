@@ -7,7 +7,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { supabase } from '@/lib/supabaseClient';
 import { toast } from 'react-toastify';
-import { fallbackJobs } from '@/data/fallbackJobs';
+import { fallbackJobs, generalApplicationJob } from '@/data/fallbackJobs';
 import Footer from '@/components/Footer';
 import SEO from '@/components/SEO';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
@@ -158,14 +158,14 @@ const buildJobPostingSchema = (job, currentId) => {
   return schema;
 };
 
-const JobDetails = () => {
+const JobDetails = ({ initialJob = null }) => {
   const { id } = useParams();
   const pageRef = useRef(null);
   const hcaptchaRef = useRef(null);
   const [hcaptchaToken, setHcaptchaToken] = useState('');
 
-  const [job, setJob] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [job, setJob] = useState(initialJob);
+  const [loading, setLoading] = useState(!initialJob);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -191,25 +191,17 @@ const JobDetails = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
 
+    if (initialJob) {
+      setJob(initialJob);
+      setLoading(false);
+      return;
+    }
+
     const getJobDetails = async () => {
       setLoading(true);
       try {
         if (id === 'general' || id === 'general-application') {
-          setJob({
-            id: 'general',
-            title: 'General Application',
-            department: 'All Departments',
-            location: 'Remote',
-            type: 'Full Time / Part Time / Internship',
-            experience: 'Any Experience Level',
-            salary: 'Competitive / Project-based',
-            openings: 'Multiple',
-            deadline: 'Always Open',
-            skills: 'Problem Solving, Adaptability, Collaboration, Communication',
-            description: "Don't see a specific role that matches your skills but still want to join Macenza? Submit a general application here. Tell us what you are good at, what projects you've worked on, and how you see yourself contributing to our mission.",
-            requirements: "A passion for innovation and building intelligent applications, excellent communication skills, ability to work independently in a remote layout, and strong problem-solving mindset.",
-            benefits: "Flexible hours, work from anywhere, access to premium learning resources, state-of-the-art tooling, and opportunities to build founding features."
-          });
+          setJob(generalApplicationJob);
           setLoading(false);
           return;
         }
@@ -258,7 +250,7 @@ const JobDetails = () => {
     };
 
     getJobDetails();
-  }, [id]);
+  }, [id, initialJob]);
 
   // GSAP animation
   useEffect(() => {

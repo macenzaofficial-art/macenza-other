@@ -136,3 +136,20 @@ export const fallbackJobs = [
     benefits: "High growth potential, access to cutting-edge AI research tools, remote work, competitive salary, and flexible PTO."
   }
 ];
+
+export const generalApplicationJob = {
+  id: 'general',
+  title: 'General Application',
+  department: 'All Departments',
+  location: 'Remote',
+  type: 'Full Time / Part Time / Internship',
+  employmentType: 'FULL_TIME',
+  experience: 'Any Experience Level',
+  salary: 'Competitive / Project-based',
+  openings: 'Multiple',
+  deadline: 'Always Open',
+  skills: 'Problem Solving, Adaptability, Collaboration, Communication',
+  description: "Don't see a specific role that matches your skills but still want to join Macenza? Submit a general application here. Tell us what you are good at, what projects you've worked on, and how you see yourself contributing to our mission.",
+  requirements: "A passion for innovation and building intelligent applications, excellent communication skills, ability to work independently in a remote layout, and strong problem-solving mindset.",
+  benefits: "Flexible hours, work from anywhere, access to premium learning resources, state-of-the-art tooling, and opportunities to build founding features."
+};

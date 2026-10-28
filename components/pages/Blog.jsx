@@ -201,7 +201,7 @@ const Blog = ({ initialPosts = [] }) => {
                           <span className="text-xs font-bold text-black">{featuredPost.authorName || 'Macenza Contributor'}</span>
                           <span className="text-[10px] text-black/40 flex items-center gap-1.5">
                             <Calendar className="w-3 h-3 text-primary" />
-                            {featuredPost.publishedAt ? new Date(featuredPost.publishedAt).toLocaleDateString() : 'Draft'}
+                            {featuredPost.publishedAt ? new Date(featuredPost.publishedAt).toLocaleDateString('en-US', { timeZone: 'UTC' }) : 'Draft'}
                           </span>
                         </div>
                       </div>
@@ -251,7 +251,7 @@ const Blog = ({ initialPosts = [] }) => {
                       <div className="p-6 md:p-8 flex flex-col gap-3">
                         <span className="text-[9px] text-black/40 flex items-center gap-1.5 font-bold uppercase">
                           <Calendar className="w-3 h-3 text-primary" />
-                          {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : 'Draft'}
+                          {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { timeZone: 'UTC' }) : 'Draft'}
                         </span>
                         <h3 className="text-lg font-black text-black group-hover:text-primary transition-colors tracking-tight leading-snug line-clamp-2">
                           {post.title}

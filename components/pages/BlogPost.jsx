@@ -367,7 +367,8 @@ const BlogPost = ({ initialPost = null, initialRelatedPosts = [] }) => {
                   {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
-                    year: 'numeric'
+                    year: 'numeric',
+                    timeZone: 'UTC'
                   }) : 'Recent'}
                 </span>
                 <span>•</span>
@@ -535,7 +536,7 @@ const BlogPost = ({ initialPost = null, initialRelatedPosts = [] }) => {
                       <div className="p-6 flex flex-col gap-3">
                         <span className="text-[9px] text-black/40 flex items-center gap-1.5 font-bold uppercase">
                           <Calendar className="w-3 h-3 text-primary" />
-                          {related.publishedAt ? new Date(related.publishedAt).toLocaleDateString() : 'Recent'}
+                          {related.publishedAt ? new Date(related.publishedAt).toLocaleDateString('en-US', { timeZone: 'UTC' }) : 'Recent'}
                         </span>
                         <h3 className="text-lg font-black text-black group-hover:text-primary transition-colors tracking-tight leading-snug line-clamp-2">
                           {related.title}

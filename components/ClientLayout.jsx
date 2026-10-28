@@ -13,7 +13,9 @@ export default function ClientLayout({ children }) {
 
   return (
     <div className="relative">
-      <ToastContainer position="bottom-center" autoClose={3000} hideProgressBar theme="colored" />
+      {!isAdmin && (
+        <ToastContainer position="bottom-center" autoClose={3000} hideProgressBar theme="colored" />
+      )}
       {!isAdmin && <SmoothScroll />}
       {!isAdmin && <Navbar />}
       {children}

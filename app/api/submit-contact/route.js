@@ -9,7 +9,26 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, email, phone, company, project_type, budget, details, captchaToken, recaptchaToken } = body;
+
+    const { name, email, phone, company, project_type, budget, details, captchaToken, recaptchaToken } = body || {};
+
+    if (typeof name !== 'string' || name.trim() === '') {
+      return NextResponse.json(
+        { error: 'Missing or invalid required field: name' },
+        { status: 400 }
+      );
+    }
+
+    if (typeof email !== 'string' || email.trim() === '') {
+      return NextResponse.json(
+        { error: 'Missing or invalid required field: email' },
+        { status: 400 }
+      );
+    }
+
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+
     const token = captchaToken || recaptchaToken;
 
     if (!token) {
@@ -43,13 +62,13 @@ export async function POST(request) {
     const { error } = await supabase
       .from('contact_submissions')
       .insert({
-        name: name?.trim() || '',
-        email: email?.trim() || '',
-        phone: phone?.trim() || '',
-        company: company?.trim() || '',
-        project_type: project_type || 'AI Development',
-        budget: budget || '',
-        details: details?.trim() || '',
+        name: trimmedName,
+        email: trimmedEmail,
+        phone: typeof phone === 'string' ? phone.trim() : '',
+        company: typeof company === 'string' ? company.trim() : '',
+        project_type: typeof project_type === 'string' && project_type.trim() ? project_type.trim() : 'AI Development',
+        budget: typeof budget === 'string' ? budget.trim() : '',
+        details: typeof details === 'string' ? details.trim() : '',
       });
 
     if (error) {

@@ -22,7 +22,7 @@ async function getPosts() {
       slug,
       mainImage,
       publishedAt,
-      body,
+      "body": body[0...1],
       "authorName": author->name,
       "authorImage": author->image,
       "categories": categories[]->title

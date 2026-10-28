@@ -6,6 +6,16 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+function isValidHttpUrl(urlStr) {
+  if (typeof urlStr !== 'string' || !urlStr.trim()) return false;
+  try {
+    const parsed = new URL(urlStr.trim());
+    return parsed.protocol === 'https:' || parsed.protocol === 'http:';
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(request) {
   try {
     const body = await request.json();
@@ -27,6 +37,13 @@ export async function POST(request) {
           { status: 400 }
         );
       }
+    }
+
+    if (!isValidHttpUrl(body?.resumeUrl)) {
+      return NextResponse.json(
+        { error: 'Invalid resume URL. Must be a valid HTTP or HTTPS URL.' },
+        { status: 400 }
+      );
     }
 
     const {

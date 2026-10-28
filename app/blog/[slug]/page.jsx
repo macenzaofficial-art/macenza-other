@@ -24,21 +24,27 @@ async function getPostData(slug) {
     if (!allPosts || allPosts.length === 0) return { post: null, relatedPosts: [], notFound: true };
 
     const cleanParamSlug = generateSlug(decodeURIComponent(slug || ''));
-    const matched = allPosts.find(p => {
+
+    // Exact slug or ID matches take precedence over title aliases
+    let matched = allPosts.find(p => {
+      const rawSlug = p.slug?.current ? generateSlug(p.slug.current) : (typeof p.slug === 'string' ? generateSlug(p.slug) : '');
       const pSlug = getPostSlug(p);
-      const pTitleSlug = generateSlug(p.title);
-      const rawSlug = p.slug?.current ? generateSlug(p.slug.current) : '';
 
       return (
-        pSlug === cleanParamSlug ||
-        pTitleSlug === cleanParamSlug ||
-        rawSlug === cleanParamSlug ||
+        (rawSlug && (rawSlug === cleanParamSlug || rawSlug === slug)) ||
+        (pSlug && (pSlug === cleanParamSlug || pSlug === slug)) ||
         p._id === slug ||
-        p._id === cleanParamSlug ||
-        pSlug === slug ||
-        pTitleSlug === slug
+        p._id === cleanParamSlug
       );
     });
+
+    // Fallback to title matching if no exact slug/ID match exists
+    if (!matched) {
+      matched = allPosts.find(p => {
+        const pTitleSlug = generateSlug(p.title);
+        return pTitleSlug === cleanParamSlug || pTitleSlug === slug;
+      });
+    }
 
     if (!matched) return { post: null, relatedPosts: [], notFound: true };
 

@@ -94,7 +94,7 @@ const getTabFromPath = (path) => {
   if (!slug) {
     return 'Dashboard';
   }
-  return SLUG_TO_TAB[slug] || null;
+  return Object.prototype.hasOwnProperty.call(SLUG_TO_TAB, slug) ? SLUG_TO_TAB[slug] : null;
 };
 
 // In-memory module cache to preserve admin data across tab switches & soft re-renders
@@ -118,7 +118,10 @@ const Admin = () => {
   const [signingIn, setSigningIn] = useState(false);
 
   // Dashboard states
-  const initialTab = (pathname && getTabFromPath(pathname)) || (tabParam && SLUG_TO_TAB[tabParam.toLowerCase()]) || 'Dashboard';
+  const initialTab =
+    (pathname && getTabFromPath(pathname)) ||
+    (tabParam && Object.prototype.hasOwnProperty.call(SLUG_TO_TAB, tabParam.toLowerCase()) ? SLUG_TO_TAB[tabParam.toLowerCase()] : null) ||
+    'Dashboard';
   const [activeTab, setActiveTab] = useState(initialTab);
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -2051,6 +2054,8 @@ const Admin = () => {
             </p>
           </div>
         </div>
+
+        <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar theme="colored" />
       </div>
     );
   }

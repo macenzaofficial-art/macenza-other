@@ -9,6 +9,26 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export async function POST(request) {
   try {
     const body = await request.json();
+
+    const requiredFields = [
+      'candidateName',
+      'email',
+      'phone',
+      'location',
+      'experience',
+      'resumeUrl'
+    ];
+
+    for (const field of requiredFields) {
+      const value = body?.[field];
+      if (typeof value !== 'string' || value.trim() === '') {
+        return NextResponse.json(
+          { error: `Missing or invalid required field: ${field}` },
+          { status: 400 }
+        );
+      }
+    }
+
     const {
       candidateName,
       email,

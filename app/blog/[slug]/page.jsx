@@ -74,7 +74,7 @@ export async function generateMetadata({ params }) {
     title: `${post.title} | Macenza Blog`,
     description: post.title,
     alternates: {
-      canonical: `https://www.macenza.com/blog/${slug}`,
+      canonical: `https://www.macenza.com/blog/${getPostSlug(post)}`,
     },
     openGraph: {
       title: `${post.title} | Macenza`,

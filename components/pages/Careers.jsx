@@ -76,6 +76,11 @@ const Careers = ({ initialJobs = EMPTY_JOBS, isFallback = false }) => {
 
   // Fetch dynamic jobs from Supabase
   const fetchJobs = async () => {
+    if (!supabase) {
+      setJobsList(fallbackJobs);
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from('jobs')

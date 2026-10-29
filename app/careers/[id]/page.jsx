@@ -15,23 +15,25 @@ const getJob = cache(async (id) => {
     return generalApplicationJob;
   }
 
-  try {
-    const { data, error } = await supabase
-      .from('jobs')
-      .select('*')
-      .eq('status', 'Active');
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('jobs')
+        .select('*')
+        .eq('status', 'Active');
 
-    if (!error && data && data.length > 0) {
-      const matched = data.find(
-        (j) =>
-          generateSlug(j.title) === cleanId ||
-          String(j.id) === cleanId ||
-          String(j._id) === cleanId
-      );
-      if (matched) return matched;
+      if (!error && data && data.length > 0) {
+        const matched = data.find(
+          (j) =>
+            generateSlug(j.title) === cleanId ||
+            String(j.id) === cleanId ||
+            String(j._id) === cleanId
+        );
+        if (matched) return matched;
+      }
+    } catch (err) {
+      console.warn('Supabase lookup failed or not set up. Falling back to mock jobs.', err);
     }
-  } catch (err) {
-    console.warn('Supabase lookup failed or not set up. Falling back to mock jobs.', err);
   }
 
   const matchedFallback = fallbackJobs.find(

@@ -206,6 +206,15 @@ const JobDetails = ({ initialJob = null }) => {
           return;
         }
 
+        if (!supabase) {
+          const matchedFallback = fallbackJobs.find(
+            j => j.id === id || generateSlug(j.title) === id
+          );
+          setJob(matchedFallback || null);
+          setLoading(false);
+          return;
+        }
+
         // Fetch active jobs from Supabase and match on sluggified title
         const { data, error } = await supabase
           .from('jobs')
@@ -353,6 +362,10 @@ const JobDetails = ({ initialJob = null }) => {
     setSubmitError('');
 
     try {
+      if (!supabase) {
+        throw new Error('Database service is not configured. Please try again later.');
+      }
+
       // 1. Upload resume to Supabase Storage Bucket 'resumes'
       const fileExt = resumeFile.name.split('.').pop().toLowerCase();
       const fileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}.${fileExt}`;

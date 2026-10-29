@@ -15,6 +15,10 @@ export const metadata = {
 };
 
 async function getJobs() {
+  if (!supabase) {
+    return { jobs: fallbackJobs, isFallback: true };
+  }
+
   try {
     const { data, error } = await supabase
       .from('jobs')

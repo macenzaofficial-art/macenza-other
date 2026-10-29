@@ -58,6 +58,11 @@ const CertificateVerification = () => {
       return;
     }
 
+    if (!supabase) {
+      toast.error('Verification service is temporarily unavailable.');
+      return;
+    }
+
     setLoading(true);
     setCertificate(null);
     setSearched(true);

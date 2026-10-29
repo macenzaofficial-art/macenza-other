@@ -865,6 +865,11 @@ const Admin = () => {
 
   // Handle Authentication Subscription
   useEffect(() => {
+    if (!supabase) {
+      setAuthChecking(false);
+      return;
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       setAuthChecking(false);
@@ -880,6 +885,11 @@ const Admin = () => {
 
   // Fetch Jobs and Applications
   const fetchData = async () => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
     try {
       if (!cachedJobs) {
         setLoading(true);

@@ -11,7 +11,9 @@ import BouncyText from '@/components/BouncyText';
 import Footer from '@/components/Footer';
 import { getPostSlug } from '@/lib/slugUtils';
 
-const Blog = ({ initialPosts = [] }) => {
+const EMPTY_POSTS = [];
+
+const Blog = ({ initialPosts = EMPTY_POSTS }) => {
   const [posts, setPosts] = useState(initialPosts && initialPosts.length > 0 ? initialPosts : []);
   const [loading, setLoading] = useState(!initialPosts || initialPosts.length === 0);
   const [activeCategory, setActiveCategory] = useState('All');

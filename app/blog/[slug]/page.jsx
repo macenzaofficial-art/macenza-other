@@ -79,17 +79,28 @@ export async function generateMetadata({ params }) {
     imageUrl = null;
   }
 
+  const firstTextBlock = Array.isArray(post.body)
+    ? post.body.find(b => b?._type === 'block' && Array.isArray(b?.children))
+    : null;
+  const excerpt =
+    (firstTextBlock?.children
+      ? firstTextBlock.children.map(c => c.text || '').join('').trim().slice(0, 160)
+      : null) ||
+    (post.body && post.body[0]?.children?.[0]?.text
+      ? post.body[0].children[0].text.slice(0, 160)
+      : `Read ${post.title} on Macenza Blog.`);
+
   return {
     title: {
       absolute: `${post.title} | Macenza Blog`,
     },
-    description: post.title,
+    description: excerpt,
     alternates: {
       canonical: `https://www.macenza.com/blog/${getPostSlug(post)}`,
     },
     openGraph: {
       title: `${post.title} | Macenza`,
-      description: post.title,
+      description: excerpt,
       type: 'article',
       publishedTime: post.publishedAt,
       authors: post.authorName ? [post.authorName] : ['Macenza Engineering'],

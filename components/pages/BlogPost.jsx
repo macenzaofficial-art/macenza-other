@@ -118,7 +118,9 @@ const PortableText = ({ value }) => {
   });
 };
 
-const BlogPost = ({ initialPost = null, initialRelatedPosts = [] }) => {
+const EMPTY_RELATED_POSTS = [];
+
+const BlogPost = ({ initialPost = null, initialRelatedPosts = EMPTY_RELATED_POSTS }) => {
   const { slug } = useParams();
   const [post, setPost] = useState(initialPost);
   const [relatedPosts, setRelatedPosts] = useState(initialRelatedPosts);

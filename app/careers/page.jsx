@@ -23,16 +23,16 @@ async function getJobs() {
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    if (data && data.length > 0) return data;
-    return fallbackJobs;
+    if (data && data.length > 0) return { jobs: data, isFallback: false };
+    return { jobs: fallbackJobs, isFallback: true };
   } catch (err) {
     console.warn('SSR fetch failed for jobs, using fallbackJobs:', err);
-    return fallbackJobs;
+    return { jobs: fallbackJobs, isFallback: true };
   }
 }
 
 export default async function Page() {
-  const initialJobs = await getJobs();
-  return <Careers initialJobs={initialJobs} />;
+  const { jobs, isFallback } = await getJobs();
+  return <Careers initialJobs={jobs} isFallback={isFallback} />;
 }
 

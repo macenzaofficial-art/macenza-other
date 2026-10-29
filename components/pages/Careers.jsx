@@ -67,7 +67,9 @@ const testimonials = [
   }
 ];
 
-const Careers = ({ initialJobs = [] }) => {
+const EMPTY_JOBS = [];
+
+const Careers = ({ initialJobs = EMPTY_JOBS, isFallback = false }) => {
   const pageRef = useRef(null);
   const router = useRouter();
   const [jobsList, setJobsList] = useState(initialJobs && initialJobs.length > 0 ? initialJobs : []);
@@ -96,7 +98,10 @@ const Careers = ({ initialJobs = [] }) => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (!initialJobs || initialJobs.length === 0) {
+    if (isFallback || !initialJobs || initialJobs.length === 0) {
+      if (initialJobs && initialJobs.length > 0) {
+        setJobsList(initialJobs);
+      }
       fetchJobs();
     } else {
       setJobsList(initialJobs);

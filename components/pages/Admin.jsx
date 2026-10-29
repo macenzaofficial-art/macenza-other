@@ -867,6 +867,7 @@ const Admin = () => {
   useEffect(() => {
     if (!supabase) {
       setAuthChecking(false);
+      setLoginError('Supabase is not configured. Admin authentication is unavailable.');
       return;
     }
 
@@ -1340,6 +1341,10 @@ const Admin = () => {
 
   const handleSignIn = async (e) => {
     e?.preventDefault();
+    if (!supabase) {
+      setLoginError('Supabase is not configured. Admin authentication is unavailable.');
+      return;
+    }
     if (!email || !password) {
       setLoginError('Please enter both email and password.');
       return;
@@ -1358,6 +1363,10 @@ const Admin = () => {
   };
 
   const handleForgotPassword = async () => {
+    if (!supabase) {
+      setLoginError('Supabase is not configured. Admin authentication is unavailable.');
+      return;
+    }
     if (!email) {
       setLoginError('Please enter your email address first to reset password.');
       return;
@@ -1381,7 +1390,9 @@ const Admin = () => {
   const handleSignOut = async () => {
     if (!window.confirm('Are you sure you want to sign out of the Admin Portal?')) return;
     try {
-      await supabase.auth.signOut();
+      if (supabase) {
+        await supabase.auth.signOut();
+      }
       setUser(null);
     } catch (err) {
       console.error(err);
@@ -2012,10 +2023,11 @@ const Admin = () => {
               <input
                 type="email"
                 required
+                disabled={!supabase || signingIn}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@macenza.com"
-                className="bg-white border border-[#BFDBFE] p-4 rounded-2xl text-black font-semibold text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
+                className="bg-white border border-[#BFDBFE] p-4 rounded-2xl text-black font-semibold text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
 
@@ -2024,13 +2036,19 @@ const Admin = () => {
               <input
                 type="password"
                 required
+                disabled={!supabase || signingIn}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="bg-white border border-[#BFDBFE] p-4 rounded-2xl text-black font-semibold text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
+                className="bg-white border border-[#BFDBFE] p-4 rounded-2xl text-black font-semibold text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <div className="flex justify-end mt-1">
-                <button type="button" onClick={handleForgotPassword} className="text-xs font-bold text-primary hover:text-primary-dark transition-colors">
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  disabled={!supabase || signingIn}
+                  className="text-xs font-bold text-primary hover:text-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                   Forgot Password?
                 </button>
               </div>
@@ -2038,8 +2056,8 @@ const Admin = () => {
 
             <button
               type="submit"
-              disabled={signingIn}
-              className="w-full py-4 mt-2 bg-primary text-white rounded-full font-black text-sm tracking-wider uppercase shadow-xl shadow-primary/20 hover:bg-primary-dark transition-all duration-300 hover:shadow-2xl active:scale-98 disabled:opacity-50 flex items-center justify-center gap-3 group"
+              disabled={signingIn || !supabase}
+              className="w-full py-4 mt-2 bg-primary text-white rounded-full font-black text-sm tracking-wider uppercase shadow-xl shadow-primary/20 hover:bg-primary-dark transition-all duration-300 hover:shadow-2xl active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group"
             >
               {signingIn ? (
                 <>

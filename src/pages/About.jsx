@@ -23,6 +23,7 @@ const teamMembers = [
   { name: "Piyush Saini", role: "Fullstack Developer", image: "/Team/Piyush Saini Fullstack Developer.webp" },
   { name: "Neha Jaiswal", role: "Fullstack Developer", image: "/Team/NEHA JAISWAL Fullstack Developer.webp" },
   { name: "Riva Sha", role: "Fullstack Developer", image: "/Team/Riva Sha FullStack Developer.webp" },
+  { name: "Sunil Bagdi", role: "Fullstack Developer", image: "/Team/Sunil Bagdi Fullstack.jpeg" },
   { name: "Khushboo Rawat", role: "Business Development Manager", image: "/Team/A Khushboo Rawat Business Development Manager.webp" },
   { name: "Aman Partha", role: "Full Stack Developer", image: "/Team/A Aman Partha Full Stack Developer.webp" },
   { name: "Gungun Rawat", role: "Frontend UI/UX Designer", image: "/Team/Gungun UI UX Designer.webp" },

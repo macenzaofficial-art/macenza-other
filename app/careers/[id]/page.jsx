@@ -22,15 +22,15 @@ const getJob = cache(async (id) => {
         .select('*')
         .eq('status', 'Active');
 
-      if (!error && data && data.length > 0) {
-        const matched = data.find(
-          (j) =>
-            generateSlug(j.title) === cleanId ||
-            String(j.id) === cleanId ||
-            String(j._id) === cleanId
-        );
-        if (matched) return matched;
-      }
+      if (error) throw error;
+
+      const matched = data?.find(
+        (j) =>
+          generateSlug(j.title) === cleanId ||
+          String(j.id) === cleanId ||
+          String(j._id) === cleanId
+      );
+      return matched || null;
     } catch (err) {
       console.warn('Supabase lookup failed or not set up. Falling back to mock jobs.', err);
     }

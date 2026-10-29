@@ -1,10 +1,23 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+let cachedSupabase = null;
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+function getSupabaseClient() {
+  if (cachedSupabase) {
+    return cachedSupabase;
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl?.trim() || !supabaseAnonKey?.trim()) {
+    throw new Error('Supabase environment variables are not configured on the server.');
+  }
+
+  cachedSupabase = createClient(supabaseUrl, supabaseAnonKey);
+  return cachedSupabase;
+}
 
 export async function POST(request) {
   try {
@@ -59,6 +72,7 @@ export async function POST(request) {
     }
 
     // Insert into Supabase database
+    const supabase = getSupabaseClient();
     const { error } = await supabase
       .from('contact_submissions')
       .insert({

@@ -1,0 +1,535 @@
+.font-klandestin {
+  font-family: var(--font-syne), 'Syne', sans-serif !important;
+}
+
+.font-martell {
+  font-family: var(--font-playfair), 'Playfair Display', serif !important;
+}
+
+.font-pinyon {
+  font-family: var(--font-pinyon), 'Pinyon Script', cursive !important;
+}
+
+.font-turret {
+  font-family: 'Turret Road', sans-serif !important;
+}
+
+.font-faculty {
+  font-family: 'Faculty Glyphic', sans-serif !important;
+}
+
+/* Scoped font for Admin Panel only: IBM Plex Serif */
+.admin-panel-root,
+.admin-panel-root *,
+.admin-panel-root input,
+.admin-panel-root button,
+.admin-panel-root select,
+.admin-panel-root textarea {
+  font-family: var(--font-ibm-plex), 'IBM Plex Serif', serif !important;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: var(--font-outfit), 'Outfit', system-ui, -apple-system, sans-serif;
+  line-height: 1.65;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: #000000;
+  background-color: #ffffff;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: #ffffff;
+  color: #000000;
+}
+
+canvas {
+  display: block;
+  max-width: 100vw;
+  max-height: 100vh;
+}
+
+.lenis.lenis-smooth {
+  height: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+::selection {
+  background: #2563eb;
+  color: white;
+}
+
+h1 {
+  font-family: var(--font-syne), 'Syne', sans-serif !important;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+p {
+  line-height: 1.75 !important;
+  letter-spacing: 0.01em;
+}
+
+li,
+a,
+span {
+  letter-spacing: 0.005em;
+}
+
+.glass {
+  @apply bg-white/70 backdrop-blur-[10px] border border-white/30;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #0f172a 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-gradient {
+  background: radial-gradient(circle at center, transparent 0%, rgba(255, 255, 255, 0.8) 100%);
+}
+
+.glass-morphism {
+  @apply bg-white/55 backdrop-blur-[5px] border border-black/5 shadow-xl shadow-black/5;
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+}
+
+.glow-soft {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+/* AI Neural Network Flowing Dots & Pulsing Nodes */
+@keyframes flow-wave-dots {
+  from {
+    stroke-dashoffset: 240;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-flow-dots-fast {
+  animation: flow-wave-dots 8s linear infinite;
+}
+
+.animate-flow-dots-medium {
+  animation: flow-wave-dots 12s linear infinite;
+}
+
+.animate-flow-dots-slow {
+  animation: flow-wave-dots 18s linear infinite;
+}
+
+.animate-flow-dots-reverse {
+  animation: flow-wave-dots 14s linear infinite reverse;
+}
+
+@keyframes node-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+}
+
+.animate-node-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: node-pulse 3s ease-in-out infinite;
+}
+
+.animate-node-pulse-delayed {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: node-pulse 3.5s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+/* Auto-hiding Navigation Bar Styles */
+nav.fixed {
+  /* No transform transition by default to avoid GSAP entry animation conflicts */
+  transition: opacity 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+nav.fixed.nav-transition {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+nav.fixed.nav-hidden {
+  transform: translate3d(-50%, -120px, 0) !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4), 0 0 0 0px rgba(37, 99, 235, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.5), 0 0 0 12px rgba(37, 99, 235, 0);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2.5s infinite;
+}
+
+/* Infinite Marquee Styles */
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 25s linear infinite;
+}
+
+.animate-marquee-right {
+  display: flex;
+  width: max-content;
+  animation: marquee-right 25s linear infinite;
+}
+
+/* Dedicated high-performance 4-group marquee animation */
+@keyframes marquee-infinite-stats {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-25%);
+  }
+}
+
+.animate-marquee-stats {
+  display: flex;
+  width: max-content;
+  animation: marquee-infinite-stats 35s linear infinite;
+}
+
+@keyframes beam-fall {
+  0% {
+    transform: translateY(-120px);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  85% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(650px);
+    opacity: 0;
+  }
+}
+
+.animate-beam-fall {
+  animation: beam-fall 6s linear infinite;
+}
+
+/* Custom Scrollbars (Transparent track, slim pill thumb) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.45) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.65);
+}
+
+::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Scoped, Frosted Glass Scrollbars for Admin Panel */
+.admin-panel-root,
+.admin-panel-root * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(2, 132, 199, 0.35) transparent;
+}
+
+.admin-panel-root ::-webkit-scrollbar,
+.admin-panel-root::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.admin-panel-root ::-webkit-scrollbar-track,
+.admin-panel-root::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-panel-root ::-webkit-scrollbar-thumb,
+.admin-panel-root::-webkit-scrollbar-thumb {
+  background: rgba(2, 132, 199, 0.35);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+.admin-panel-root ::-webkit-scrollbar-thumb:hover,
+.admin-panel-root::-webkit-scrollbar-thumb:hover {
+  background: rgba(2, 132, 199, 0.65);
+}
+
+.admin-panel-root ::-webkit-scrollbar-button,
+.admin-panel-root::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Custom Scrollbar Utility */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(2, 132, 199, 0.35) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(2, 132, 199, 0.35);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(2, 132, 199, 0.65);
+}
+
+
+/* ==========================================================================
+   Android-App-Like Mobile Experience for Admin Panel Only (< 768px)
+   Completely isolated to .admin-panel-root so public site is 100% unaffected
+   ========================================================================== */
+@media (max-width: 767px) {
+
+  /* Prevent horizontal scroll bleed on mobile admin */
+  .admin-panel-root {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Accommodate Android gesture navigation & fixed bottom navigation bar */
+  .admin-panel-root .admin-mobile-content-area {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Android Material touch feedback */
+  .admin-panel-root button:active,
+  .admin-panel-root a:active,
+  .admin-panel-root [role="button"]:active {
+    opacity: 0.88;
+    transform: scale(0.98);
+    transition: transform 0.1s ease, opacity 0.1s ease;
+  }
+
+  /* Smooth momentum scrolling for mobile views */
+  .admin-panel-root .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ==========================================================================
+   Admin Dashboard Glassmorphism & KPI Single-Cut Corner Styling
+   ========================================================================== */
+.admin-cut-card {
+  position: relative;
+  border-radius: 24px 0 24px 24px;
+  clip-path: polygon(0 0,
+      calc(100% - 34px) 0,
+      100% 34px,
+      100% 100%,
+      0 100%);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.admin-cut-card:hover {
+  transform: translateY(-3px);
+}
+
+.admin-glass-card {
+  background: rgba(255, 255, 255, 0.24) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  box-shadow: 0 16px 40px -10px rgba(56, 189, 248, 0.12) !important;
+}
+
+.admin-glass-inner {
+  background: rgba(255, 255, 255, 0.18) !important;
+  backdrop-filter: blur(18px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.03) !important;
+}
+
+/* Enforce transparency and background blur across all admin panel containers */
+.admin-panel-root .bg-white\/60,
+.admin-panel-root .bg-white\/70,
+.admin-panel-root .bg-white\/80 {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+}
+
+
+/* ==========================================================================
+   Ultra-Pure Glassmorphism for Sidebar & Mobile Bottom Nav (Reference Image)
+   ========================================================================== */
+.glass-effect-panel {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.16) 100%) !important;
+  backdrop-filter: blur(28px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow: inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.90),
+    inset -1px 0 1px 0 rgba(255, 255, 255, 0.30),
+    0 20px 40px -15px rgba(2, 132, 199, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.04) !important;
+}
+
+.glass-effect-pill {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.20) 100%) !important;
+  backdrop-filter: blur(28px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.75) !important;
+  box-shadow: inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.25),
+    0 14px 36px -6px rgba(2, 132, 199, 0.25),
+    0 6px 18px rgba(0, 0, 0, 0.06) !important;
+}
+
+.glass-effect-subcard {
+  background: rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.60) !important;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.85),
+    0 2px 8px rgba(0, 0, 0, 0.03) !important;
+}

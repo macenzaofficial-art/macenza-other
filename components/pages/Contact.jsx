@@ -528,7 +528,7 @@ const Contact = () => {
                 <div className="flex justify-center py-2">
                   <HCaptcha
                     ref={hcaptchaRef}
-                    sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || process.env.VITE_HCAPTCHA_SITE_KEY}
+                    sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY}
                     onVerify={(token) => setHcaptchaToken(token)}
                     onExpire={() => setHcaptchaToken('')}
                   />
